@@ -1,0 +1,70 @@
+@(result: JPlag)
+
+@main("Result page") {
+
+    <div class="container-fluid mt-5" id="similarity_report_container">
+        <h3 id="title_text">Potential plagiarisms</h3>
+        <div class="row mb-5">
+            <div class="col-8 red-background">
+                <div class="row">
+                    @for(file <- result.plagiarismGroup) {
+                        <div class="col-2 pt-2">
+                            <p>@file</p>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-4 text-center red-background">
+                <div class="row">
+                    <div class="col-12">
+                        <p><u>Average similarity (%)</u></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>@result.plagiarismGroupAverage</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <a href="@routes.RunJPlagController.resultDetail(1)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column">
+            <h3 id="title_text" class="text-center">Similarity comparison</h3>
+            <table class="table table-hover table-bordered text-center w-auto">
+                <thead>
+                    <tr>
+                        <th scope="col">File A</th>
+                        <th scope="col">File B</th>
+                        <th scope="col">Similarity (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(file <- result.resultList) {
+                    @if(!file.potentialPlagiarism) {
+                        <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(file.matchIndex)">
+                            <td>@file.fileA</td>
+                            <td>@file.fileB</td>
+                            <td>@file.percentage</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+
+
+}

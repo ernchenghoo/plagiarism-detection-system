@@ -1,0 +1,42 @@
+@(status: Option[String])
+
+@main("Homepage") {
+
+    @if(status.isDefined) {
+        <div class="alert alert-primary mt-3" role="alert">
+            @status
+        </div>
+    } else {
+
+    }
+
+
+
+    <div class="row">
+        <div class="col text-center">
+            <a href="@routes.RunJPlagController.detection()" class="btn btn-primary homepage_button">Check for plagiarism</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <a href="@routes.RunJPlagController.result" class="btn btn-primary homepage_button">Past detection results</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <a href="@routes.RunJPlagController.resultTest" class="btn btn-primary homepage_button">Result test</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+        </div>
+    </div>
+
+
+
+
+}

@@ -1,0 +1,35 @@
+@import scala.collection.mutable.ListBuffer
+@(filePairs: List[ResultFilePair])
+
+@main("Result Detail") {
+
+    <div class="container-fluid mb-5 mt-5">
+
+        <div class="d-flex flex-column">
+            <h3 id="title_text" class="text-center">Similarity comparison</h3>
+            <table class="table table-hover table-bordered text-center w-auto">
+                <thead>
+                    <tr>
+                        <th scope="col">File A</th>
+                        <th scope="col">File B</th>
+                        <th scope="col">Similarity (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(file <- filePairs) {
+                    @if(file.potentialPlagiarism) {
+                        <tr>
+                            <td>@file.fileA</td>
+                            <td>@file.fileB</td>
+                            <td>@file.percentage</td>
+                        </tr>
+                    }
+
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+}

@@ -1,0 +1,32 @@
+@(matchIndex: Int)
+
+@main("Result Code Comparison") {
+
+
+    <div class="container-fluid" id="random_container">
+
+    </div>
+    <div class="container-fluid" id="random_container2">
+
+    </div>
+    <script>
+        document.getElementById("random_container2").innerHTML = "<p>Hello world</p>"
+
+        var string = ""
+        jsRoutes.controllers.RunJPlagController.getCodeComparisons(1).ajax({
+            success : function(data) {
+                data.forEach(function (item, index) {
+                    document.getElementById("random_container").innerHTML = data
+                })
+
+            }
+        });
+
+
+    </script>
+    <script>
+
+
+
+    </script>
+}

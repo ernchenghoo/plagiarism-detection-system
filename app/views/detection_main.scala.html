@@ -1,0 +1,58 @@
+@import views.html.main
+@(form: Form[JPlag])(implicit request: MessagesRequestHeader)
+
+@main("Homepage") {
+  <div class="row">
+  <div class="col text-center" id="title_text">
+    <p>Plagiarism Detection System</p>
+  </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-center">
+      <a href="@routes.RunJPlagController.runJPlag()" class="btn btn-primary homepage_button">RUN</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-center">
+      <button type="button" class="btn btn-primary homepage_button" data-toggle="modal" data-target="#jplag_settings">Settings</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-center">
+      @helper.form(action = helper.CSRF(routes.RunJPlagController.upload()), Symbol("enctype") -> "multipart/form-data") {
+        <input type="file" class="btn btn-primary homepage_button" name="files" multiple id="files" size="1000" onchange="this.form.submit()">
+      }
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" role="dialog" id="jplag_settings">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            @helper.input(form("language")) { (id, name, value, args) =>
+              <select name="@name" id="@id" @toHtmlArgs(args)>
+                <option value="java19">Java 19</option>
+                <option value="java17">Java 17</option>
+                <option value="python3">Python 3</option>
+                <option value="c/c++">C or C++</option>
+              </select>
+            }
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+
