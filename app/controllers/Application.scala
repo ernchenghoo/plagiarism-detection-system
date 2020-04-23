@@ -10,7 +10,7 @@ class Application @Inject()(cc: MessagesControllerComponents, assets: Assets) ex
   def javascriptRoutes = Action { implicit request =>
     Ok(
       JavaScriptReverseRouter("jsRoutes")(
-        routes.javascript.RunJPlagController.getCodeComparisons
+
       )
     ).as(MimeTypes.JAVASCRIPT)
   }

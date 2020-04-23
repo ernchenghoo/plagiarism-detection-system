@@ -10,7 +10,9 @@ scalaVersion := "2.13.1"
 libraryDependencies ++= Seq(
   guice,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
-  "org.jsoup" % "jsoup" % "1.13.1")
+  "org.jsoup" % "jsoup" % "1.13.1",
+  "net.ruippeixotog" %% "scala-scraper" % "2.2.0"
+)
 
 
 // Adds additional packages into Twirl

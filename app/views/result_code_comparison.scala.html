@@ -1,32 +1,35 @@
-@(matchIndex: Int)
+@(matchIndex: Int, studentResultPairs: Option[StudentFilePairs])
 
 @main("Result Code Comparison") {
 
+    <div class="container-fluid">
+        <div class="d-flex flex-column">
+            <h3 id="title_text" class="text-center">Similarity comparison</h3>
+            <table class="table table-hover table-bordered text-left w-auto">
+                <thead>
+                    <tr>
+                        @if(studentResultPairs.isDefined) {
+                            <th scope="col">@studentResultPairs.get.fileA</th>
+                            <th scope="col">@studentResultPairs.get.fileB</th>
+                        }
 
-    <div class="container-fluid" id="random_container">
-
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(studentResultPairs.isDefined) {
+                        @for(pairs <- studentResultPairs.get.extractResultsFromStaticHTML()) {
+                            <tr>
+                                <td>@Html(pairs._1.fileName)</td>
+                                <td>@Html(pairs._2.fileName)</td>
+                            </tr>
+                            <tr>
+                                <td>@Html(pairs._1.code)</td>
+                                <td>@Html(pairs._2.code)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="container-fluid" id="random_container2">
-
-    </div>
-    <script>
-        document.getElementById("random_container2").innerHTML = "<p>Hello world</p>"
-
-        var string = ""
-        jsRoutes.controllers.RunJPlagController.getCodeComparisons(1).ajax({
-            success : function(data) {
-                data.forEach(function (item, index) {
-                    document.getElementById("random_container").innerHTML = data
-                })
-
-            }
-        });
-
-
-    </script>
-    <script>
-
-
-
-    </script>
 }

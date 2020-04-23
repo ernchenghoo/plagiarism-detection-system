@@ -8,11 +8,9 @@ GET     /                                   controllers.RunJPlagController.homep
 GET     /detection                          controllers.RunJPlagController.detection
 GET     /runJPlag                           controllers.RunJPlagController.runJPlag()
 GET     /result                             controllers.RunJPlagController.result
-GET     /getcideComparisons                 controllers.RunJPlagController.getCodeComparisons(matchIndex: Int)
 GET     /result/codeComparison              controllers.RunJPlagController.resultCodeComparison(matchIndex: Int)
 GET     /javascriptRoutes                   controllers.Application.javascriptRoutes
 GET     /result/detail                      controllers.RunJPlagController.resultDetail(group: Int)
-GET     /resultTest                         controllers.RunJPlagController.resultTest()
 POST    /saveFile                           controllers.RunJPlagController.upload()
 
 # Map static resources from the /public folder to the /assets URL path
