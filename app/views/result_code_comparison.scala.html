@@ -3,14 +3,45 @@
 @main("Result Code Comparison") {
 
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-9 pr-0">
+            </div>
+            <div class="col-3">
+                <h3 id="token_title_text" class="text-center">Token matches</h3>
+                <table class="table table-bordered token-table">
+                    <thead>
+                        <tr>
+                        @if(studentResultPairs.isDefined) {
+                            <th scope="col">Student @studentResultPairs.get.fileA</th>
+                            <th scope="col">Student @studentResultPairs.get.fileB</th>
+                            <th scope="col">Tokens</th>
+                        }
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if(studentResultPairs.isDefined) {
+                        @for(pairs <- studentResultPairs.get.extractResultsFromStaticHTML()) {
+                            <tr>
+                                <td>@Html(pairs.codeFileA.fileName)</td>
+                                <td>@Html(pairs.codeFileB.fileName)</td>
+                                <td>@Html(pairs.tokens)</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
         <div class="d-flex flex-column">
             <h3 id="title_text" class="text-center">Similarity comparison</h3>
-            <table class="table table-hover table-bordered text-left w-auto">
+            <table class="table table-bordered text-left w-auto">
                 <thead>
                     <tr>
                         @if(studentResultPairs.isDefined) {
-                            <th scope="col">@studentResultPairs.get.fileA</th>
-                            <th scope="col">@studentResultPairs.get.fileB</th>
+                            <th scope="col" class="text-center">Student @studentResultPairs.get.fileA</th>
+                            <th scope="col" class="text-center">Student @studentResultPairs.get.fileB</th>
                         }
 
                     </tr>
@@ -19,12 +50,12 @@
                     @if(studentResultPairs.isDefined) {
                         @for(pairs <- studentResultPairs.get.extractResultsFromStaticHTML()) {
                             <tr>
-                                <td>@Html(pairs._1.fileName)</td>
-                                <td>@Html(pairs._2.fileName)</td>
+                                <th>@Html(pairs.codeFileA.fileName)</th>
+                                <th>@Html(pairs.codeFileB.fileName)</th>
                             </tr>
                             <tr>
-                                <td>@Html(pairs._1.code)</td>
-                                <td>@Html(pairs._2.code)</td>
+                                <td>@Html(pairs.codeFileA.code)</td>
+                                <td>@Html(pairs.codeFileB.code)</td>
                             </tr>
                         }
                     }

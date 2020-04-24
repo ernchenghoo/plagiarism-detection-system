@@ -51,8 +51,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def resultDetail (group: Int): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     group match {
       case 1 => Ok(views.html.result_detail(newInstance.resultList))
-//      case 2 => Ok(views.html.result_detail(newInstance.group2))
-//      case 3 => Ok(views.html.result_detail(newInstance.group3))
     }
   }
 

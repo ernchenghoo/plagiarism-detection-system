@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>E</TITLE>
+ <TITLE>F</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,141 +15,89 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff">
 <HR>
-<H3><CENTER>Question 1.py</CENTER></H3><HR>
+<H3><CENTER>ANSWER QUESTION 4.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match8-1.html#0',3,'match8-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
-import numpy as np
-import cv2
-
-img = cv2.imread(&quot;omega_book.bmp&quot;,0)
-img2 = cv2.equalizeHist(img)
-
-img3 = cv2.calcHist([img],[0],None,[256],[0,256])
-img4 = cv2.</B></FONT>calcHist([img2],[0],None,[256],[0,256])
-
-<A NAME="1"></A>pt.figure()
-
-pt.subplot(2,2,1)
-pt<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match8-1.html#1',3,'match8-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(img,cmap=&quot;gray&quot;)
-pt.title(&quot;Original&quot;)
-
-pt.subplot(2,2,2)
-pt.imshow(img,cmap=&quot;gray&quot;)
-pt.title(&quot;Equalize&quot;)
-
-pt.subplot(</B></FONT>2,2,3)
-pt.plot(img3)
-pt.title(&quot;Hist_Original&quot;)
-
-pt.subplot(2,2,4)
-pt.plot(img4)
-pt.title(&quot;Hist_Equalize&quot;)
-
-pt.show()
-</PRE>
-<HR>
-<H3><CENTER>Question 2.py</CENTER></H3><HR>
-<PRE>
-from matplotlib import pyplot as pt
-import cv2
-<A NAME="2"></A>
-airplane = cv2.imread(&quot;airplane.bmp&quot;, 1)
-
-r <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match8-1.html#2',3,'match8-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= airplane[:,:,0]
-g = airplane[:,:,1]
-b = airplane[:,:,2]
-
-r_hist = cv2.calcHist([b],[0],None,[256],[0,256])
-g_hist = cv2.calcHist([g],[0],None,[256],[0,256])
-b_hist = cv2.calcHist([r],[0],None,[256],[0,256])
-
-pt.figure()
-
-pt.title(&quot;Red Channel&quot;)
-pt.xlabel(&quot;Bins&quot;)
-pt.ylabel(&quot;Count&quot;)
-
-<A NAME="3"></A>pt.plot(b_hist, 'r')
-pt.xlim([0</B></FONT>,256])
-
-pt<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match8-1.html#3',3,'match8-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.show()
-
-pt.figure()
-
-pt.title(&quot;Green Channel&quot;)
-pt.xlabel(&quot;Bins&quot;)
-pt.ylabel(&quot;Count&quot;)
-
-pt.plot(g_hist, 'g')
-pt.xlim([0,256])
-
-pt.show()
-
-pt.figure()
-
-pt.title(&quot;Blue Channel&quot;)
-pt.xlabel(&quot;Bins&quot;)
-pt.ylabel(&quot;Count&quot;)
-
-pt.plot(r_hist, 'b')
-pt.</B></FONT>xlim([0,256])
-
-pt.show()
-</PRE>
-<HR>
-<H3><CENTER>Question 4.py</CENTER></H3><HR>
-<PRE>
-<A NAME="4"></A><FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match8-1.html#4',3,'match8-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match8-1.html#0',3,'match8-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
+img = cv2.imread(&quot;q4omega.tif&quot;,1)
+img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+hist = cv2.calcHist([img_gray],[0],None,[256],[0,256])
 
-q4 = cv2.imread(&quot;q4omega.tif&quot;,1)
-q4_gray = cv2.cvtColor(q4,cv2.COLOR_BGR2GRAY)
-hist = cv2.calcHist([q4_gray],[0],None,[256],[0,256])
-
-[nrow,ncol] = q4_gray.shape
+[nrow,ncol] = img_gray.shape
 mask = np.zeros((nrow,ncol),dtype=np.uint8)
 
-mask2 = q4_gray.copy()
+mask2 = img_gray.copy()
 
-
-
-threshold = 175
-threshold1 = 80
+t1 = 178
+t2 = 80
 
 for x in range (0,nrow):
     for y in range(0,ncol):
-        if q4_gray[x,y] &lt;= threshold:
+        if img_gray[x,y] &lt;= t1:
             mask[x,y] =255
-        if q4_gray[x,y] &gt;=threshold1:
+        if img_gray[x,y] &gt;=t2:
             mask2[x,y]=255
         else:
             mask[x,y]=0
             mask2[x,y]=0
 
 mask3= cv2.bitwise_not(mask)
-mask[:,762:1147]=0
-mask2[:,0:387]=0
-mask2[:,760:1147]=0
-mask3[:,0:776]=0
+
+mask[:,760:1147]=0
+
+mask2[:,0:385]=0
+
+mask2[:,760:1145]=0
+
+mask3[:,0:775]=0
+
 mask4=mask.copy()
+
 mask4=mask+mask2+mask3
 
-ex_q4 = q4.copy()
-ex_q4[:,:,0] = cv2.bitwise_and(q4[:,:,0],mask4)
-ex_q4[:,:,1] = cv2.bitwise_and(q4[:,:,1],mask4)
-ex_q4[:,:,2] = cv2.bitwise_and(q4[:,:,2],mask4)
+ex_img = img.copy()
+ex_img[:,:,0] = cv2.bitwise_and(img[:,:,0],mask4)
+ex_img[:,:,1] = cv2.bitwise_and(img[:,:,1],mask4)
+ex_img[:,:,2] = cv2.bitwise_and(img[:,:,2],mask4)
 
 pt.figure()
 
-pt.subplot(1,2,1)
-pt.imshow(cv2.cvtColor(q4, cv2.COLOR_BGR2RGB))
-pt.title(&quot;Original Image&quot;)
+pt.subplot(3,3,1)
+pt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Original Color Image&quot;)
 
-pt.subplot(1,2,2)
-pt.title(&quot;Output Image&quot;)
-pt.imshow(cv2.cvtColor(ex_q4, cv2.</B></FONT>COLOR_BGR2RGB))
+pt.subplot(3,3,2)
+pt.imshow(</B></FONT>img_gray, cmap=&quot;gray&quot;)
+pt.title(&quot;Original Gray Image&quot;)
+
+pt.subplot(3,3,3)
+pt.imshow(mask, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 1&quot;)
+
+pt.subplot(3,3,4)
+pt.imshow(mask2, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 2&quot;)
+
+pt.subplot(3,3,5)
+pt.imshow(mask3, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 3&quot;)
+
+pt.subplot(3,3,6)
+pt.imshow(mask4, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 4&quot;)
+
+pt.subplot(3,3,7)
+pt.title(&quot;Extracted Color Image &quot;)
+pt.imshow(cv2.cvtColor(ex_img, cv2.COLOR_BGR2RGB))
+
+pt.subplot(3,3,8)
+pt.title(&quot;Histogram&quot;)
+pt.plot(hist)
+pt.xlim([0,256])
+
+pt.show()
 </PRE>
 
 </BODY>
