@@ -1,5 +1,5 @@
 @import scala.collection.mutable.ListBuffer
-@(filePairs: List[ResultFilePair])
+@(filePairs: List[StudentFilePairs])
 
 @main("Result Detail") {
 
@@ -18,18 +18,23 @@
                 <tbody>
                 @for(file <- filePairs) {
                     @if(file.potentialPlagiarism) {
-                        <tr>
+                        <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(file.matchIndex)">
                             <td>@file.fileA</td>
                             <td>@file.fileB</td>
                             <td>@file.percentage</td>
                         </tr>
                     }
-
                 }
                 </tbody>
             </table>
         </div>
     </div>
 
-
+    <script>
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
+    </script>
 }

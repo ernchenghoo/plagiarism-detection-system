@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>QUESTION_1.py</TITLE>
+ <TITLE>F</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,36 +15,201 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff" style="margin-left:25">
 <HR>
-<H3><CENTER>QUESTION_1.py</CENTER></H3><HR>
+<H3><CENTER>ANSWER QUESTION 1.py</CENTER></H3><HR>
+<PRE>
+<A NAME="8"></A><FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#8',2,'match34-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>from matplotlib import pyplot as pt
+import numpy as np
+import cv2
+<A NAME="3"></A>
+img =</B></FONT> cv2.imread(&quot;omega_book.bmp&quot;,0)
+
+img <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#3',2,'match34-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>=</B></FONT> img * 2
+img = img - 33
+
+<A NAME="1"></A>img2 = cv2.equalizeHist(img)
+
+img3 = cv2.calcHist([img],[0],None,[256],[0,256])
+img4 <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#1',2,'match34-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.calcHist([img2],[0],None,[256],[0,256])
+
+<A NAME="7"></A>pt.figure()
+
+pt.subplot(</B></FONT>2,2,1)
+pt<FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#7',2,'match34-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.title(&quot;Adjusted&quot;)
+pt.imshow(</B></FONT>img,cmap=&quot;gray&quot;)
+
+pt.subplot(2,2,2)
+pt.imshow(img,cmap=&quot;gray&quot;)
+pt.title(&quot;Equalized&quot;)
+
+pt.subplot(2,2,3)
+pt.plot(img3)
+pt.title(&quot;H_adjusted&quot;)
+
+pt.subplot(2,2,4)
+pt.plot(img4)
+pt.title(&quot;H_equalized&quot;)
+
+pt.show()
+</PRE>
+<HR>
+<H3><CENTER>ANSWER QUESTION 2.py</CENTER></H3><HR>
+<PRE>
+<A NAME="5"></A><FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#5',2,'match34-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>from matplotlib import pyplot as pt
+import numpy as np
+import</B></FONT> cv2
+<A NAME="11"></A>
+airplane = cv2.imread(&quot;airplane.bmp&quot;, 1)
+
+b = airplane<FONT color="#571b7e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#11',2,'match34-top.html#11',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>[:,:,0]
+<A NAME="10"></A>g = airplane[</B></FONT>:,:,1]
+r = airplane[:,:,2]
+<A NAME="2"></A>
+b_hist <FONT color="#b041ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#10',2,'match34-top.html#10',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.calcHist([b],[0],None,[256],[0,256])
+g_hist = cv2.</B></FONT>calcHist([g],[0],None,[256],[0,256])
+r_hist <FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#2',2,'match34-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.calcHist([r],[0],None,[256],[0,256])
+
+pt.figure()
+pt.subplot(1,3,1)
+pt.title(&quot;Blue Channel&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(b_hist, 'b')
+pt.xlim([0,256])
+
+pt.subplot(</B></FONT>1,3,2)
+pt.title(&quot;Green Channel&quot;)
+<A NAME="4"></A>pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(g_hist, 'g')
+pt<FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#4',2,'match34-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.xlim([0,256])
+
+pt.subplot(1,3,3)
+pt.title(&quot;Red Channel&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(r_hist, 'r')
+pt.xlim([0,256])
+
+cv2.imshow(</B></FONT>&quot;Blue of Airplane.bmp&quot;,b)
+
+cv2.imshow(&quot;Green of Airplane.bmp&quot;,g)
+
+cv2.imshow(&quot;Red of Airplane.bmp&quot;,r)
+
+pt.show()
+</PRE>
+<HR>
+<H3><CENTER>ANSWER QUESTION 3.py</CENTER></H3><HR>
+<PRE>
+<A NAME="0"></A><FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#0',2,'match34-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+
+img = cv2.imread(&quot;omega_circuit.bmp&quot;,0)
+<A NAME="12"></A>
+img_after= img.copy(</B></FONT>)
+
+img_after<FONT color="#3b9c9c"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#12',2,'match34-top.html#12',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>[0:65,:]=</B></FONT>cv2.medianBlur(img[0:65,:],5)
+
+img_after[450:510,:]=cv2.medianBlur(img[450:510,:],5)
+<A NAME="13"></A>
+img_after[:,0:65]=cv2.medianBlur(img[:,0:65],5)
+
+img_after[:,450:510]=cv2.medianBlur(img<FONT color="#842dce"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#13',2,'match34-top.html#13',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>[:,450:510],5)
+
+
+pt.figure()
+pt.subplot(</B></FONT>1,2,1)
+pt.imshow(img, cmap=&quot;gray&quot;)
+pt.title(&quot;Original Image&quot;)
+
+pt.subplot(1,2,2)
+pt.imshow(img_after, cmap=&quot;gray&quot;)
+pt.title(&quot;Median fFilter with 5x5&quot;)
+</PRE>
+<HR>
+<H3><CENTER>ANSWER QUESTION 4.py</CENTER></H3><HR>
 <PRE>
 import numpy as np
 import cv2
 from matplotlib import pyplot as pt
-#question 1
 
-book = cv2.imread(&quot;omega_book.bmp&quot;,0)
-book = book -17*2
-<A NAME="0"></A>book_eq = cv2.equalizeHist(book)
+img = cv2.imread(&quot;q4omega.tif&quot;,1)
+img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+<A NAME="6"></A>hist = cv2.calcHist([img_gray],[0],None,[256],[0,256])
 
-hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
-hist_book_eq = cv2<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#0',2,'match34-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.calcHist([book_eq],[0],None,[256],[0,256])
+[nrow,ncol] = img_gray.shape
+mask <FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#6',2,'match34-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= np.zeros((nrow,ncol),dtype=np.uint8)
+
+mask2 = img_gray.copy(</B></FONT>)
+
+t1 = 178
+t2 = 80
+
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if img_gray[x,y] &lt;= t1:
+            mask[x,y] =255
+        if img_gray[x,y] &gt;=t2:
+            mask2[x,y]=255
+        else:
+            mask[x,y]=0
+            mask2[x,y]=0
+
+mask3= cv2.bitwise_not(mask)
+
+mask[:,760:1147]=0
+
+mask2[:,0:385]=0
+
+mask2[:,760:1145]=0
+
+mask3[:,0:775]=0
+
+mask4=mask.copy()
+
+mask4=mask+mask2+mask3
+
+ex_img = img.copy()
+ex_img[:,:,0] = cv2.bitwise_and(img[:,:,0],mask4)
+ex_img[:,:,1] = cv2.bitwise_and(img[:,:,1],mask4)
+ex_img[:,:,2] = cv2.bitwise_and(img[:,:,2],mask4)
 
 pt.figure()
-pt.subplot(2,2,1)
-pt.imshow(book,cmap=&quot;gray&quot;)
-pt.title(&quot;manually adjusted&quot;)
 
-pt.subplot(2,2,2)
-pt.imshow(book_eq,cmap=&quot;gray&quot;)
-pt.title(&quot;histogram equalized version&quot;)
+pt.subplot(3,3,1)
+pt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+<A NAME="9"></A>pt.title(&quot;Original Color Image&quot;)
 
-pt.subplot(2,2,3)
-pt.plot(hist_book)
-pt.title(&quot;manually adjusted histogram&quot;)
+pt.subplot(3,3,2)
+pt<FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match34-0.html#9',2,'match34-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.imshow(img_gray, cmap=&quot;gray&quot;)
+pt.title(&quot;Original Gray Image&quot;)
 
-pt.</B></FONT>subplot(2,2,4)
-pt.plot(hist_book_eq)
-pt.title(&quot;histogram equalized version&quot;)
+pt.subplot(3,3,3)
+pt.imshow(mask, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 1&quot;)
+
+pt.</B></FONT>subplot(3,3,4)
+pt.imshow(mask2, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 2&quot;)
+
+pt.subplot(3,3,5)
+pt.imshow(mask3, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 3&quot;)
+
+pt.subplot(3,3,6)
+pt.imshow(mask4, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask 4&quot;)
+
+pt.subplot(3,3,7)
+pt.title(&quot;Extracted Color Image &quot;)
+pt.imshow(cv2.cvtColor(ex_img, cv2.COLOR_BGR2RGB))
+
+pt.subplot(3,3,8)
+pt.title(&quot;Histogram&quot;)
+pt.plot(hist)
+pt.xlim([0,256])
+
 pt.show()
 </PRE>
 

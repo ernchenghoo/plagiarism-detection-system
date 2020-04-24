@@ -17,40 +17,40 @@
 <HR>
 <H3><CENTER>QUESTION_1.py</CENTER></H3><HR>
 <PRE>
-import numpy as np
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match15-1.html#0',3,'match15-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
-from matplotlib import pyplot as pt
-#question 1
-<A NAME="0"></A>
-book = cv2.imread(&quot;omega_book.bmp&quot;,0)
-book = book -17*2
-book_eq <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match15-1.html#0',3,'match15-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.equalizeHist(book)
+<A NAME="1"></A>from</B></FONT> matplotlib import pyplot as pt
+<A NAME="2"></A>#question 1
+<A NAME="3"></A>
+book <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match15-1.html#1',3,'match15-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.imread(</B></FONT>&quot;omega_book.bmp&quot;,0)
+book <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match15-1.html#2',3,'match15-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=</B></FONT> book -17*2
+book_eq <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match15-1.html#3',3,'match15-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.equalizeHist(book)
 
-hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
-hist_book_eq = cv2.calcHist([book_eq],[0],None,[256],[0,256])
-
-pt.</B></FONT>figure()
-pt.subplot(2,2,1)
-pt.imshow(book,cmap=&quot;gray&quot;)
-pt.title(&quot;manually adjusted&quot;)
-
-pt.subplot(2,2,2)
-pt.imshow(book_eq,cmap=&quot;gray&quot;)
-pt.title(&quot;histogram equalized version&quot;)
+<A NAME="4"></A>hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
+<A NAME="5"></A>hist_book_eq = cv2.calcHist([book_eq],[0],None,[256],[0,256])
+<A NAME="7"></A><A NAME="6"></A>
+pt.</B></FONT>figure<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match15-1.html#4',3,'match15-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>)
+pt<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match15-1.html#5',3,'match15-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.subplot(2,2,1)
+pt.</B></FONT>imshow<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match15-1.html#6',3,'match15-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>book,cmap<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match15-1.html#7',3,'match15-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=&quot;gray&quot;)
+<A NAME="9"></A><A NAME="8"></A>pt.title(&quot;manually adjusted&quot;)
+<A NAME="10"></A>
+pt.</B></FONT>subplot(2,2,2)
+pt<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match15-1.html#8',3,'match15-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(</B></FONT>book_eq,cmap<FONT color="#f88017"><A HREF="javascript:ZweiFrames('match15-1.html#9',3,'match15-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=</B></FONT>&quot;gray&quot;)
+pt<FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match15-1.html#10',3,'match15-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.title(&quot;histogram equalized version&quot;)
 
 pt.subplot(2,2,3)
 pt.plot(hist_book)
-pt.title(&quot;manually adjusted histogram&quot;)
+<A NAME="11"></A>pt.title(&quot;manually adjusted histogram&quot;)
 
-pt.subplot(2,2,4)
-pt.plot(hist_book_eq)
-pt.title(&quot;histogram equalized version&quot;)
-pt.show()
+<A NAME="12"></A>pt.</B></FONT>subplot(2,2,4)
+pt<FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match15-1.html#11',3,'match15-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.plot(hist_book_eq)
+pt.</B></FONT>title(&quot;histogram equalized version&quot;)
+pt<FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match15-1.html#12',3,'match15-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.show(</B></FONT>)
 </PRE>
 <HR>
 <H3><CENTER>QUESTION_2.py</CENTER></H3><HR>
 <PRE>
-<A NAME="1"></A><FONT color="#f63526"><A HREF="javascript:ZweiFrames('match15-1.html#1',3,'match15-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+<A NAME="13"></A><FONT color="#842dce"><A HREF="javascript:ZweiFrames('match15-1.html#13',3,'match15-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -71,17 +71,17 @@ pt.imshow(g)
 pt.title(&quot;GREEN&quot;)
 
 pt.subplot(1,3,3)
-pt.imshow(b)
+<A NAME="14"></A>pt.imshow(b)
 pt.title(</B></FONT>&quot;BLUE&quot;)
 
-pt.show()
+pt<FONT color="#f52887"><A HREF="javascript:ZweiFrames('match15-1.html#14',3,'match15-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.show(</B></FONT>)
 
 
 </PRE>
 <HR>
 <H3><CENTER>QUESTION_3.py</CENTER></H3><HR>
 <PRE>
-<A NAME="2"></A><FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match15-1.html#2',3,'match15-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+<A NAME="15"></A><FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match15-1.html#15',3,'match15-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -109,7 +109,7 @@ pt.title(</B></FONT>&quot;Median 5x5 Image&quot;)
 <HR>
 <H3><CENTER>QUESTION_4.py</CENTER></H3><HR>
 <PRE>
-<A NAME="3"></A><FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match15-1.html#3',3,'match15-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+<A NAME="16"></A><FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match15-1.html#16',3,'match15-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 #question 4
@@ -118,28 +118,28 @@ q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
 histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
 
 [nrow,ncol] = q4omega_gray.shape
-<A NAME="4"></A>mask = np.zeros((nrow,ncol),dtype=np.uint8)
+<A NAME="17"></A>mask = np.zeros((nrow,ncol),dtype=np.uint8)
 
 threshold =</B></FONT> 150
-<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match15-1.html#4',3,'match15-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for x in range (0,nrow):
+<FONT color="#800517"><A HREF="javascript:ZweiFrames('match15-1.html#17',3,'match15-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &gt;= threshold:
             mask[x,y] =255
-<A NAME="5"></A>        else:
+<A NAME="19"></A><A NAME="18"></A>        else:
             mask[x,y]=0</B></FONT>
 
-mask2 = q4omega_gray<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match15-1.html#5',3,'match15-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.copy()
+mask2 <FONT color="#f62817"><A HREF="javascript:ZweiFrames('match15-1.html#18',3,'match15-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=</B></FONT> q4omega_gray<FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match15-1.html#19',3,'match15-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.copy()
 
 for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &lt;= threshold:
             mask2[x,y] =255
-        else:
+<A NAME="20"></A>        else:
             mask2[x,y]=0</B></FONT>
-<A NAME="6"></A>
-mask3 = q4omega_gray.copy()
+<A NAME="21"></A>
+mask3 <FONT color="#d4a017"><A HREF="javascript:ZweiFrames('match15-1.html#20',3,'match15-top.html#20',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= q4omega_gray.copy(</B></FONT>)
 
-<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match15-1.html#6',3,'match15-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for x in range (0,nrow):
+<FONT color="#00ff00"><A HREF="javascript:ZweiFrames('match15-1.html#21',3,'match15-top.html#21',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &lt;= threshold:
             mask2[x,y] =255
@@ -158,32 +158,32 @@ pt.figure()
 
 pt.subplot(2,4,1)
 pt.imshow(q4omega)
-pt.title(&quot;Original Color Image&quot;)
+<A NAME="23"></A><A NAME="22"></A>pt.title(&quot;Original Color Image&quot;)
 
 pt.</B></FONT>subplot(2,4,2)
-pt.imshow(q4omega_gray, cmap=&quot;gray&quot;)
-pt.title(&quot;Original Gray Image&quot;)
+pt<FONT color="#4cc417"><A HREF="javascript:ZweiFrames('match15-1.html#22',3,'match15-top.html#22',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>imshow(q4omega_gray, cmap<FONT color="#f660ab"><A HREF="javascript:ZweiFrames('match15-1.html#23',3,'match15-top.html#23',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=&quot;gray&quot;)
+<A NAME="25"></A><A NAME="24"></A>pt.title(&quot;Original Gray Image&quot;)
 
-pt.subplot(2,4,3)
-<A NAME="7"></A>pt.imshow(mask, cmap=&quot;gray&quot;)
-pt.title(&quot;Mask&quot;)
+pt.</B></FONT>subplot(2,4,3)
+<A NAME="26"></A>pt<FONT color="#ada96e"><A HREF="javascript:ZweiFrames('match15-1.html#24',3,'match15-top.html#24',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>imshow(mask, cmap<FONT color="#87f717"><A HREF="javascript:ZweiFrames('match15-1.html#25',3,'match15-top.html#25',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=&quot;gray&quot;)
+pt.title(</B></FONT>&quot;Mask&quot;)
 
-pt<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match15-1.html#7',3,'match15-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.subplot(2,4,4)
+pt<FONT color="#95b9c7"><A HREF="javascript:ZweiFrames('match15-1.html#26',3,'match15-top.html#26',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.subplot(2,4,4)
 pt.title(&quot;Histogram&quot;)
 pt.plot(histq4omega)
 pt.xlim([0,256])
-
+<A NAME="27"></A>
 pt.subplot(2,4,5)
 pt.title(&quot;2nd mask&quot;)
-pt.imshow(</B></FONT>mask2, cmap=&quot;gray&quot;)
-
+pt.imshow(</B></FONT>mask2, cmap<FONT color="#e77471"><A HREF="javascript:ZweiFrames('match15-1.html#27',3,'match15-top.html#27',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=&quot;gray&quot;)
+<A NAME="29"></A><A NAME="28"></A>
 pt.subplot(2,4,6)
-pt.title(&quot;3rd mask&quot;)
-pt.imshow(mask3,cmap=&quot;gray&quot;)
-
+pt.</B></FONT>title(&quot;3rd mask&quot;)
+pt<FONT color="#717d7d"><A HREF="javascript:ZweiFrames('match15-1.html#28',3,'match15-top.html#28',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>imshow(mask3,cmap<FONT color="#faafba"><A HREF="javascript:ZweiFrames('match15-1.html#29',3,'match15-top.html#29',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>=&quot;gray&quot;)
+<A NAME="31"></A><A NAME="30"></A>
 pt.subplot(2,4,7)
-pt.title(&quot;Extracted Color Image &quot;)
-pt.imshow(cv2.cvtColor(ex_q4omega, cv2.COLOR_BGR2RGB))
+pt.</B></FONT>title(&quot;Extracted Color Image &quot;)
+pt<FONT color="#f9966b"><A HREF="javascript:ZweiFrames('match15-1.html#30',3,'match15-top.html#30',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(cv2.</B></FONT>cvtColor(ex_q4omega, cv2<FONT color="#3ea99f"><A HREF="javascript:ZweiFrames('match15-1.html#31',3,'match15-top.html#31',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>COLOR_BGR2RGB))
 </PRE>
 
 </BODY>

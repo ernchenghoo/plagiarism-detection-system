@@ -23,7 +23,10 @@
   <div class="row">
     <div class="col text-center">
       @helper.form(action = helper.CSRF(routes.RunJPlagController.upload()), Symbol("enctype") -> "multipart/form-data") {
-        <input type="file" class="btn btn-primary homepage_button" name="files" multiple id="files" size="1000" onchange="this.form.submit()">
+        <label for="file-upload" class="custom-file-upload">
+          <i class="fa fa-cloud-upload"></i> Upload File
+        </label>
+        <input type="file" id="file-upload" class="btn btn-primary homepage_button" name="files" size="1000" onchange="this.form.submit()">
       }
     </div>
   </div>

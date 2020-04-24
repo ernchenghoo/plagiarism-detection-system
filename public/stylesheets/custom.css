@@ -3,14 +3,42 @@
     font-family: Roboto, serif;
 }
 
+#token_title_text {
+    font-size: 15px;
+    font-family: Roboto, serif;
+}
+
 .logo_image {
     padding: 0;
 }
 
+.token-table {
+    font-size: 12px;
+
+
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.th {
+    background-color: #f5f5f5;
+}
 .homepage_button {
     width: 50%;
     margin-bottom: 20px;
     background: #005cbf;
+    border-radius: 12px;
+    color: white;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    background: #005cbf;
+    width: 50%;
+    border-radius: 12px;
+    color: white;
 }
 
 .custom-file-upload {
