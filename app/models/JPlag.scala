@@ -1,21 +1,23 @@
 package models
 import java.io.{ByteArrayOutputStream, File, PrintWriter}
 
-
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import scala.jdk.CollectionConverters._
 import scala.collection.mutable.ListBuffer
 import scala.sys.process.{Process, ProcessLogger}
 
 case class JPlag(language: String) {
 
   val resultString = s"java -jar ./jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r ./public/results -s ./testFiles"
-  var resultList: List[StudentFilePairs] = List[StudentFilePairs]()
+  var unPlagiarisedPairs: List[StudentFilePairs] = List[StudentFilePairs]()
   var error: String = null
-  var plagiarismGroup: ListBuffer[String] = new ListBuffer[String]()
-  var plagiarismGroupAverage = 0.0
+  var plagiarismGroup: ListBuffer[PotentialPlagiarismGroup] = new ListBuffer[PotentialPlagiarismGroup]()
 
   var exitCode: Int = 0
 
   def runJPlag(): Boolean = {
+    plagiarismGroup.clear()
     val command = resultString
     val process = processRunner(command)
     println(process._2)
@@ -44,38 +46,134 @@ case class JPlag(language: String) {
   }
 
   def processResults(rawData: String): Unit = {
-    val filteredResults = new ListBuffer[StudentFilePairs]
+    val unplagiarisedGroup = new ListBuffer[StudentFilePairs]
     val results = rawData.split("===")
     val resultData = results(2).split("&").map(_.trim())
     var counter = 0
-    var plagiarismGroupCounter = 0
-    var plagiarismGroupTotal = 0.0
+
     while (counter+1 < resultData.length) {
-      //for every 3 in resultData, first field is fileA, second field is fileB, third field is percentage
+      //for every 4 in resultData:
+      //  Index 0: Student A name
+      //  Index 1: Student B name
+      //  Index 2: File pair percentage
+      //  Index 3: File pair match index
       if ((counter+1) %4 != 0) {
-        if (resultData(counter+2).toDouble > 40) {
-          if (resultData(counter+2).toDouble >= 70) {
-            filteredResults += new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-              resultData(counter+3).toInt,true)
-            plagiarismGroupTotal += resultData(counter+2).toDouble
-            plagiarismGroupCounter += 1
-            if (!plagiarismGroup.contains(resultData(counter))) {
-              plagiarismGroup += resultData(counter)
+          val studentCodeFilePairs = getCodeFilePairs(resultData(counter+3))
+          val highToken = studentCodeFilePairs.find(pairs => pairs.tokenNum >= 50)
+          //high chance to be plagiarising
+          if (highToken.isDefined) {
+            println("Student " + resultData(counter) + " and student " + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
+            // if plagiarism group already available, check and see if token matches
+            if (plagiarismGroup.nonEmpty) {
+              var addedIntoGroup = false
+              // loop to check if token matches, if yes assume they are in the same plagiarism group
+              for (group <- plagiarismGroup) {
+                //token matches, add into same group
+                if (group.tokenNo == highToken.get.tokenNum) {
+                  println("Add into group " + group.groupNo + ", student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
+                  group.studentPairs += new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
+                    resultData(counter+3).toInt, studentCodeFilePairs)
+                  addedIntoGroup = true
+                }
+              }
+              // boolean check failed, token is not similar to any groups currently available, create a new group
+              if (!addedIntoGroup) {
+                println("New group, student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
+                val studentPair = new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
+                  resultData(counter+3).toInt, studentCodeFilePairs)
+                plagiarismGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), plagiarismGroup.length + 1, highToken.get.tokenNum)
+                plagiarismGroup.last.studentPairs += studentPair
+              }
+              for (x <- plagiarismGroup) {
+                println ("Group " + x.groupNo + ", token: " + x.tokenNo)
+                for (y <- x.studentPairs) {
+                  println ("\tStudent " + y.studentA + "and " + y.studentB)
+                }
+              }
+              println("\n")
             }
-            if (!plagiarismGroup.contains(resultData(counter+1))) {
-              plagiarismGroup += resultData(counter+1)
+            else {
+              println("New group, student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
+              val studentPair = new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
+                resultData(counter+3).toInt, studentCodeFilePairs)
+              plagiarismGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), 1, highToken.get.tokenNum)
+              plagiarismGroup.last.studentPairs += studentPair
             }
           }
           else {
-            filteredResults += new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-              resultData(counter+3).toInt, false)
+            unplagiarisedGroup += new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
+              resultData(counter+3).toInt, studentCodeFilePairs)
           }
-        }
       }
       counter += 4
     }
-    plagiarismGroupAverage = BigDecimal(plagiarismGroupTotal/plagiarismGroupCounter).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
-    resultList = filteredResults.toList.sortBy(_.fileA)
+    unPlagiarisedPairs = unplagiarisedGroup.toList.sortBy(_.percentage)(Ordering[Double].reverse)
+  }
+
+  def getCodeFilePairs (matchIndex: String): List[CodeFilePair] = {
+    //get the file paths of the matches generated by JPlag
+    val studentAMatchFile = "./public/results/match" + matchIndex + "-0.html"
+    val studentBMatchFile = "./public/results/match" + matchIndex + "-1.html"
+    val comparisonTable = "./public/results/match" + matchIndex + "-top.html"
+
+    //generate a JSoup doc to extract the contents from static HTML generated
+    val studentADoc: Document = Jsoup.parse(new File(studentAMatchFile), "utf-8")
+    val studentBDoc: Document = Jsoup.parse(new File(studentBMatchFile), "utf-8")
+    val comparisonTableDoc: Document = Jsoup.parse(new File(comparisonTable), "utf-8")
+
+    //remove unnecessary images
+    studentADoc.getElementsByTag("img").remove()
+    studentBDoc.getElementsByTag("img").remove()
+
+    //create an empty list buffer to add each separate files from a student to identify the total number of files that has been detected
+    val studentACodes = new ListBuffer[String]()
+    val studentBCodes = new ListBuffer[String]()
+    val studentAtitles = new ListBuffer[String]()
+    val studentBtitles = new ListBuffer[String]()
+    val comparisonLines = new ListBuffer[String]()
+    val comparisonTokens = new ListBuffer[String]()
+    val tableHeaders = new ListBuffer[String]()
+
+    studentADoc.getElementsByTag("pre").asScala.foreach(studentACodes += _.outerHtml())
+    studentBDoc.getElementsByTag("pre").asScala.foreach(studentBCodes += _.outerHtml())
+    studentADoc.getElementsByTag("h3").asScala.foreach(studentAtitles += _.text())
+    studentBDoc.getElementsByTag("h3").asScala.foreach(studentBtitles += _.text())
+    comparisonTableDoc.select("a").asScala.foreach(comparisonLines += _.html())
+    comparisonTableDoc.getElementsByTag("font").asScala.foreach(comparisonTokens += _.html())
+    comparisonTableDoc.getElementsByTag("th").asScala.foreach(tableHeaders += _.html())
+
+    val studentFileA = new ListBuffer[CodeFile]()
+    val studentFileB = new ListBuffer[CodeFile]()
+
+    for (index <- studentACodes.indices) {
+      studentFileA += new CodeFile(studentAtitles(index), studentACodes(index))
+    }
+    for (index <- studentBCodes.indices) {
+      studentFileB += new CodeFile(studentBtitles(index), studentBCodes(index))
+    }
+
+    val studentFilePairs = new ListBuffer[CodeFilePair]()
+
+    var counter = 0
+    while (counter < comparisonLines.length) {
+      val codeFilePair = new CodeFilePair()
+      for (element <- studentFileA) {
+        //for titles in comparisonLines, counter is file on the left, counter+1 is file on the right
+        if (comparisonLines(counter).contains(element.fileName)) {
+          codeFilePair.codeFileA = element
+        }
+      }
+      for (element <- studentFileB) {
+        if (comparisonLines(counter+1).contains(element.fileName)) {
+          codeFilePair.codeFileB = element
+        }
+      }
+      codeFilePair.tokenNum = comparisonTokens(counter+1).toInt
+      studentFilePairs += codeFilePair
+      counter += 2
+    }
+
+    studentFilePairs.toList
   }
 
 

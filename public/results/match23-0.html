@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>H</TITLE>
+ <TITLE>D</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,85 +15,76 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff">
 <HR>
-<H3><CENTER>Question 1.py</CENTER></H3><HR>
+<H3><CENTER>Q3.py</CENTER></H3><HR>
 <PRE>
-# -*- coding: utf-8 -*-
-&quot;&quot;&quot;
-Spyder Editor
-<A NAME="0"></A>
-This is a temporary script file.
-&quot;&quot;&quot;
-<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match23-1.html#0',3,'match23-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match23-1.html#0',3,'match23-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import cv2
 import numpy as np
+from matplotlib import pyplot as pt
+
+
+circuit = cv2.imread(&quot;omega_circuit.bmp&quot;,0)
+
+filtered_circuit = cv2.medianBlur(circuit,5)
+
+pt.subplot(1,2,1)
+pt.imshow(circuit,cmap=&quot;gray&quot;)
+pt.subplot(1,2,2)
+pt.imshow(filtered_circuit,cmap=</B></FONT>&quot;gray&quot;) 
+</PRE>
+<HR>
+<H3><CENTER>Q4.py</CENTER></H3><HR>
+<PRE>
+<A NAME="1"></A><FONT color="#f63526"><A HREF="javascript:ZweiFrames('match23-1.html#1',3,'match23-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
+from matplotlib import pyplot as pt
 
-<A NAME="1"></A>
-<A NAME="2"></A>img = cv2.imread(&quot;omega_book.bmp&quot;,0)
-<A NAME="3"></A>img2 = cv2.equalizeHist(</B></FONT>img)
-new_image <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match23-1.html#1',3,'match23-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= np.concatenate((img,img2),1)
-<A NAME="4"></A>cv2.</B></FONT>imshow<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match23-1.html#2',3,'match23-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>&quot;result&quot;,new_image)
-cv2<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match23-1.html#3',3,'match23-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.waitKey(</B></FONT>)
 
-hist <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match23-1.html#4',3,'match23-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.calcHist([img],[0],None,[256],[0,256])
+q4 = cv2.imread(&quot;q4omega.tif&quot;,1)
+q4_gray = cv2.cvtColor(q4,cv2.COLOR_BGR2GRAY)
+hist = cv2.calcHist([q4_gray],[0],None,[256],[0,256])
+
+[nrow,ncol] = q4_gray.shape
+mask = np.zeros((nrow,ncol),dtype=np.uint8)
+
+mask2 = q4_gray.copy()
+
+
+
+threshold = 175
+threshold1 = 80
+
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4_gray[x,y] &lt;= threshold:
+            mask[x,y] =255
+        if q4_gray[x,y] &gt;=threshold1:
+            mask2[x,y]=255
+        else:
+            mask[x,y]=0
+            mask2[x,y]=0
+
+mask3= cv2.bitwise_not(mask)
+mask[:,762:1147]=0
+mask2[:,0:387]=0
+mask2[:,760:1147]=0
+mask3[:,0:776]=0
+mask4=mask.copy()
+mask4=mask+mask2+mask3
+
+ex_q4 = q4.copy()
+ex_q4[:,:,0] = cv2.bitwise_and(q4[:,:,0],mask4)
+ex_q4[:,:,1] = cv2.bitwise_and(q4[:,:,1],mask4)
+ex_q4[:,:,2] = cv2.bitwise_and(q4[:,:,2],mask4)
+
 pt.figure()
-<A NAME="5"></A>pt.subplot(1,2,1)
-pt.title(&quot;Original omega_book&quot;)
-<A NAME="6"></A>pt.xlabel(&quot;Bins&quot;)
-<A NAME="7"></A>pt.</B></FONT>ylabel<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match23-1.html#5',3,'match23-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(&quot;Number of Pixels&quot;)
-pt.plot(hist)
-<A NAME="8"></A>pt.xlim(</B></FONT>[<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match23-1.html#6',3,'match23-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>0,256])
-<A NAME="9"></A>pt.</B></FONT>show<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match23-1.html#7',3,'match23-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>)
 
-hist2 <FONT color="#bce954"><A HREF="javascript:ZweiFrames('match23-1.html#8',3,'match23-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.calcHist([img2],[0],None,[256],[0</B></FONT>,256])
-pt<FONT color="#f88017"><A HREF="javascript:ZweiFrames('match23-1.html#9',3,'match23-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.subplot(1,2,2)
-pt.title(&quot;Edited omega_book&quot;)
-<A NAME="10"></A>pt.xlabel(&quot;Bins&quot;)
-<A NAME="11"></A>pt.ylabel(&quot;Number of Pixels&quot;)
-pt.plot(hist)
-pt.</B></FONT>xlim<FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match23-1.html#10',3,'match23-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>([0,256])
-pt.</B></FONT>show<FONT color="#571b7e"><A HREF="javascript:ZweiFrames('match23-1.html#11',3,'match23-top.html#11',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>)
+pt.subplot(1,2,1)
+pt.imshow(cv2.cvtColor(q4, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Original Color Image&quot;)
 
-</PRE>
-<HR>
-<H3><CENTER>Question 3.py</CENTER></H3><HR>
-<PRE>
-# -*- coding: utf-8 -*-
-&quot;&quot;&quot;
-Created on Fri Oct 28 12:55:59 2016
-
-@author: 15074248
-&quot;&quot;&quot;
-<A NAME="12"></A>from matplotlib import pyplot as pt
-import numpy as np
-import cv2
-img <FONT color="#3b9c9c"><A HREF="javascript:ZweiFrames('match23-1.html#12',3,'match23-top.html#12',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= cv2.imread(&quot;omega_circuit.bmp&quot;, 0)
-<A NAME="13"></A>
-[nrow,ncol] = img.shape
-output_img = cv2.medianBlur(</B></FONT>img,(5))
-cv2<FONT color="#842dce"><A HREF="javascript:ZweiFrames('match23-1.html#13',3,'match23-top.html#13',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(&quot;Edited circuit&quot;, output_img)
-cv2.</B></FONT>waitKey()
-</PRE>
-<HR>
-<H3><CENTER>Question 4.py</CENTER></H3><HR>
-<PRE>
-<A NAME="14"></A><FONT color="#f52887"><A HREF="javascript:ZweiFrames('match23-1.html#14',3,'match23-top.html#14',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
-import numpy as np
-import cv2
-
-img = cv2.imread(&quot;q4omega.tif&quot;,1)
-img1 = cv2.imread(&quot;q4omega.tif&quot;,0)
-cv2.imshow(&quot;q4omega&quot;, img)
-<A NAME="15"></A>cv2.waitKey()
-
-<A NAME="17"></A><A NAME="16"></A>img = cv2.cvtColor(img,cv2.</B></FONT>COLOR_BGR2RGB)
-new_img <FONT color="#3bb9ff"><A HREF="javascript:ZweiFrames('match23-1.html#15',3,'match23-top.html#15',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= img.copy()
-new_img[:,:,0] = img[</B></FONT>:,:,0]
-new_img<FONT color="#3090c7"><A HREF="javascript:ZweiFrames('match23-1.html#16',3,'match23-top.html#16',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>[:,:,1] =</B></FONT> img<FONT color="#800517"><A HREF="javascript:ZweiFrames('match23-1.html#17',3,'match23-top.html#17',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>[:,:,1]
-<A NAME="18"></A>new_img[:,:,2] = img[</B></FONT>:,:,2]
-<A NAME="19"></A>
-
-cv2<FONT color="#f62817"><A HREF="javascript:ZweiFrames('match23-1.html#18',3,'match23-top.html#18',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>imshow(&quot;Edited q4omega&quot;,new_img)
-cv2<FONT color="#4e9258"><A HREF="javascript:ZweiFrames('match23-1.html#19',3,'match23-top.html#19',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.</B></FONT>waitKey()
+pt.subplot(1,2,2)
+pt.title(</B></FONT>&quot;Extracted Color Image &quot;)
+pt.imshow(cv2.cvtColor(ex_q4, cv2.COLOR_BGR2RGB)) 
 </PRE>
 
 </BODY>

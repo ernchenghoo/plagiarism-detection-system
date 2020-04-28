@@ -1,10 +1,12 @@
 package controllers
 
 
+import java.io.{File, FileInputStream}
 import java.nio.file.Paths
+import java.util.zip.ZipInputStream
 
 import javax.inject.Inject
-import models.{JPlag, StudentFilePairs}
+import models.{JPlag, PotentialPlagiarismGroup, StudentFilePairs}
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
@@ -49,14 +51,21 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def resultDetail (group: Int): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    group match {
-      case 1 => Ok(views.html.result_detail(newInstance.resultList))
-    }
+    Ok(views.html.result_detail(newInstance.plagiarismGroup.find(pairs => pairs.groupNo == group).get))
   }
 
-  def resultCodeComparison (matchIndex: Int): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-
-    val selectedPair: Option[StudentFilePairs] = newInstance.resultList.find(student => student.matchIndex == matchIndex)
+  def resultCodeComparison (group: Int, matchIndex: Int): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    var selectedPair: Option[StudentFilePairs] = null
+    if (group != 0) {
+      for (plgGroup <- newInstance.plagiarismGroup) {
+        if (plgGroup.groupNo == group) {
+          selectedPair = plgGroup.studentPairs.find(student => student.matchIndex == matchIndex)
+        }
+      }
+    }
+    else {
+      selectedPair = newInstance.unPlagiarisedPairs.find(student => student.matchIndex == matchIndex)
+    }
 
     Ok(views.html.result_code_comparison(matchIndex, selectedPair))
 
@@ -70,7 +79,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def upload = Action(parse.multipartFormData) { request =>
     request.body.files.foreach( file => {
-      val filename = Paths.get(file.filename).getFileName
+      val filename: File = Paths.get(file.filename).getFileName.toFile
       file.ref.moveTo(Paths.get(s"./testFiles/$filename").toFile, replace = true)
     })
     Redirect(routes.RunJPlagController.detection())

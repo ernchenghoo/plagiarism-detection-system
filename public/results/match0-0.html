@@ -90,9 +90,26 @@ pt.title(&quot;Blue channel&quot;)
 pt.plot(</B></FONT>hist3)
 </PRE>
 <HR>
+<H3><CENTER>Omega\question3.py</CENTER></H3><HR>
+<PRE>
+<A NAME="2"></A><FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match0-1.html#2',3,'match0-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import cv2
+import numpy as np
+from matplotlib import pyplot as pt
+
+
+circuit = cv2.imread(&quot;omega_circuit.bmp&quot;,0)
+
+filtered_circuit = cv2.medianBlur(circuit,5)
+
+pt.subplot(1,2,1)
+pt.imshow(circuit,cmap=&quot;gray&quot;)
+pt.subplot(1,2,2)
+pt.imshow(filtered_circuit,cmap=</B></FONT>&quot;gray&quot;)
+</PRE>
+<HR>
 <H3><CENTER>Omega\question4.py</CENTER></H3><HR>
 <PRE>
-<A NAME="2"></A><FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match0-1.html#2',3,'match0-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+<A NAME="3"></A><FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match0-1.html#3',3,'match0-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>D</TITLE>
+ <TITLE>A</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,9 +15,26 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff" style="margin-left:25">
 <HR>
-<H3><CENTER>Q4.py</CENTER></H3><HR>
+<H3><CENTER>Question 3.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match10-0.html#0',2,'match10-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+import cv2
+import numpy as np
+<A NAME="0"></A>from matplotlib import pyplot as pt
+
+
+circuit = cv2<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match10-0.html#0',2,'match10-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.imread(&quot;omega_circuit.bmp&quot;,0)
+
+filtered_circuit = cv2.medianBlur(circuit,5)
+
+pt.subplot(1,2,1)
+pt.imshow(circuit,cmap=&quot;gray&quot;)
+pt.subplot(1,2,2)
+pt.imshow(</B></FONT>filtered_circuit,cmap=&quot;gray&quot;) 
+</PRE>
+<HR>
+<H3><CENTER>Question 4.py</CENTER></H3><HR>
+<PRE>
+<A NAME="1"></A><FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match10-0.html#1',2,'match10-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -30,7 +47,6 @@ hist = cv2.calcHist([q4_gray],[0],None,[256],[0,256])
 mask = np.zeros((nrow,ncol),dtype=np.uint8)
 
 mask2 = q4_gray.copy()
-
 
 
 threshold = 175
@@ -61,13 +77,18 @@ ex_q4[:,:,2] = cv2.bitwise_and(q4[:,:,2],mask4)
 
 pt.figure()
 
-pt.subplot(1,2,1)
+pt.subplot(2,3,1)
 pt.imshow(cv2.cvtColor(q4, cv2.COLOR_BGR2RGB))
 pt.title(&quot;Original Color Image&quot;)
 
-pt.subplot(1,2,2)
-pt.title(</B></FONT>&quot;Extracted Color Image &quot;)
-pt.imshow(cv2.cvtColor(ex_q4, cv2.COLOR_BGR2RGB)) 
+pt.subplot(2,3,2)
+pt.imshow(</B></FONT>mask, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask&quot;)
+
+pt.subplot(2,3,3)
+pt.title(&quot;Extracted Color Image &quot;)
+pt.imshow(cv2.cvtColor(ex_q4, cv2.COLOR_BGR2RGB))
+
 </PRE>
 
 </BODY>

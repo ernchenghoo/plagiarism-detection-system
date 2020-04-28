@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>I</TITLE>
+ <TITLE>Question 3.py</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,35 +15,21 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff">
 <HR>
-<H3><CENTER>Q1.py</CENTER></H3><HR>
+<H3><CENTER>Question 3.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match40-1.html#0',3,'match40-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
 import cv2
-from</B></FONT> matplotlib import pyplot as pt
+import numpy as np
+<A NAME="0"></A>from matplotlib import pyplot as pt
 
 
+circuit = cv2<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match40-1.html#0',3,'match40-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imread(&quot;omega_circuit.bmp&quot;,0)
 
-airplane = cv2.imread(&quot;airplane.bmp&quot;, 1)
+filtered_circuit = cv2.medianBlur(circuit,5)
 
-
-
-
-b = airplane[:,:,0]
-
-g = airplane[:,:,1]
-
-r = airplane[:,:,2]
-
-pt.figure()
-pt.subplot(2,2,1)
-pt.imshow(r)
-pt.title(&quot;Red&quot;)
-pt.subplot(2,2,2)
-pt.imshow(g)
-pt.title(&quot;Green&quot;)
-pt.subplot(2,2,3)
-pt.imshow(b)
-pt.title(&quot;Blue&quot;)
+pt.subplot(1,2,1)
+pt.imshow(circuit,cmap=&quot;gray&quot;)
+pt.subplot(1,2,2)
+pt.imshow(</B></FONT>filtered_circuit,cmap=&quot;gray&quot;) 
 </PRE>
 
 </BODY>

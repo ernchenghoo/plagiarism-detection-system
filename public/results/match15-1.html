@@ -17,7 +17,7 @@
 <HR>
 <H3><CENTER>Q1.py</CENTER></H3><HR>
 <PRE>
-<A NAME="13"></A><FONT color="#842dce"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#13',2,'match15-top.html#13',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+<A NAME="1"></A><FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#1',2,'match15-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -48,9 +48,9 @@ pt.title(</B></FONT>&quot;Blue&quot;)
 <HR>
 <H3><CENTER>Q2.py</CENTER></H3><HR>
 <PRE>
-<A NAME="15"></A>
+<A NAME="2"></A>
 
-<FONT color="#3bb9ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#15',2,'match15-top.html#15',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#2',2,'match15-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -76,27 +76,27 @@ pt.title(</B></FONT>&quot;Median 5x5 Image&quot;)
 <HR>
 <H3><CENTER>Q3.py</CENTER></H3><HR>
 <PRE>
-<A NAME="16"></A>
-<FONT color="#3090c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#16',2,'match15-top.html#16',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+<A NAME="3"></A>
+<FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#3',2,'match15-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
 q4omega = cv2.imread(&quot;q4omega.tif&quot;,1)
 q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
-<A NAME="22"></A><A NAME="5"></A><A NAME="2"></A>histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
-<A NAME="24"></A><A NAME="9"></A><A NAME="7"></A>[nrow,ncol] = q4omega_gray.shape
-<A NAME="19"></A>mask = np.zeros((nrow,ncol),dtype=np.uint8)
-mask1 =</B></FONT> np<FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#5',2,'match15-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.zeros((nrow</B></FONT>,ncol),dtype<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#2',2,'match15-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>=</B></FONT>np<FONT color="#4cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#22',2,'match15-top.html#22',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.</B></FONT>uint8)
-mask2 <FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#7',2,'match15-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= np.zeros((nrow</B></FONT>,ncol),dtype<FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#9',2,'match15-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>=</B></FONT>np<FONT color="#ada96e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#24',2,'match15-top.html#24',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.</B></FONT>uint8)
-pt<FONT color="#4e9258"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#19',2,'match15-top.html#19',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.figure()
+histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
+[nrow,ncol] = q4omega_gray.shape
+<A NAME="5"></A>mask = np.zeros((nrow,ncol),dtype=np.uint8)
+mask1 =</B></FONT> np.zeros((nrow,ncol),dtype=np.uint8)
+mask2 = np.zeros((nrow,ncol),dtype=np.uint8)
+pt<FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#5',2,'match15-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.figure()
 #white is 255
 for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &gt;= 150:
-<A NAME="21"></A>            mask1[x,y] =255
+<A NAME="6"></A>            mask1[x,y] =255
         else:
             mask1[x,y]=0</B></FONT>
-<FONT color="#00ff00"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#21',2,'match15-top.html#21',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for x in range (0,nrow):
+<FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#6',2,'match15-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &lt;= 150:
             mask2[x,y] =255
@@ -111,58 +111,58 @@ ex_q4omega = q4omega.copy()
 ex_q4omega[:,:,0] = cv2.bitwise_and(q4omega[:,:,0],mask)
 ex_q4omega[:,:,1] = cv2.bitwise_and(q4omega[:,:,1],mask)
 ex_q4omega[:,:,2] = cv2.bitwise_and(q4omega[:,:,2],mask)
-<A NAME="10"></A>pt.figure()
+pt.figure()
 pt.subplot(2,2,1)
 pt.imshow(cv2.cvtColor(q4omega, cv2.</B></FONT>COLOR_BGR2RGB))
-<A NAME="8"></A>pt<FONT color="#b041ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#10',2,'match15-top.html#10',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.title(&quot;Original Color Image&quot;)
+pt.title(&quot;Original Color Image&quot;)
 pt.subplot(2,2,2)
-pt.imshow(cv2.cvtColor(ex_q4omega, cv2.</B></FONT>COLOR_BGR2RGB))
-pt<FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#8',2,'match15-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.title(</B></FONT>&quot;Expected Color Image&quot;)
+pt.imshow(cv2.cvtColor(ex_q4omega, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Expected Color Image&quot;)
 </PRE>
 <HR>
 <H3><CENTER>Q4.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#0',2,'match15-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
-<A NAME="3"></A>import cv2
-from</B></FONT> matplotlib import pyplot as pt
+import numpy as np
+<A NAME="0"></A>import cv2
+from matplotlib import pyplot as pt
 
-<A NAME="28"></A><A NAME="18"></A>q4omega <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#3',2,'match15-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.imread(&quot;q4omega.tif&quot;,1)
-<A NAME="31"></A><A NAME="23"></A>q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
-<A NAME="27"></A>histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
-<A NAME="29"></A>[nrow</B></FONT>,ncol] <FONT color="#f62817"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#18',2,'match15-top.html#18',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>=</B></FONT> q4omega_gray<FONT color="#717d7d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#28',2,'match15-top.html#28',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.</B></FONT>shape
-<A NAME="12"></A>mask <FONT color="#f660ab"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#23',2,'match15-top.html#23',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= np.zeros((nrow</B></FONT>,ncol),dtype=np<FONT color="#3ea99f"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#31',2,'match15-top.html#31',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.</B></FONT>uint8)
-mask1 <FONT color="#e77471"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#27',2,'match15-top.html#27',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= np.zeros((nrow</B></FONT>,ncol),dtype=np.uint8)
-<A NAME="17"></A>mask2 <FONT color="#faafba"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#29',2,'match15-top.html#29',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= np.zeros((nrow</B></FONT>,ncol),dtype=np.uint8)
-pt<FONT color="#3b9c9c"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#12',2,'match15-top.html#12',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.figure(</B></FONT>)
+q4omega <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#0',2,'match15-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.imread(&quot;q4omega.tif&quot;,1)
+q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
+histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
+[nrow</B></FONT>,ncol] = q4omega_gray.shape
+mask = np.zeros((nrow,ncol),dtype=np.uint8)
+mask1 = np.zeros((nrow,ncol),dtype=np.uint8)
+<A NAME="4"></A>mask2 = np.zeros((nrow,ncol),dtype=np.uint8)
+pt.figure()
 #white is 255
-<FONT color="#800517"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#17',2,'match15-top.html#17',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for x in range (0,nrow):
+<FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#4',2,'match15-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>for x in range (0,nrow):
     for y in range(0,ncol):
         if q4omega_gray[x,y] &gt;= 150:
-<A NAME="4"></A>            mask1[x,y] =255
-<A NAME="6"></A>        else:
+            mask1[x,y] =255
+        else:
             mask1[x,y]=0</B></FONT>
-for x in range <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#4',2,'match15-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>(</B></FONT>0,nrow):
-    for y in range<FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#6',2,'match15-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>(</B></FONT>0,ncol):
+for x in range (0,nrow):
+    for y in range(0,ncol):
         if q4omega_gray[x,y] &lt;= 150:
             mask2[x,y] =255
         else:
             mask2[x,y]=0
 
 mask1[:,0:380] = 0
-<A NAME="1"></A>mask2[:,370:1140] = 0
-<A NAME="11"></A>mask = mask1 + mask2
-<A NAME="20"></A>
-<A NAME="25"></A>ex_q4omega <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#1',2,'match15-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= q4omega.copy(</B></FONT>)
-<A NAME="26"></A>ex_q4omega[:,:,0] = cv2<FONT color="#571b7e"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#11',2,'match15-top.html#11',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.bitwise_and(q4omega[</B></FONT>:,:,0],mask)
-ex_q4omega[:,:,1] <FONT color="#d4a017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#20',2,'match15-top.html#20',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.bitwise_and(</B></FONT>q4omega[:,:,1],mask)
-ex_q4omega[:,:,2] <FONT color="#87f717"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#25',2,'match15-top.html#25',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.bitwise_and(</B></FONT>q4omega[:,:,2],mask)
-pt<FONT color="#95b9c7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#26',2,'match15-top.html#26',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.figure()
+mask2[:,370:1140] = 0
+mask = mask1 + mask2
+
+ex_q4omega = q4omega.copy()
+<A NAME="7"></A>ex_q4omega[:,:,0] = cv2.bitwise_and(q4omega[:,:,0],mask)
+ex_q4omega[:,:,1] = cv2.bitwise_and(q4omega[:,:,1],mask)
+ex_q4omega[:,:,2] = cv2.bitwise_and(q4omega[:,:,2],mask)
+pt<FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#7',2,'match15-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.figure()
 pt.subplot(2,2,1)
-<A NAME="30"></A>pt.imshow(cv2.cvtColor(q4omega, cv2.COLOR_BGR2RGB))
-<A NAME="14"></A>pt.title(&quot;Original Color Image&quot;)
+pt.imshow(cv2.cvtColor(q4omega, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Original Color Image&quot;)
 pt.subplot(2,2,2)
-pt.imshow(</B></FONT>cv2<FONT color="#f9966b"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#30',2,'match15-top.html#30',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.cvtColor(ex_q4omega, cv2.</B></FONT>COLOR_BGR2RGB))
-pt<FONT color="#f52887"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match15-0.html#14',2,'match15-top.html#14',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.title(</B></FONT>&quot;Expected Color Image&quot;)
+pt.imshow(</B></FONT>cv2.cvtColor(ex_q4omega, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Expected Color Image&quot;)
 </PRE>
 
 </BODY>

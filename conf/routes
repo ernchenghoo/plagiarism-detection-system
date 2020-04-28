@@ -8,7 +8,7 @@ GET     /                                   controllers.RunJPlagController.homep
 GET     /detection                          controllers.RunJPlagController.detection
 GET     /runJPlag                           controllers.RunJPlagController.runJPlag()
 GET     /result                             controllers.RunJPlagController.result
-GET     /result/codeComparison              controllers.RunJPlagController.resultCodeComparison(matchIndex: Int)
+GET     /result/codeComparison              controllers.RunJPlagController.resultCodeComparison(fromPlagiarisedGroup: Int, matchIndex: Int)
 GET     /javascriptRoutes                   controllers.Application.javascriptRoutes
 GET     /result/detail                      controllers.RunJPlagController.resultDetail(group: Int)
 POST    /saveFile                           controllers.RunJPlagController.upload()

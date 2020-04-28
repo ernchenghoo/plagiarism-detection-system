@@ -12,19 +12,21 @@
                     <thead>
                         <tr>
                         @if(studentResultPairs.isDefined) {
-                            <th scope="col">Student @studentResultPairs.get.fileA</th>
-                            <th scope="col">Student @studentResultPairs.get.fileB</th>
+                            <th scope="col">Student @studentResultPairs.get.studentA</th>
+                            <th scope="col">Student @studentResultPairs.get.studentB</th>
                             <th scope="col">Tokens</th>
+                        } else {
+                            <p>student result pairs not defined</p>
                         }
                         </tr>
                     </thead>
                     <tbody>
                     @if(studentResultPairs.isDefined) {
-                        @for(pairs <- studentResultPairs.get.extractResultsFromStaticHTML()) {
+                        @for(pairs <- studentResultPairs.get.similarFiles) {
                             <tr>
                                 <td>@Html(pairs.codeFileA.fileName)</td>
                                 <td>@Html(pairs.codeFileB.fileName)</td>
-                                <td>@Html(pairs.tokens)</td>
+                                <td>@pairs.tokenNum</td>
                             </tr>
                         }
                     }
@@ -40,15 +42,17 @@
                 <thead>
                     <tr>
                         @if(studentResultPairs.isDefined) {
-                            <th scope="col" class="text-center">Student @studentResultPairs.get.fileA</th>
-                            <th scope="col" class="text-center">Student @studentResultPairs.get.fileB</th>
+                            <th scope="col" class="text-center">Student @studentResultPairs.get.studentA</th>
+                            <th scope="col" class="text-center">Student @studentResultPairs.get.studentB</th>
+                        } else {
+                            <p>no student results pair defined</p>
                         }
 
                     </tr>
                 </thead>
                 <tbody>
                     @if(studentResultPairs.isDefined) {
-                        @for(pairs <- studentResultPairs.get.extractResultsFromStaticHTML()) {
+                        @for(pairs <- studentResultPairs.get.similarFiles) {
                             <tr>
                                 <th>@Html(pairs.codeFileA.fileName)</th>
                                 <th>@Html(pairs.codeFileB.fileName)</th>

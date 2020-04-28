@@ -15,9 +15,93 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff" style="margin-left:25">
 <HR>
+<H3><CENTER>ANSWER QUESTION 1.py</CENTER></H3><HR>
+<PRE>
+from matplotlib import pyplot as pt
+import numpy as np
+import cv2
+
+img = cv2.imread(&quot;omega_book.bmp&quot;,0)
+
+img = img * 2
+img = img - 33
+<A NAME="1"></A>
+img2 = cv2.equalizeHist(img)
+
+img3 <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match3-0.html#1',2,'match3-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.calcHist([img],[0],None,[256],[0,256])
+img4 = cv2.calcHist([img2],[0],None,[256],[0,256])
+
+pt.figure()
+
+pt.subplot(2,2,1)
+pt.title(&quot;Adjusted&quot;)
+pt.imshow(</B></FONT>img,cmap=&quot;gray&quot;)
+
+pt.subplot(2,2,2)
+pt.imshow(img,cmap=&quot;gray&quot;)
+pt.title(&quot;Equalized&quot;)
+
+pt.subplot(2,2,3)
+pt.plot(img3)
+pt.title(&quot;H_adjusted&quot;)
+
+pt.subplot(2,2,4)
+pt.plot(img4)
+pt.title(&quot;H_equalized&quot;)
+
+pt.show()
+</PRE>
+<HR>
+<H3><CENTER>ANSWER QUESTION 2.py</CENTER></H3><HR>
+<PRE>
+from matplotlib import pyplot as pt
+import numpy as np
+import cv2
+
+airplane = cv2.imread(&quot;airplane.bmp&quot;, 1)
+
+b = airplane[:,:,0]
+g = airplane[:,:,1]
+r = airplane[:,:,2]
+<A NAME="0"></A>
+b_hist = cv2.calcHist([b],[0],None,[256],[0,256])
+g_hist = cv2.calcHist([g],[0],None,[256],[0,256])
+r_hist <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match3-0.html#0',2,'match3-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>= cv2.calcHist([r],[0],None,[256],[0,256])
+
+pt.figure()
+pt.subplot(1,3,1)
+pt.title(&quot;Blue Channel&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(b_hist, 'b')
+pt.xlim([0,256])
+
+pt.subplot(1,3,2)
+pt.title(&quot;Green Channel&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(g_hist, 'g')
+pt.xlim([0,256])
+
+pt.subplot(</B></FONT>1,3,3)
+pt.title(&quot;Red Channel&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Count&quot;)
+pt.plot(r_hist, 'r')
+pt.xlim([0,256])
+
+cv2.imshow(&quot;Blue of Airplane.bmp&quot;,b)
+
+cv2.imshow(&quot;Green of Airplane.bmp&quot;,g)
+
+cv2.imshow(&quot;Red of Airplane.bmp&quot;,r)
+
+pt.show()
+</PRE>
+<HR>
 <H3><CENTER>ANSWER QUESTION 4.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match3-0.html#0',2,'match3-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
+<A NAME="3"></A><FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match3-0.html#3',2,'match3-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>import numpy as np
 import cv2
 from matplotlib import pyplot as pt
 
@@ -70,17 +154,17 @@ pt.title(&quot;Original Color Image&quot;)
 
 pt.subplot(3,3,2)
 pt.imshow(</B></FONT>img_gray, cmap=&quot;gray&quot;)
-pt.title(&quot;Original Gray Image&quot;)
+<A NAME="2"></A>pt.title(&quot;Original Gray Image&quot;)
 
 pt.subplot(3,3,3)
-pt.imshow(mask, cmap=&quot;gray&quot;)
+pt<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match3-0.html#2',2,'match3-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>.imshow(mask, cmap=&quot;gray&quot;)
 pt.title(&quot;Mask 1&quot;)
 
 pt.subplot(3,3,4)
 pt.imshow(mask2, cmap=&quot;gray&quot;)
 pt.title(&quot;Mask 2&quot;)
 
-pt.subplot(3,3,5)
+pt.subplot(</B></FONT>3,3,5)
 pt.imshow(mask3, cmap=&quot;gray&quot;)
 pt.title(&quot;Mask 3&quot;)
 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>J</TITLE>
+ <TITLE>question3.py</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,37 +15,21 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff">
 <HR>
-<H3><CENTER>QUESTION_1.py</CENTER></H3><HR>
+<H3><CENTER>question3.py</CENTER></H3><HR>
 <PRE>
-<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match36-1.html#0',3,'match36-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
-import cv2
-from</B></FONT> matplotlib import pyplot as pt
-#question 1
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match36-1.html#0',3,'match36-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import cv2
+import numpy as np
+from matplotlib import pyplot as pt
 
-book = cv2.imread(&quot;omega_book.bmp&quot;,0)
-book = book -17*2
-book_eq = cv2.equalizeHist(book)
 
-hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
-hist_book_eq = cv2.calcHist([book_eq],[0],None,[256],[0,256])
+circuit = cv2.imread(&quot;omega_circuit.bmp&quot;,0)
 
-pt.figure()
-pt.subplot(2,2,1)
-pt.imshow(book,cmap=&quot;gray&quot;)
-pt.title(&quot;manually adjusted&quot;)
+filtered_circuit = cv2.medianBlur(circuit,5)
 
-pt.subplot(2,2,2)
-pt.imshow(book_eq,cmap=&quot;gray&quot;)
-pt.title(&quot;histogram equalized version&quot;)
-
-pt.subplot(2,2,3)
-pt.plot(hist_book)
-pt.title(&quot;manually adjusted histogram&quot;)
-
-pt.subplot(2,2,4)
-pt.plot(hist_book_eq)
-pt.title(&quot;histogram equalized version&quot;)
-pt.show()
+pt.subplot(1,2,1)
+pt.imshow(circuit,cmap=&quot;gray&quot;)
+pt.subplot(1,2,2)
+pt.imshow(filtered_circuit,cmap=</B></FONT>&quot;gray&quot;)
 </PRE>
 
 </BODY>

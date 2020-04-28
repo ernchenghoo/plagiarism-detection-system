@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
 <HEAD>
- <TITLE>H</TITLE>
+ <TITLE>question1.py</TITLE>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <script type="text/javascript">
   <!--
@@ -15,44 +15,40 @@
 </HEAD>
 <BODY BGCOLOR="#ffffff">
 <HR>
-<H3><CENTER>Question 1.py</CENTER></H3><HR>
+<H3><CENTER>question1.py</CENTER></H3><HR>
 <PRE>
-# -*- coding: utf-8 -*-
-&quot;&quot;&quot;
-Spyder Editor
-<A NAME="0"></A>
-This is a temporary script file.
-&quot;&quot;&quot;
-<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match38-1.html#0',3,'match38-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match38-1.html#0',3,'match38-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
 import numpy as np
-import</B></FONT> cv2
+import cv2
+
+book = cv2.imread(&quot;omega_book.bmp&quot;, 0)
+
+book = book * 2
+book = book + 15
 
 
-img = cv2.imread(&quot;omega_book.bmp&quot;,0)
-img2 = cv2.equalizeHist(img)
-new_image = np.concatenate((img,img2),1)
-cv2.imshow(&quot;result&quot;,new_image)
-cv2.waitKey()
 
-hist = cv2.calcHist([img],[0],None,[256],[0,256])
+
+hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
+
+book2 = cv2.imread(&quot;book.bmp&quot;, 0)
+book_eq = cv2.equalizeHist(book)
+book_eq_hist = cv2.calcHist([book_eq],[0],None,[256],[0,256])
+
 pt.figure()
 pt.subplot(1,2,1)
-pt.title(&quot;Original omega_book&quot;)
+pt.title(&quot;Omega_Book_Manually_Adj&quot;)
 pt.xlabel(&quot;Bins&quot;)
 pt.ylabel(&quot;Number of Pixels&quot;)
-pt.plot(hist)
+pt.plot(hist_book)
 pt.xlim([0,256])
-pt.show()
-
-hist2 = cv2.calcHist([img2],[0],None,[256],[0,256])
 pt.subplot(1,2,2)
-pt.title(&quot;Edited omega_book&quot;)
+pt.title(&quot;Omega_Book_Equalized&quot;)
 pt.xlabel(&quot;Bins&quot;)
 pt.ylabel(&quot;Number of Pixels&quot;)
-pt.plot(hist)
+pt.plot(book_eq_hist)
 pt.xlim([0,256])
-pt.show()
-
+pt.show(</B></FONT>)
 </PRE>
 
 </BODY>
