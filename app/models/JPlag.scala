@@ -1,15 +1,20 @@
 package models
 import java.io.{ByteArrayOutputStream, File, PrintWriter}
 
+import org.apache.commons.io.FileUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.zeroturnaround.zip.ZipUtil
+
 import scala.jdk.CollectionConverters._
 import scala.collection.mutable.ListBuffer
 import scala.sys.process.{Process, ProcessLogger}
 
 case class JPlag(language: String) {
 
-  val resultString = s"java -jar ./jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r ./public/results -s ./testFiles"
+  val destinationPath = "./public/results"
+  val sourcePath = "./testFiles"
+  val resultString = s"java -jar ./jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath -s $sourcePath"
   var unPlagiarisedPairs: List[StudentFilePairs] = List[StudentFilePairs]()
   var error: String = null
   var plagiarismGroup: ListBuffer[PotentialPlagiarismGroup] = new ListBuffer[PotentialPlagiarismGroup]()
@@ -29,6 +34,9 @@ case class JPlag(language: String) {
     }
     else {
       processResults(rawResults)
+      //remove all uploaded files
+      val uploadedFilesDirectory = new java.io.File(sourcePath)
+      FileUtils.cleanDirectory(uploadedFilesDirectory)
       true
     }
   }
@@ -62,7 +70,6 @@ case class JPlag(language: String) {
           val highToken = studentCodeFilePairs.find(pairs => pairs.tokenNum >= 50)
           //high chance to be plagiarising
           if (highToken.isDefined) {
-            println("Student " + resultData(counter) + " and student " + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
             // if plagiarism group already available, check and see if token matches
             if (plagiarismGroup.nonEmpty) {
               var addedIntoGroup = false
@@ -70,7 +77,6 @@ case class JPlag(language: String) {
               for (group <- plagiarismGroup) {
                 //token matches, add into same group
                 if (group.tokenNo == highToken.get.tokenNum) {
-                  println("Add into group " + group.groupNo + ", student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
                   group.studentPairs += new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
                     resultData(counter+3).toInt, studentCodeFilePairs)
                   addedIntoGroup = true
@@ -78,22 +84,13 @@ case class JPlag(language: String) {
               }
               // boolean check failed, token is not similar to any groups currently available, create a new group
               if (!addedIntoGroup) {
-                println("New group, student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
                 val studentPair = new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
                   resultData(counter+3).toInt, studentCodeFilePairs)
                 plagiarismGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), plagiarismGroup.length + 1, highToken.get.tokenNum)
                 plagiarismGroup.last.studentPairs += studentPair
               }
-              for (x <- plagiarismGroup) {
-                println ("Group " + x.groupNo + ", token: " + x.tokenNo)
-                for (y <- x.studentPairs) {
-                  println ("\tStudent " + y.studentA + "and " + y.studentB)
-                }
-              }
-              println("\n")
             }
             else {
-              println("New group, student " + resultData(counter) + " and student" + resultData(counter+1) + ", token: " + highToken.get.tokenNum)
               val studentPair = new StudentFilePairs(resultData(counter), resultData(counter+1), BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
                 resultData(counter+3).toInt, studentCodeFilePairs)
               plagiarismGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), 1, highToken.get.tokenNum)
@@ -121,9 +118,11 @@ case class JPlag(language: String) {
     val studentBDoc: Document = Jsoup.parse(new File(studentBMatchFile), "utf-8")
     val comparisonTableDoc: Document = Jsoup.parse(new File(comparisonTable), "utf-8")
 
-    //remove unnecessary images
+    //remove unnecessary elements
     studentADoc.getElementsByTag("img").remove()
     studentBDoc.getElementsByTag("img").remove()
+    studentADoc.getElementsByTag("div").remove()
+    studentBDoc.getElementsByTag("div").remove()
 
     //create an empty list buffer to add each separate files from a student to identify the total number of files that has been detected
     val studentACodes = new ListBuffer[String]()
@@ -133,6 +132,7 @@ case class JPlag(language: String) {
     val comparisonLines = new ListBuffer[String]()
     val comparisonTokens = new ListBuffer[String]()
     val tableHeaders = new ListBuffer[String]()
+
 
     studentADoc.getElementsByTag("pre").asScala.foreach(studentACodes += _.outerHtml())
     studentBDoc.getElementsByTag("pre").asScala.foreach(studentBCodes += _.outerHtml())
@@ -174,6 +174,33 @@ case class JPlag(language: String) {
     }
 
     studentFilePairs.toList
+  }
+
+  def unZipUploadedFiles(): Unit = {
+    val uploadedFilesDirectory = new java.io.File(sourcePath)
+    for (file <- uploadedFilesDirectory.listFiles()) {
+      val extension = file.toString.split("\\.").last
+
+      println(extension)
+      if (extension == "zip" || extension == "rar") {
+        val fileName = file.getName
+        ZipUtil.unpack(new File(s"./testFiles/${fileName}"), new File("./testFiles"))
+      }
+      if (file.delete()) {
+        println(s"${file.getName} deleted")
+      }
+    }
+
+    for (extractedFile <- uploadedFilesDirectory.listFiles()) {
+      val extension = extractedFile.toString.split("\\.").last
+      if (extension == "zip") {
+        val extractedFileName = extractedFile.getName
+        ZipUtil.unpack(new File(s"./testFiles/${extractedFileName}"), new File("./testFiles"))
+      }
+      if (extractedFile.delete()) {
+        println(s"${extractedFile.getName} deleted")
+      }
+    }
   }
 
 

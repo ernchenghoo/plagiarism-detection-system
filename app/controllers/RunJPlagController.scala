@@ -1,12 +1,13 @@
 package controllers
 
 
-import java.io.{File, FileInputStream}
-import java.nio.file.Paths
-import java.util.zip.ZipInputStream
+import java.io.{File, FileInputStream, FileOutputStream, IOException}
+import java.nio.file.{Path, Paths}
+import java.util.zip.{ZipEntry, ZipInputStream}
 
 import javax.inject.Inject
 import models.{JPlag, PotentialPlagiarismGroup, StudentFilePairs}
+import org.zeroturnaround.zip.ZipUtil
 import play.api.data.Forms._
 import play.api.data._
 import play.api.mvc._
@@ -79,9 +80,11 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def upload = Action(parse.multipartFormData) { request =>
     request.body.files.foreach( file => {
-      val filename: File = Paths.get(file.filename).getFileName.toFile
+      val filename = Paths.get(file.filename).getFileName.toFile
       file.ref.moveTo(Paths.get(s"./testFiles/$filename").toFile, replace = true)
     })
+    newInstance.unZipUploadedFiles()
+
     Redirect(routes.RunJPlagController.detection())
   }
 

@@ -36,35 +36,35 @@
         </div>
     </div>
 
-        <div class="d-flex flex-column">
-            <h3 id="title_text" class="text-center">Similarity comparison</h3>
-            <table class="table table-bordered text-left w-auto">
-                <thead>
-                    <tr>
-                        @if(studentResultPairs.isDefined) {
-                            <th scope="col" class="text-center">Student @studentResultPairs.get.studentA</th>
-                            <th scope="col" class="text-center">Student @studentResultPairs.get.studentB</th>
-                        } else {
-                            <p>no student results pair defined</p>
-                        }
-
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="d-flex flex-column">
+        <h3 id="title_text" class="text-center">Similarity comparison</h3>
+        <table class="table table-bordered text-left w-auto">
+            <thead>
+                <tr>
                     @if(studentResultPairs.isDefined) {
-                        @for(pairs <- studentResultPairs.get.similarFiles) {
-                            <tr>
-                                <th>@Html(pairs.codeFileA.fileName)</th>
-                                <th>@Html(pairs.codeFileB.fileName)</th>
-                            </tr>
-                            <tr>
-                                <td>@Html(pairs.codeFileA.code)</td>
-                                <td>@Html(pairs.codeFileB.code)</td>
-                            </tr>
-                        }
+                        <th scope="col" class="text-center">Student @studentResultPairs.get.studentA</th>
+                        <th scope="col" class="text-center">Student @studentResultPairs.get.studentB</th>
+                    } else {
+                        <p>no student results pair defined</p>
                     }
-                </tbody>
-            </table>
-        </div>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if(studentResultPairs.isDefined) {
+                    @for(pairs <- studentResultPairs.get.similarFiles) {
+                        <tr>
+                            <th>@Html(pairs.codeFileA.fileName)</th>
+                            <th>@Html(pairs.codeFileB.fileName)</th>
+                        </tr>
+                        <tr>
+                            <td>@Html(pairs.codeFileA.code)</td>
+                            <td>@Html(pairs.codeFileB.code)</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
+
 }

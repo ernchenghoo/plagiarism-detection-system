@@ -9,9 +9,9 @@ GET     /detection                          controllers.RunJPlagController.detec
 GET     /runJPlag                           controllers.RunJPlagController.runJPlag()
 GET     /result                             controllers.RunJPlagController.result
 GET     /result/codeComparison              controllers.RunJPlagController.resultCodeComparison(fromPlagiarisedGroup: Int, matchIndex: Int)
-GET     /javascriptRoutes                   controllers.Application.javascriptRoutes
+GET     /javascriptRoutes                   controllers.Application.javascriptRoutes()
 GET     /result/detail                      controllers.RunJPlagController.resultDetail(group: Int)
-POST    /saveFile                           controllers.RunJPlagController.upload()
+POST    /uploadFile                         controllers.RunJPlagController.upload
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
