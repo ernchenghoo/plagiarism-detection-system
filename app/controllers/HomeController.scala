@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject._
-import models.{Home, JPlag}
+import models.JPlag
 import play.api.mvc._
 
 

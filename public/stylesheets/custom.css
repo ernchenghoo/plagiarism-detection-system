@@ -3,6 +3,10 @@
     font-family: Roboto, serif;
 }
 
+.loading_gif {
+    float: right;
+}
+
 #token_title_text {
     font-size: 15px;
     font-family: Roboto, serif;
@@ -14,11 +18,9 @@
 
 .token-table {
     font-size: 12px;
-
-
 }
 
-input[type="file"] {
+input[id="studentCodeUpload"] {
     display: none;
 }
 

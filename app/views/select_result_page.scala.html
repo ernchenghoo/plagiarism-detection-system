@@ -1,0 +1,34 @@
+@(detectionIDList: List[(String, String)])
+
+@main("Select result page") {
+
+    <div class="d-flex flex-column">
+        <h3 id="title_text" class="text-center">Similarity comparison</h3>
+        <table class="table table-hover table-bordered text-center w-auto">
+            <thead>
+                <tr>
+                    <th scope="col">Detection ID</th>
+                    <th scope="col">Detection Date Time</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(detectionID <- detectionIDList) {
+                <tr class='clickable-row' data-href="@routes.RunJPlagController.result(detectionID._1)">
+                    <td>@detectionID._1</td>
+                    <td>@detectionID._2</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+
+
+}
