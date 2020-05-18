@@ -4,14 +4,20 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                                   controllers.RunJPlagController.homepage(status: Option[Boolean])
+GET     /                                   controllers.RunJPlagController.homepage
 GET     /detection                          controllers.RunJPlagController.detection
-GET     /runJPlag                           controllers.RunJPlagController.runJPlag()
-GET     /result                             controllers.RunJPlagController.result
-GET     /result/codeComparison              controllers.RunJPlagController.resultCodeComparison(fromPlagiarisedGroup: Int, matchIndex: Int)
-GET     /javascriptRoutes                   controllers.Application.javascriptRoutes()
-GET     /result/detail                      controllers.RunJPlagController.resultDetail(group: Int)
-POST    /uploadFile                         controllers.RunJPlagController.upload
+GET     /validateDetection                  controllers.RunJPlagController.validateDetection
+GET     /runJPlag                           controllers.RunJPlagController.runJPlag
+GET     /result                             controllers.RunJPlagController.resultSelect
+GET     /home/:status                       controllers.RunJPlagController.homepageAfterRun(status: String)
+GET     /result/:detectionID                controllers.RunJPlagController.result(detectionID: String)
+GET     /result/codeComparison/:matchIndex  controllers.RunJPlagController.resultCodeComparison(fromPlagiarisedGroup: Option[String], matchIndex: String)
+GET     /result/detail/:group               controllers.RunJPlagController.resultDetail(group: String)
+POST    /studentFileUpload                  controllers.RunJPlagController.studentFileUpload
+POST    /submitSettings                     controllers.RunJPlagController.submitSettings
+
+# Javascript route
+GET     /javascriptRoutes                   controllers.RunJPlagController.javascriptRoutes()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

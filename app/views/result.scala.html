@@ -1,10 +1,10 @@
-@(result: JPlag)
+@(result: DetectionResult)
 
 @main("Result page") {
 
     <div class="container-fluid mt-5" id="similarity_report_container">
         <h3 id="title_text">Potential plagiarisms</h3>
-        @for(file <- result.plagiarismGroup) {
+        @for(file <- result.resultPlagiarismGroups) {
             <div class="row mb-5">
                 <div class="col-8 red-background">
                     <div class="row">
@@ -28,7 +28,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <a href="@routes.RunJPlagController.resultDetail(file.groupNo)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                            <a href="@routes.RunJPlagController.resultDetail(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
                         </div>
                     </div>
                 </div>
@@ -46,11 +46,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                @for(file <- result.unPlagiarisedPairs) {
-                    <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(0, file.matchIndex)">
-                        <td>@file.studentA</td>
-                        <td>@file.studentB</td>
-                        <td>@file.percentage</td>
+                @for(studentPair <- result.resultNonPlagiarismStudentPairs) {
+                    <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(None, studentPair.studentFilePairID)">
+                        <td>@studentPair.studentA</td>
+                        <td>@studentPair.studentB</td>
+                        <td>@studentPair.percentage</td>
                     </tr>
                 }
                 </tbody>

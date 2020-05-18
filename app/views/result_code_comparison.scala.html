@@ -1,19 +1,18 @@
-@(matchIndex: Int, studentResultPairs: Option[StudentFilePairs])
+@(matchIndex: String, selectedPair: Option[StudentFilePairs])
 
 @main("Result Code Comparison") {
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-9 pr-0">
-            </div>
-            <div class="col-3">
+
+            <div class="col-12">
                 <h3 id="token_title_text" class="text-center">Token matches</h3>
                 <table class="table table-bordered token-table">
                     <thead>
                         <tr>
-                        @if(studentResultPairs.isDefined) {
-                            <th scope="col">Student @studentResultPairs.get.studentA</th>
-                            <th scope="col">Student @studentResultPairs.get.studentB</th>
+                        @if(selectedPair.isDefined) {
+                            <th scope="col">Student @selectedPair.get.studentA</th>
+                            <th scope="col">Student @selectedPair.get.studentB</th>
                             <th scope="col">Tokens</th>
                         } else {
                             <p>student result pairs not defined</p>
@@ -21,8 +20,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if(studentResultPairs.isDefined) {
-                        @for(pairs <- studentResultPairs.get.similarFiles) {
+                    @if(selectedPair.isDefined) {
+                        @for(pairs <- selectedPair.get.similarFiles) {
                             <tr>
                                 <td>@Html(pairs.codeFileA.fileName)</td>
                                 <td>@Html(pairs.codeFileB.fileName)</td>
@@ -41,9 +40,9 @@
         <table class="table table-bordered text-left w-auto">
             <thead>
                 <tr>
-                    @if(studentResultPairs.isDefined) {
-                        <th scope="col" class="text-center">Student @studentResultPairs.get.studentA</th>
-                        <th scope="col" class="text-center">Student @studentResultPairs.get.studentB</th>
+                    @if(selectedPair.isDefined) {
+                        <th scope="col" class="text-center">Student @selectedPair.get.studentA</th>
+                        <th scope="col" class="text-center">Student @selectedPair.get.studentB</th>
                     } else {
                         <p>no student results pair defined</p>
                     }
@@ -51,8 +50,8 @@
                 </tr>
             </thead>
             <tbody>
-                @if(studentResultPairs.isDefined) {
-                    @for(pairs <- studentResultPairs.get.similarFiles) {
+                @if(selectedPair.isDefined) {
+                    @for(pairs <- selectedPair.get.similarFiles) {
                         <tr>
                             <th>@Html(pairs.codeFileA.fileName)</th>
                             <th>@Html(pairs.codeFileB.fileName)</th>

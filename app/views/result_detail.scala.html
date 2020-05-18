@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
                 @for(file <- filePairs.studentPairs) {
-                    <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(filePairs.groupNo, file.matchIndex)">
+                    <tr class='clickable-row' data-href="@routes.RunJPlagController.resultCodeComparison(Some(filePairs.groupID), file.studentFilePairID)">
                         <td>@file.studentA</td>
                         <td>@file.studentB</td>
                         <td>@file.percentage</td>

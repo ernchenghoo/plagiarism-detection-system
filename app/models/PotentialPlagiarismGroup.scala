@@ -2,7 +2,7 @@ package models
 
 import scala.collection.mutable.ListBuffer
 
-class PotentialPlagiarismGroup(val studentPairs: ListBuffer[StudentFilePairs], val groupNo: Int, val tokenNo: Int) {
+class PotentialPlagiarismGroup(val studentPairs: ListBuffer[StudentFilePairs], val groupID: String, val tokenNo: Int) {
 
   def getIndividualStudent: List[String] = {
     val individualStudentList: ListBuffer[String] = new ListBuffer[String]()

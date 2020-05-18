@@ -1,8 +1,5 @@
 package models
 
-class CodeFilePair {
-  var codeFileA: CodeFile = _
-  var codeFileB: CodeFile = _
-  var tokenNum: Int = _
-}
+class CodeFilePair (var codeFileA: CodeFile, var codeFileB: CodeFile, var tokenNum: Int)
+
 

@@ -12,7 +12,9 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
   "org.jsoup" % "jsoup" % "1.13.1",
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
-  "org.zeroturnaround" % "zt-zip" % "1.14"
+  "org.zeroturnaround" % "zt-zip" % "1.14",
+  "mysql" % "mysql-connector-java" % "8.0.20",
+  javaJdbc
 )
 
 

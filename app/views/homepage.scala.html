@@ -1,24 +1,51 @@
 @(status: Option[String])
 
 @main("Homepage") {
+
     <script src="@routes.Assets.versioned("javascripts/homepage.js")" type="text/javascript"></script>
 
-    @if(status.isDefined) {
-        <div class="alert alert-info alert-dismissible fade show mt-3" role="alert" id="detectionSuccessAlert">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Success!</strong> @status
+    <div class="alert alert-info mt-3" role="alert" id="detectionSuccessAlert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <img src="@routes.Assets.versioned("gifs/loading.gif")" class="loading_gif mr-3" id="runLoadingGIF" alt="Image loading error">
         </div>
+    </div>
+
+    @if(status.isDefined) {
+        <script>
+            $('#detectionSuccessAlert').fadeIn(300).delay(3000).fadeOut(300).text("The plagiarism detection is currently running!");
+            $.ajax({
+            method: 'GET',
+            url: 'http://localhost:9000/runJPlag',
+            success : function(response) {
+                console.log(response.Status)
+                if (response.Status === "Processing") {
+                    $("#runLoadingGIF").show();
+                }
+
+            }
+            });
+            console.log("Do something")
+        </script>
+    } else {
+        <script>
+            $("#detectionSuccessAlert").hide();
+            $("#runLoadingGIF").hide();
+        </script>
     }
 
     <div class="row">
         <div class="col text-center">
-            <a href="@routes.RunJPlagController.detection()" class="btn btn-primary homepage_button">Check for plagiarism</a>
+            <a href="@routes.RunJPlagController.detection" class="btn btn-primary homepage_button">Check for plagiarism</a>
         </div>
     </div>
 
     <div class="row">
         <div class="col text-center">
-            <a href="@routes.RunJPlagController.result" class="btn btn-primary homepage_button">Past detection results</a>
+            <a href="@routes.RunJPlagController.resultSelect" class="btn btn-primary homepage_button">Past detection results</a>
         </div>
     </div>
 
