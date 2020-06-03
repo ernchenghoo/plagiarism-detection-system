@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000059.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000059.java</CENTER></H3><HR>
+<PRE>
+/*
+ * Project Name: myshell_00000059
+ * Version: 0.01
+ * Author: Wong Hou Yong
+ * Student ID: 00000059
+ */
+
+package myshell;
+
+//IMPORTING NECESSARY JAVA LIBRARY
+import java.util.*;
+import java.io.*;
+import java.text.*;
+
+public class myshell_00000059 {
+	
+	public static void main(String args[]) throws IOException {
+		
+		//DEFINE READER TO READ IN COMMANDS
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    	//DEFINE NECESSARY VARIABLES
+    	boolean exitStatus = false; 
+		String stdID = &quot;00000059&quot;;
+		String commandLine = null;
+
+		//DEFINE NECESSARY ARRAYLIST
+		ArrayList&lt;String&gt; commandList = new ArrayList&lt;String&gt;();
+    	ArrayList&lt;String&gt; commandParameter = new ArrayList&lt;String&gt;();
+    
+    	//PRINTOUT BANNER
+		System.out.printf(&quot;My Shell Version 0.01\n&quot;);
+		System.out.printf(&quot;\n&quot;);
+
+		do {
+
+			//FLUSH OUT VALUES IN COMMAND PARAMETER
+<A NAME="0"></A>			commandParameter.clear();
+
+			//MAKE SURE VALUE OF X IS ALWAYS NULL
+			Integer x = null;<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match728-1.html#0',3,'match728-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+
+      		//PROMPT FOR COMMANDS
+			System.out.printf(&quot;%s &gt; &quot;, stdID);
+			commandLine = br.readLine();
+			
+			//ADD COMMANDS INTO AN ARRAYLIST
+			if (!commandLine.equals(&quot;&quot;)) {
+				commandList.add(commandLine);
+			}</B></FONT>
+			
+			//SPLIT COMMANDLINE
+			String[] commandSplit = commandLine.split(&quot; &quot;);
+
+			//EXTRACT INTEGER PARAMETER
+			ArrayList&lt;String&gt; parameterSplit = new ArrayList&lt;String&gt;();
+			for(String A : commandSplit) {
+	  			parameterSplit.add(A);
+			}
+			parameterSplit.remove(&quot;-l&quot;);
+			parameterSplit.remove(&quot;-c&quot;);
+			parameterSplit.remove(&quot;-h&quot;);
+			
+			
+			//CHECK PRESENCE OF INTEGERPARAMETER
+			if(parameterSplit.size() &gt; 1) {
+				if (parameterSplit.get(1).matches(&quot;-?[0-9]+&quot;)) {
+					 x = Integer.parseInt(parameterSplit.get(1));
+				}
+			}
+
+		  	//CHECK PRESENCE OF PARAMETERS AND ADD IT INTO COMMANDPARAMETER
+      		if(comma<font color="#C0C0C0"><EM>ndSplit.length &gt; 1) {
+        		for(int i = 1 ; i &lt; commandSplit.length ; i++) {
+          			commandParameter.add(commandSplit[i]);
+        		}
+      		}
+
+      
+		  	//COMMAND: &quot;blank&quot;
+		  	if(commandSplit[0].equals(&quot;&quot;)){
+		    	continue;
+		  	}
+		  
+		  
+		  
+			//COMMAND: about 
+			if(commandSplit[0].equals(&quot;about&quot;)) {</EM></font>
+			    System.out.printf(&quot;author: Wong Hou Yong\n&quot;);
+			    System.out.printf(&quot;Version: 0.01\n&quot;);
+			    System.out.printf(&quot;\n&quot;);
+			    continue;
+			}<font color="#C0C0C0"><EM>
+			
+			
+			
+			//COMMAND: date 
+			if(commandSplit[0].equals(&quot;date&quot;)) {
+				Date date = new Date();
+				SimpleDateFormat sdf =  new SimpleDateFormat(&quot;E dd/mm/yyyy&quot;); // change date format 
+				System.out.println(sdf.format(date));</EM></font>
+				System.out.printf(&quot;\n&quot;);
+				continue;
+			}
+			
+			
+			
+			//COMMAND: time 
+			if(commandSplit[0].equals(&quot;time&quot;)) {
+				Date time = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;); // change time format
+<A NAME="1"></A>				System.out.println(sdf.format(time));
+				System.out.printf(&quot;\n&quot;);
+				continue;
+			}<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match728-1.html#1',3,'match728-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+			
+			
+			
+			
+			//COMMAND: ls 
+			if(commandSplit[0].equals(&quot;ls&quot;)) {
+				File file = new File(&quot;.&quot;); //&quot;.&quot;, is indicating current diectory
+				File[] fileStr = file.listFiles();
+
+				//COMMAND: ls
+				if(commandParameter.size() == </B></FONT>0) {
+					
+					for(File FS : fileStr) {
+						System.out.println(FS.getName());
+					} 
+					System.out.printf(&quot;\n&quot;);
+				}
+				else {
+<A NAME="2"></A>					for(String CP : commandParameter) {
+						//COMMAND: ls -d
+						if(CP.equals(&quot;-d&quot;)) {
+							for(File FS : fileStr) {<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match728-1.html#2',3,'match728-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+								if(FS.isDirectory()) {
+									System.out.println(FS.getName());
+								} 
+							}</B></FONT>
+							System.out.printf(&quot;\n&quot;);
+							continue;
+						}
+<A NAME="3"></A>
+						//COMMAND: ls -f
+						if(CP.equals(&quot;-f&quot;)) {
+							for(File FS : fileStr) {<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match728-1.html#3',3,'match728-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+								if(FS.isFile()) {
+									System.out.println(FS.getName());
+								} 
+							}</B></FONT>
+							System.out.printf(&quot;\n&quot;);
+							continue;
+						}
+
+						//COMMAND: ls -h
+						if(CP.equals(&quot;-h&quot;)) {
+							System.out.println(&quot;ls -d: Print directory(s) in the current directory.&quot;);
+							System.out.println(&quot;ls -f: Print file(s) in the current directory.&quot;);
+							System.out.printf(&quot;\n&quot;);
+							continue;
+						}
+
+						//INVALID ls COMMAND
+						else {
+							System.out.printf(&quot;Error: Invalid input argument(s).\nPlease enter \&quot;ls -h\&quot; for help.\n&quot;);
+							System.out.printf(&quot;\n&quot;);
+						}
+<A NAME="4"></A>					}
+				}
+				continue;
+			}<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match728-1.html#4',3,'match728-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+
+
+			
+			//COMMAND: notepad
+			if(commandSplit[0].equals(&quot;notepad&quot;)) {
+				try {
+					ProcessBuilder pb = new ProcessBuilder(&quot;notepad.exe&quot;);
+					pb.start();
+				}
+				catch (Exception e) {
+					System.out.println(&quot;Failed: Cannot locate program \&quot;n</B></FONT>otepad.exe\&quot;.&quot;);
+				}
+				System.out.printf(&quot;\n&quot;);
+				continue;
+			}
+			
+<A NAME="5"></A>			
+			
+			//COMMAND: hist
+			if(commandSplit[0].eq<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match728-1.html#5',3,'match728-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>uals(&quot;hist&quot;)) {
+			 
+			  //COMPLETE &quot;hist&quot; COMMAND
+				if(commandParameter.size() &gt;= 1) {
+<A NAME="6"></A>	  				for(String CP : commandParameter) {
+	  					//COMMAND: hist -l
+		  				if(CP.equals(&quot;-l&quot;)) {</B></FONT>
+		  					if(x == null || (x &gt;= 0 &amp;&amp; x &gt;= (commandList.si<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match728-1.html#6',3,'match728-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ze() - 1))) {
+			  			    	for(int i = 0 ; i &lt; (commandList.size() - 1) ; i++)
+			  			      	{
+			  			        	System.out.println(commandList.get(i));
+<A NAME="7"></A>			  			      	}</B></FONT>
+			  			    	System.out.printf(&quot;\n&quot;);
+								continue;
+							}<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match728-1.html#7',3,'match728-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+							if(x &gt;= 0 &amp;&amp; x &lt; (commandList.size() - 1)) {
+								for(int i = 0 ; i &lt; x ; i++)
+			  			      	{
+			  			        	System.out.println(commandList.get(i));
+			  			      	}</B></FONT>
+			  			    	System.out.printf(&quot;\n&quot;);
+								continue;
+							}
+							if(x &lt; 0) {
+								System.out.printf(&quot;Error: Invalid number for parameter x.\n&quot;);
+								System.out.printf(&quot;\n&quot;);
+<A NAME="8"></A>								continue;
+							}
+		  			    }
+		  			    if(CP.matches(&quot;-?[0-9]+&quot;)){<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match728-1.html#8',3,'match728-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+		  			      continue;
+		  			    }
+		  			    
+		  			    //COMMAND: hist -c
+		  			    if(CP.equals(&quot;-c&quot;)) {
+		  			      commandList.clear();    </B></FONT>
+		  			      System.out.printf(&quot;Deleted: All history has been deleted.\n&quot;);
+		  			      System.out.printf(&quot;\n&quot;);
+		  			      continue;
+		  			    }
+
+		  			    //COMMAND : hist -h
+		  			    if(CP.equals(&quot;-h&quot;)) {
+		  			      System.out.println(&quot;hist -l [int]: Retrieve the last [int] commands enterd by the user.&quot;);
+		  			      System.out.println(&quot;hist -c: Clear the command history.&quot;);
+		  			      System.out.printf(&quot;\n&quot;);
+		  			      continue;
+		  			    }
+
+		  			    //INVALID hist COMMAND
+		  			    else {
+			  				System.out.printf(&quot;%s: Invalid \&quot;hist\&quot; command.\nPlease enter \&quot;hist -h\&quot; for help.\n&quot;, commandLine);
+			  				System.out.printf(&quot;\n&quot;);
+						}
+		  			}
+				}
+			 
+				//INCOMPLETE &quot;hist&quot; COMMAND
+				else {
+					System.out.printf(&quot;Error: Not enough input argument(s). Please enter \&quot;hist -h\&quot; for help.\n&quot;);
+					System.out.printf(&quot;\n&quot;);
+				    continue;
+				}
+			  	
+			  	continue;
+			}
+			
+			
+			
+			//COMMAND: exit 
+			if(commandSplit[0].equals(&quot;exit&quot;)) {
+			  exitStatus = true;
+			  continue;
+			}
+			
+			
+			
+			//INVALID COMMAND
+			else {
+			  System.out.printf(&quot;%s: Invalid command.\n&quot;, commandLine);
+			  System.out.printf(&quot;\n&quot;);
+			}
+			
+		} while(exitStatus == false);
+	}
+}
+</PRE>
+
+</BODY>
+</HTML>

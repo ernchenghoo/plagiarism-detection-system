@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000158.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000158.java</CENTER></H3><HR>
+<PRE>
+package myshell;
+
+import java.io.*;
+<font color="#C0C0C0"><EM>import java.util.ArrayList;
+import java.util.Date;
+import java.text.*;
+import java.lang.ProcessBuilder;
+
+public class myshell_00000158 {
+
+	public static void main(String[] args) throws IOException {
+
+//DEFINITIONS-------------------------------------------------------------------------------------------------------------------------
+		
+		String commandLine; //store user input
+		
+		int i; //for printi</EM></font>ng out command history
+		
+		//places user input in a buffer
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+		System.out.println(&quot;My Shell Version 0.01&quot;); //banner that appears at top of interface
+		
+		System.out.println(&quot;Enter 'guide' for valid commands&quot;); //show list of valid commands
+		
+		String[] commandList = { &quot;about&quot;, &quot;time&quot;, &quot;date&quot;, &quot;notepad&quot;, &quot;exit&quot;, &quot;ls&quot;, &quot;ls -f (files)&quot;,
+				&quot;ls -d (directory)&quot;, &quot;hist&quot;, &quot;hist -h&quot;, &quot;hist -l&quot;, &quot;hist -c&quot;, &quot;hist -l -c&quot;, &quot;hist -c -l&quot;, &quot;hist -l [+int]&quot;,
+				&quot;hist -l [+int] -c&quot;, &quot;hist -c -l [+int]&quot;};
+		
+		ArrayList&lt;String&gt; history = new ArrayList&lt;String&gt;(); //stores command history
+		
+		String directoryName = &quot;.&quot;; //current directory
+		
+		File directory = new File(directoryName); //defines the current directory to search for files
+		
+		File[] fList = directory.list<font color="#C0C0C0"><EM>Files(); //stores listed files
+
+//MAIN PROGRAM LOOP-------------------------------------------------------------------------------------------------------------------
+		
+		while (true) {
+		   
+		   System.out.print(&quot;00000158&gt; &quot;); //will always appear for every input
+
+		   commandLine = console.readLine(); //read command
+	
+		   //Split: COMMAND || PARAMETER(S)
+		   ArrayList&lt;String&gt; commandParams = new ArrayList&lt;String&gt;(); //store parameters
+		   String[] commandSplit = commandLine.split(&quot; &quot;); //split the input using a space
+
+		   //Check for parameters. 
+		   //commandSplit size &gt; 1 = parameters available
+		   //Add the parameters 1 by 1 into commandParams
+		   if (commandSplit.length &gt; 1) {
+		      for (i = 1; i &lt; c</EM></font>ommandSplit.length; i++) {<font color="#C0C0C0"><EM>
+		          commandParams.add(commandSplit[i]);
+		      }
+		   }
+
+//ENTER NOTHING----------------------------------------------------------------------------------------------------------------------
+		   
+		   if (commandSplit[0].equals(&quot;&quot;)) {
+			   continue; //do nothing
+		   }</EM></font>
+		   
+//NOTEPAD-----------------------------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;notepad&quot;)) {
+			   history.add(commandLine); //add command to history
+			   System.out.println(&quot;Notepad launched&quot;);
+			   ProcessBuilder p = new ProcessBuilder();
+			   p.command(&quot;notepad.exe&quot;);
+			   p.start();
+		   }
+		   
+//TIME-------------------------------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;time&quot;)) {
+			   history.add(commandLine); //add command to history
+			   Date time = new Date();
+		       SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+		       System.out.println(sdf.format(time));
+		   }
+		            
+//DATE-------------------------------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;date&quot;)) {
+<A NAME="0"></A>			   history.add(commandLine); //add command to history
+			   Date date = new Date();
+		       SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+		       System.out.println(sdf.format(dat<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match864-1.html#0',3,'match864-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>e));
+		   }
+		   
+//ABOUT-----------------------------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;about&quot;)) {
+			   history.add(commandLine); //add command to history
+			   System.out.println(&quot;author: CHAW CHUN YEE&quot;);
+			   System.out.println(&quot;version: 0.01&quot;);
+		   }
+		            
+//EXIT------------------------------------------------------------------------------------------------------------------------------
+		   else if (commandSplit[0].equals(&quot;exit&quot;)) {</B></FONT>
+		       System.exit(0);
+		   }
+		   
+//GUIDE (LIST OF VALID COMMANDS) - BONUS---------------------------------------------------------------------------------------------
+		   
+<A NAME="1"></A>		   else if (commandSplit[0].equals(&quot;guide&quot;)) {
+			   System.out.println(&quot;List of valid commands:&quot;);
+			   for (i = 0; i &lt; commandList.length; i++) {
+				   System.out.println(commandLi<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match864-1.html#1',3,'match864-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>st[i]);
+			   }
+			   System.out.println(&quot;**NOTE: [+int] = only POSITIVE integers (incl. 0)&quot;);
+		   }
+		            
+//LIST FILES AND DIRECTORIES--------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;ls&quot;)) {
+			   //SHOW ALL
+			   if (commandParams.size() &lt; 1) {
+				   history.add(commandLine); //add command</B></FONT> to history
+				   System.out.println(&quot;All files and folders:&quot;);
+				   for (File file : fList){
+					   System.out.println(file.getName());
+			       }
+			   }<font color="#C0C0C0"><EM>
+			   else {
+				   //SHOW ONLY FOLDERS
+<A NAME="2"></A>				   if (commandParams.get(0).equals(&quot;-d&quot;)) {
+					   history.add(commandLine); //add command to history
+					   System.out.println(&quot;Folders available:&quot;);</EM></font>
+					   for (File file : fList){<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match864-1.html#2',3,'match864-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+						   if (file.isDirectory()){
+				            	System.out.println(file.getName());
+				            }
+					   }</B></FONT>
+				   }
+				   //SHOW ONLY FILES
+<A NAME="3"></A>				   else if (commandParams.get(0).equals(&quot;-f&quot;)) {
+					   history.add(commandLine); //add command to history
+					   System.out.println(&quot;Files available:&quot;);
+					   for (File file : fList){<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match864-1.html#3',3,'match864-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+						   if (file.isFile()){
+				            	System.out.println(file.getName());
+				           } 
+						   else if (file.isDirectory()){
+				            	file.getName();</B></FONT>
+				           }
+					   } 
+<A NAME="4"></A>				   }
+				   else {
+					   System.out.println(&quot;Invalid command&quot;); 
+				   }<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match864-1.html#4',3,'match864-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+		   		} //end of else
+			} //end of commandSplit[0].equals(&quot;ls&quot;)
+		   
+//COMMAND HISTORY------------------------------------------------------------------------------------------------------------------
+		   
+		   else if (commandSplit[0].equals(&quot;hist&quot;)) {
+			   //ONLY hist
+			   if (commandParams.size() &lt; 1) {
+				   history.add(commandLine); //add command to history
+				   System.out.println(&quot;Error: Not enough input argument(s). Please enter hist -h for help.&quot;);
+			   } 
+			   //1 PARAMETER
+			   else if (commandParams.size() </B></FONT>&lt; 2) {
+				   //help
+				   if (commandParams.get(0).equals(&quot;-h&quot;)) {
+					   history.add(commandLine); //add command to history
+					   System.out.println(&quot;hist -l [+int]:&quot;);
+					   System.out.println(&quot;Retrieve the last [+int] valid commands entered by the user.&quot;);
+					   System.out.println(&quot;**NOTE: [+int] = only POSITIVE integers (incl. 0).&quot;);
+					   System.out.println(&quot;**NOTE: If [int] more than number of commands stored in history, &quot;);
+					   System.out.println(&quot;**entire history will be shown from most recent entry.&quot;);
+					   System.out.println(&quot;hist -l: Retrieve entire history from most recent entry.&quot;);
+					   System.out.println(&quot;hist -c: Clear the command history.&quot;);
+				   }
+				   //clear
+				   else if (commandParams.get(0).equals(&quot;-c&quot;)) {
+					   System.out.println(&quot;Deleted: All command history.&quot;);
+					   history.clear();
+				   }
+				   //print all
+				   else if (commandParams.get(0).equals(&quot;-l&quot;)) {
+					   System.out.println(&quot;Command history (from most recent):&quot;);
+					   //print backwards
+					   for (i = history.size()-1; i &gt;= 0; i--) {
+						   System.out.println(history.get(i));
+					   }
+				   }
+				   else {
+					   System.out.println(&quot;Invalid command&quot;);
+				   }
+			   }
+			   //2 PARAMETERS - LIST ALL &amp; CLEAR
+			   else if (commandParams.get(0).equals(&quot;-l&quot;) &amp;&amp; commandParams.get(1).equals(&quot;-c&quot;)) {
+				   System.out.println(&quot;Command history (from most recent):&quot;);
+				   //print backwards
+				   for (i = history.size()-1; i &gt;= 0; i--) {
+					   System.out.println(history.get(i));
+				   }
+				   System.out.println(&quot;Deleted: All command history.&quot;);
+				   history.clear();
+			   }
+			   //2 PARAMETERS - CLEAR &amp; LIST ALL
+			   else if (commandParams.get(0).equals(&quot;-c&quot;) &amp;&amp; commandParams.get(1).equals(&quot;-l&quot;)) {
+				   System.out.println(&quot;Deleted: All command history.&quot;);
+				   history.clear();
+				   //check if history is cleared first
+				   //if history is cleared first, then nothing is printed
+				   if (history.isEmpty() == false) {
+					   System.out.println(&quot;Command history (from most recent):&quot;);
+					   //print backwards
+					   for (i = history.size()-1; i &gt;= 0; i--) {
+						   System.out.println(history.get(i));
+					   }
+				   }
+				   else {
+					   continue;
+				   }
+			   }
+			   //2 PARAMETERS W/ INTEGER - LIMITED NUMBER OF ENTRIES
+			   else if (commandParams.size() &lt; 3) {
+				   //hist -l [int]
+				   if (commandParams.get(0).equals(&quot;-l&quot;)) {
+					   //check if history is cleared first
+					   //if history is cleared first, then nothing is printed
+					   if (history.isEmpty() == false) {
+						   //required number of entries LESS THAN available entries
+						   //Integer.parseInt(): changes number (a string) to integer
+						   if (history.size() &gt;= Integer.parseInt(commandParams.get(1))) {
+							   //ensures only positive integers are entered
+							   if (Integer.parseInt(commandParams.get(1)) &lt; 0) {
+								   System.out.println(&quot;No negative integers&quot;);
+							   }
+							   else {
+								   System.out.printf(&quot;Last %d command(s):\n&quot;, Integer.parseInt(commandParams.get(1)));
+<A NAME="5"></A>								   //print backwards
+								   for (i = history.size()-1; i &gt;= history.size()-Integer.parseInt(commandParams.get(1)); i--) {
+									   System.out.println(history.get(i));
+								   }<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match864-1.html#5',3,'match864-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+							   }
+						   }
+						   //required number of entries MORE THAN available entries
+						   //prints out entire history
+						   else {
+							   System.out.println(&quot;Exceeded available command history.&quot;);
+							   System.out.println(&quot;Showing entire history from most recent.&quot;);</B></FONT>
+							   //print backwards
+							   for (i = history.size()-1; i &gt;= 0; i--) {
+								   System.out.println(history.get(i));
+							   }
+						   }
+					   }
+				   }
+				   //make sure -l is the only accepted parameter
+				   else if (commandParams.get(0).equals(&quot;-l&quot;) == false) {
+					   System.out.println(&quot;Invalid command&quot;);
+				   }
+				   //if hist -c is executed first, then do not print anything
+				   else {
+					   continue;
+				   }
+			   } //end of else if (commandParams.size() &lt; 3)
+			   //3 PARAMETERS
+			   else if (commandParams.size() &lt; 4) {
+				   //hist -l [int] -c
+				   //LIST how many first, then CLEAR
+				   if (commandParams.get(0).equals(&quot;-l&quot;) &amp;&amp; commandParams.get(2).equals(&quot;-c&quot;)) {
+					   //check if history is cleared first
+					   //if history is cleared first, then nothing is printed
+					   if (history.isEmpty() == false) {
+						   //required number of entries LESS THAN available entries
+						   //Integer.parseInt(): changes number (a string) to integer
+						   if (history.size() &gt;= Integer.parseInt(commandParams.get(1))) {
+							   //ensures only positive integers are entered
+							   if (Integer.parseInt(commandParams.get(1)) &lt; 0) {
+								   System.out.println(&quot;No negative integers&quot;);
+							   }
+							   else {
+								   System.out.printf(&quot;Last %d commands:\n&quot;, Integer.parseInt(commandParams.get(1)));
+								   //print backwards
+								   for (i = history.size()-1; i &gt;= history.size()-Integer.parseInt(commandParams.get(1)); i--) {
+									   System.out.println(history.get(i));
+								   }
+							   }
+						   }
+						   //required number of entries MORE THAN available entries
+						   //prints out entire history
+						   else {
+							   System.out.println(&quot;Exceeded available command history.&quot;);
+							   System.out.println(&quot;Showing entire history from most recent.&quot;);
+							   //print backwards
+							   for (i = history.size()-1; i &gt;= 0; i--) {
+								   System.out.println(history.get(i));
+							   }
+						   }
+					   }
+					   System.out.println(&quot;Deleted: All command history.&quot;);
+					   history.clear();
+				   }
+				   //hist -c -l [int]
+				   //CLEAR first, then LIST
+				   else if (commandParams.get(0).equals(&quot;-c&quot;) &amp;&amp; commandParams.get(1).equals(&quot;-l&quot;)) {
+					   System.out.println(&quot;Deleted: All command history.&quot;);
+					   history.clear();
+					   //&quot;if&quot; statement below is skipped, since history is cleared
+					   //this if statement below is only for error checking
+					   if (history.isEmpty() == false) {
+						   if (history.size() &gt;= Integer.parseInt(commandParams.get(2))) {
+							   if (Integer.parseInt(commandParams.get(2)) &lt; 0) {
+								   System.out.println(&quot;No negative integers&quot;);
+							   }
+							   else {
+								   System.out.printf(&quot;Last %d commands:\n&quot;, Integer.parseInt(commandParams.get(2)));
+								   //print backwards
+								   for (i = history.size()-1; i &gt;= history.size()-Integer.parseInt(commandParams.get(2)); i--) {
+									   System.out.println(history.get(i));
+								   }
+							   }
+						   }
+						   else {
+							   System.out.println(&quot;Exceeded available command history.&quot;);
+							   System.out.println(&quot;Showing entire history from most recent.&quot;);
+							   //print backwards
+							   for (i = history.size()-1; i &gt;= 0; i--) {
+								   System.out.println(history.get(i));
+							   }
+						   }
+					   }
+				   }
+				   else {
+					   System.out.println(&quot;Invalid command&quot;);
+				   }
+			   } //end of else if (commandParams.size() &lt; 4)
+		   } //end of commandSplit[0].equals(&quot;hist&quot;)
+		   
+//INVALID COMMAND-------------------------------------------------------------------------------------------------------------------
+<A NAME="6"></A>		   
+		   else {
+			   System.out.println(&quot;Invalid command&quot;);
+		   }<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match864-1.html#6',3,'match864-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+		
+		} //end of MAIN PROGRAM LOOP
+	
+	} // end of public static void main(String[] args) throws IOException
+
+}</B></FONT> //end of public class myshell_00000158
+</PRE>
+
+</BODY>
+</HTML>

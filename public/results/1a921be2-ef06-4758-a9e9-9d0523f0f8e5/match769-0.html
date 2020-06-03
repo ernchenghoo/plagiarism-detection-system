@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000082.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000082.java</CENTER></H3><HR>
+<PRE>
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.text.*;
+
+
+public class myshell_00000082 {
+    
+
+    public static void main(String[] args) throws IOException {
+
+        String commandLine;
+
+   
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+       
+        System.out.println</EM></font>(&quot;My Shell Version 0.01&quot;);
+        
+        
+        ArrayList &lt;String&gt; al = new ArrayList();
+        
+        while (true) {
+            int commandValid = 0;
+          
+            
+            <font color="#C0C0C0"><EM>System.out.print(&quot;00000082 &gt; &quot;);
+
+            
+            commandLine = console.readLine();
+            
+            
+            ArrayList commandParams = new ArrayList();
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+            
+            
+            
+            if(commandSplit.length &gt; 1){
+                for(int i = 1; i &lt; commandSplit.length; i++){
+                    commandParams.add(commandSplit[i]);
+                }
+            }
+            
+            
+            if(commandSplit[0].equals(&quot;&quot;)){
+                continue;
+            }
+            
+            
+            if(commandSplit[0].equals(&quot;about&quot;) &amp;&amp; commandSplit.length == 1){</EM></font>
+                System.out.println(&quot;author: Khoo Ter Kuan,Sean&quot;);
+                System.out.println(&quot;version: 0.01&quot;);
+                al.add(commandLine);
+                commandValid = 1;  
+            <font color="#C0C0C0"><EM>}
+             
+            
+            if(commandSplit[0].equals(&quot;time&quot;) &amp;&amp; commandSplit.length == 1){
+                Date time = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format</EM></font>(time));
+                al.add(commandLine);
+                commandValid = 1;  
+            }
+            
+            
+            if(commandSplit[0].equals(&quot;date&quot;)&amp;&amp; commandSplit.length == 1){
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format(date));
+                al.add(commandLine);
+                commandValid = 1;  
+            }
+            
+            
+<A NAME="0"></A>            if(commandSplit[0].equals(&quot;exit&quot;)&amp;&amp; commandSplit.length == 1){
+                System.exit(0);
+                commandValid = 1;  
+            <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match769-1.html#0',3,'match769-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+            
+            
+            
+            if(commandSplit[0].equals(&quot;ls&quot;) &amp;&amp; commandSplit.length == 2){
+                File dir = new File(&quot;.&quot;);
+                File[] filesList = dir.listFiles</B></FONT>();
+<A NAME="1"></A>                
+                if(commandSplit.length == 1){
+                    for(File file : filesList){
+                        System.out.println(<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match769-1.html#1',3,'match769-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>file.getName());
+                    }
+                }   
+                    else{
+<A NAME="2"></A>                        for(File file : filesList){
+                            if</B></FONT>(file.isFile() &amp;&amp; commandSplit[1].equals(&quot;-f&quot;)){
+                                System.out.println(file.getName());
+                            <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match769-1.html#2',3,'match769-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+                            if(file.isDirectory() &amp;&amp; commandSplit[1].equals(&quot;-d&quot;)){
+                                System.out.println(file.getName());
+                            }
+                        }</B></FONT>          
+                    }   
+            al.add(commandLine);
+            commandValid = 1;  
+            }
+       
+            
+            if(commandSplit[0].equals(&quot;notepad&quot;)&amp;&amp; commandSplit.length == 1){
+                ProcessBuilder pb = new ProcessBuilder(&quot;Notepad.exe&quot;);
+                File file = new File(&quot;Notepad.txt&quot;);
+                pb.start();
+                al.add(commandLine);
+                commandValid = 1;  
+            <font color="#C0C0C0"><EM>}
+           
+            
+            if (commandSplit[0].equals(&quot;hist&quot;)){
+                if (commandParams.size() &lt; 1){
+                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                }
+                
+                else{
+                    
+                    if(commandParams.get(0).equals(&quot;-h&quot;)){
+                                System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                                System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                                
+                                
+                    }
+
+                                if(commandParams.get</EM></font>(0).equals(&quot;-l&quot;) &amp;&amp; !al.isEmpty()){
+                                    int x = Integer.parseInt((String)commandParams.get(1));
+                                        if( x&lt;0 || x &gt; al.size()){
+                                           System.out.println(&quot;Invalid number&quot;);
+                                           al.add(commandLine);//add invalid number into al
+                                           continue;
+                                        }
+<A NAME="3"></A>                                        for(int i = al.size()-x; i&lt;al.size(); i++){
+                                                System.out.println(al.get(i));
+                                            }
+                                <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match769-1.html#3',3,'match769-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+
+
+                                    if(commandParams.get(0).equals(&quot;-c&quot;) &amp;&amp; commandParams.size()&lt;2){
+                                        System.out.println(&quot;Deleted: All command history.&quot;);
+                                        al.clear();
+                                        
+                                    }</B></FONT>
+<A NAME="4"></A>
+
+                                        if(commandParams.size() == 3){
+                                            if(<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match769-1.html#4',3,'match769-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>commandParams.get(0).equals(&quot;-c&quot;) ||commandParams.get(2).equals(&quot;-c&quot;) ){
+                                                System.out.println(&quot;Deleted: All command history.&quot;);
+                                                al.clear();
+                                            }
+
+                                            if(commandParams.get(1).equals(&quot;-l&quot;) &amp;&amp; !al.isEmpty()) {</B></FONT>
+                                                int x = Integer.parseInt((String) commandParams.get(2));
+                                                    if( x&lt;0 || x &gt; al.size()){
+                                                        System.out.println(&quot;Invalid number&quot;);
+                                                        al.add(commandLine);//add invalid number into al
+                                                        continue;
+                                                    }
+                                                        for(int i = al.size()-x; i &lt; al.size();i++){
+                                                            System.out.println(al.get(i));
+                                                        }
+                                            }
+                                         
+                                        }
+            
+                }   
+             al.add(commandLine);
+             commandValid = 1;      
+             }
+            
+            if(commandValid == 0){
+                System.out.println(&quot;Invalid command!&quot;);
+                al.add(commandLine);
+            }
+        }
+    }
+}
+
+    
+</PRE>
+
+</BODY>
+</HTML>

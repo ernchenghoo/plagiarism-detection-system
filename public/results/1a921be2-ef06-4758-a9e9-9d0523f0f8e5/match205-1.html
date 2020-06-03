@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000103.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000103.java</CENTER></H3><HR>
+<PRE>
+package myshell;
+
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.text.*;
+
+
+public class myshell_00000103 {
+
+    public static void main(String[] args) throws IOException {
+    	
+    	String commandLine;
+    	BufferedReader console = new Bu</EM></font>fferedReader(new InputStreamReader(System.in));
+    	
+        //commandHist is an array list that will have commands added into it as the shell is running.
+        ArrayList &lt;String&gt; commandHist = <font color="#C0C0C0"><EM>new ArrayList();
+        
+    	System.out.println(&quot;My Shell Version 0.01&quot;);
+
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+        while (true) {
+            System.out.print(&quot;00000103&gt; &quot;);
+
+            commandLine = console.readLine();
+
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+            ArrayList commandParams = new ArrayList();
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+
+            //Check to see if there is any parameter.
+            //If size of commandSplit is larger than one that means the user has included some parameters in the input.
+            if (commandSplit.length &gt; 1) {
+                //Add the parameters into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            }
+
+            //Reprint the console line if user just pressed &quot;enter&quot; without any command.
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue;
+            }</EM></font>
+<A NAME="0"></A>
+            //Prints the author name and version number.
+            else if (commandSplit[0].equals(&quot;about&quot;)) {
+            	com<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#0',2,'match205-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>mandHist.add(commandLine);
+            	System.out.println(&quot;author: 00000103 Chew Hew Wah&quot;);
+            	System.out.println(&quot;version: 0.01&quot;);
+            }
+            
+            //Print the current time.
+            else if (commandSplit[0].equals(&quot;time&quot;)) {
+            	commandHist.add(commandLine);
+                Date time =	 new Date();
+                //Format the output in hour:minute:second AM/PM format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format(time));
+            }
+            
+            //Print today's date.
+            else if (commandSplit[0].equals(&quot;date&quot;)) {
+            	commandHist.add(commandLine);
+                Date date = new Date();
+                //Format the output in day/month/year format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format(date));
+            }
+            
+            //Exit the console when &quot;exit&quot; is entered.
+            else if (commandSplit[0].equals(&quot;exit&quot;)) {
+                System.exit(0);
+            }
+            
+            //To retrieve files and folders (or directories) from the current directory
+            else if (commandSplit[0].equals(&quot;ls&quot;)) {
+            	File file = new File(&quot;.&quot;);
+<A NAME="1"></A>            	File[] files;
+            	files = file.listFiles();
+            	if (commandParams.size() &gt; 0) {
+            		if (commandParams.get(0).equals(&quot;-f&quot;)) {<</B></FONT>FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#1',2,'match205-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+            			commandHist.add(commandLine);
+            			for (File filecheck : files) {
+            				if (filecheck.isFile()) {
+            					System.out.println(filecheck);
+<A NAME="2"></A>            				}
+            			}
+            		}</B></FONT>
+            		else if (commandPar<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#2',2,'match205-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>ams.get(0).equals(&quot;-d&quot;)) {
+            			commandHist.add(commandLine);
+            			for (File filecheck : files) {
+            				if (filecheck.isDirectory()) {</B></FONT>
+            					System.out.println(filecheck);
+            				}
+            			}
+<A NAME="3"></A>            		}
+            		else {
+            			System.out.println(&quot;Please enter ls -f for files or ls -d for directory&quot;);
+            		}<FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#3',2,'match205-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+            	}
+            	else {
+            		commandHist.add(commandLine);
+            		for (File filecheck : files) {
+            			System.out.println(filecheck);
+            		}
+            	}
+            }
+            
+            //Example of a built-in function that can be used to print the command history. 
+            else <font color="#C0C0C0"><EM>if (</B></FONT>commandSplit[0].equals(&quot;hist&quot;)) {
+                if (commandParams.size() &lt; 1) {
+                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                } 
+                else {
+                    //Process based on the number of parameters attached to the command.
+                	//hist -h
+<A NAME="5"></A>                	if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                		commandHist.add(commandLine);
+                        System.out.println</EM></font>(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                        <FONT color="#c8c2a7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#5',2,'match205-top.html#5',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                    }
+                	//hist -c
+                	else if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                        commandHist.clear();
+                        commandHist.add(commandLine);
+<A NAME="6"></A>                        System.out.println</B></FONT>(&quot;All command history deleted!&quot;);
+                        if (commandParams.size() &gt; 2) { //check for hist -c -l x
+                        	if (commandParams.get(1).equals(&quot;-l&quot;)) try {
+                        		int x = Intege<FONT color="#50ebec"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#6',2,'match205-top.html#6',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>r.parseInt(commandParams.get(2).toString());
+                            	if (x &lt;= 0) {
+                            		System.out.println(&quot;Invalid number!&quot;);
+                            	}
+                            	else if (x &gt;= commandHist.size()){
+                            	}
+                            	else {
+                            		int m = commandHist.size() - Integer.parseInt(commandParams.get(2).toString()) - 1;
+                            		int n = commandHist.size() - 1;
+                            		ArrayList &lt;String&gt; newcommandHist = new ArrayList &lt;&gt; (commandHist.subList(m, n));</B></FONT>
+                            		for (String array : newcommandHist) {
+                						System.out.println(array);
+                					}
+                            	}
+                        	} catch (NumberFormatException e) {
+                    			System.out.println(&quot;NumberFormatException is handled.&quot;);
+                    			System.out.println(&quot;Please input an integer.&quot;);
+                            }
+                        }
+                    }
+                    //hist -l
+                	else if (commandParams.get(0).equals(&quot;-l&quot;)) {
+                		commandHist.add(commandLine);
+                		if (commandParams.size() &lt; 2) {
+                			System.out.println(&quot;Invalid command!  Please type a valid integer!&quot;);
+                		}
+                		else try {
+                			int x = Integer.parseInt(commandParams.get(1).toString());
+                			if (x &lt;= 0) {
+                				System.out.println(&quot;Invalid number!&quot;);
+                			}
+                			else if (x &gt;= commandHist.size()){
+                				System.out.println(&quot;Number is too big! Please try again.&quot;);
+                			}
+                			else {
+                				int m = commandHist.size() - Integer.parseInt(commandParams.get(1).toString()) - 1;
+                				int n = commandHist.size() - 1;
+                				ArrayList &lt;String&gt; newcommandHist = new ArrayList &lt;&gt; (commandHist.subList(m, n));
+<A NAME="7"></A>                					for (String array : newcommandHist) {
+                						System.out.println(array);
+                					}
+                			}<FONT color="#c58917"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#7',2,'match205-top.html#7',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+                			if (commandParams.size() &gt; 2) { //check for hist -l x -c
+                				if (commandParams.get(2).equals(&quot;-c&quot;)) {
+                                    commandHist.clear();
+                                    commandHist.add</B></FONT>(commandLine);
+                                    System.out.println(&quot;Above command histories are now deleted!&quot;);                			
+                				}
+                			}
+<A NAME="8"></A>                		} catch (NumberFormatException e) {	
+                			System.out.println(&quot;NumberFormatException is handled.&quot;);
+                			System.out.println(&quot;Please input an integer.&quot;);
+                        <FONT color="#bce954"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#8',2,'match205-top.html#8',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+                	}
+                	else {
+                		System.out.println(&quot;Invalid Command! Please type hist -h for help.&quot;);
+                	}
+<A NAME="4"></A>                }
+            }
+            //running notepad.exe 
+            else <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#4',2,'match205-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (</B></FONT>commandSplit[0].equals(&quot;notepad&quot;)) {
+            	commandHist.add(commandLine);
+            	ProcessBuilder pb = new ProcessBuilder(&quot;Notepad.exe&quot;);
+            	pb.start();
+<A NAME="9"></A>            }
+            else {</B></FONT>
+            	System.out.println(&quot;Invalid Command!&quot;);
+            <FONT color="#f88017"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match205-0.html#9',2,'match205-top.html#9',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+        }
+    }
+}</B></FONT>
+</PRE>
+
+</BODY>
+</HTML>

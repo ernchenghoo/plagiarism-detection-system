@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>H</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Question 1.py</CENTER></H3><HR>
+<PRE>
+# -*- coding: utf-8 -*-
+&quot;&quot;&quot;
+Spyder Editor
+<A NAME="0"></A>
+This is a temporary script file.
+&quot;&quot;&quot;
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match13-1.html#0',3,'match13-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from matplotlib import pyplot as pt
+import numpy as np
+import cv2
+
+
+img = cv2.imread(&quot;omega_book.bmp&quot;,0)
+img2 = cv2.equalizeHist(img)
+new_image = np.concatenate((img</B></FONT>,img2),1)
+<A NAME="1"></A>cv2.imshow(&quot;result&quot;,new_image)
+cv2.waitKey()
+
+hist = cv2<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match13-1.html#1',3,'match13-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.calcHist([img],[0],None,[256],[0,256])
+pt.figure()
+pt.subplot(1,2,1)
+pt.title(&quot;Original omega_book&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Number of Pixels&quot;)
+pt.plot(hist)
+pt.xlim([0,256])
+<A NAME="2"></A>pt.show(</B></FONT>)
+
+hist2 = cv2.calcHist([img2],[0],None,[256],[0,256])
+pt<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match13-1.html#2',3,'match13-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.subplot(1,2,2)
+pt.title(&quot;Edited omega_book&quot;)
+pt.xlabel(&quot;Bins&quot;)
+pt.ylabel(&quot;Number of Pixels&quot;)
+pt.plot(hist)
+pt.xlim([0,256])
+pt.show(</B></FONT>)
+
+</PRE>
+<HR>
+<H3><CENTER>Question 4.py</CENTER></H3><HR>
+<PRE>
+from matplotlib import pyplot as pt
+<A NAME="3"></A>import numpy as np
+import cv2
+
+img = cv2<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match13-1.html#3',3,'match13-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imread(&quot;q4omega.tif&quot;,1)
+img1 = cv2.imread(&quot;q4omega.tif&quot;,0)
+cv2.imshow(&quot;q4omega&quot;, img)
+cv2.waitKey()
+
+img = cv2.cvtColor(img,cv2.</B></FONT>COLOR_BGR2RGB)
+new_img = img.copy()
+new_img[:,:,0] = img[:,:,0]
+new_img[:,:,1] = img[:,:,1]
+new_img[:,:,2] = img[:,:,2]
+
+
+cv2.imshow(&quot;Edited q4omega&quot;,new_img)
+cv2.waitKey()
+</PRE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000067.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000067.java</CENTER></H3><HR>
+<PRE>
+
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+/**
+ *
+ * @author STAN-PC
+ */
+public class myshell_00000067 {
+    
+    public static void main(String[] args) throws IOException {
+
+        //Use commandLine to store the command and the argument(s).
+        String commandLine;
+        
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new</EM></font> InputStreamReader(System.in));
+        
+        ArrayList command = new ArrayList(); //To store user command input
+        
+        //Just a banner
+        <font color="#C0C0C0"><EM>System.out.println(&quot;My Shell Version 0.01&quot;);
+        
+        while (true) {
+            //Print the console line.
+            System.out.print(&quot;00000067 &gt; &quot;);
+            
+            //Read the input from user.
+            commandLine = console.readLine();
+            
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+            ArrayList commandParams = new ArrayList();
+            String[] commandSplit = commandLine.split(&quot; &quot;)</EM></font>;
+            ArrayList&lt;String&gt; cmd = new ArrayList&lt;&gt;(); //To store valid command inputs 
+            
+            //Add valid command inputs into array
+            cmd.add(&quot;about&quot;);
+            cmd.add(&quot;time&quot;);
+            cmd.add(&quot;date&quot;);
+            cmd.add(&quot;hist&quot;);
+            cmd.add(&quot;ls&quot;);
+            cmd.add(&quot;notepad&quot;);
+            <font color="#C0C0C0"><EM>cmd.add(&quot;exit&quot;);
+            
+            //Check to see if there is any parameter.
+            //If size of commandSplit is larger than one that means the user has included some parameters in the input.
+            if (commandSplit.length &gt; 1) {
+                //Add the parameters into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            }
+            
+            //Reprint the conline line if user just pressed &quot;enter&quot; without any command.
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue;
+            }
+            
+            //Print about details 
+            if (commandSplit[0].equals(&quot;about&quot;)) {</EM></font>
+                command.add(commandLine); //Add input into array
+                System.out.println(&quot;author: Stanley Stephen Abok&quot;);
+                System.out.println(&quot;version: 0.01&quot;);
+            }
+            
+            //Print the current time
+            if (commandSplit[0].equals(&quot;time&quot;)) {
+                command.add(commandLine); //Add input into array
+                <font color="#C0C0C0"><EM>Date time = new Date();
+                //Format the output in hour:minute:second AM/PM format
+                SimpleDateFormat formatter = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(formatter.format(time));
+            }
+            
+            //Print today's date
+            if (commandSplit[0].equals(&quot;date&quot;)) {
+                command.add</EM></font>(commandLine); //Add input into array
+                <font color="#C0C0C0"><EM>Date date = new Date();
+                //Format the output in day/month/year format
+                SimpleDateFormat formatter = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(formatter.format(date));
+            }
+            
+            //Exit the console 
+            if (commandSplit[0].equals(&quot;exit&quot;)) {</EM></font>
+                command.add(commandLine); //Add input into array
+                System.exit(0);
+            <font color="#C0C0C0"><EM>}
+            
+            if (commandSplit[0].equals(&quot;hist&quot;)) {
+                if (commandParams.size() &lt; 1) {
+                    System.out.println(&quot;Error: Not enough input argument(s). Please enter hist -h for help. &quot;);
+                }
+                else {
+                    //Print help list
+                    if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                        System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                        System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                    }
+                    //To clear the command history
+                    if (commandParams.get(0).equals(&quot;-c&quot;)) { //When -c is first parameter
+                        System.out.println</EM></font>(&quot;Deleted: All command hsitory &quot;);
+                        command.clear(); //Clear array
+                    }    
+                    //Print the history of user inputs
+                    else if (commandParams.get(0).equals(&quot;-l&quot;)) { //When -l is first parameter
+                        int parameter = Integer.parseInt((String) commandParams.get(1)); //To change String to Integer  
+                        
+                        //To ensure hist -c works
+                        if(parameter &gt; 0) {
+                            if(command.isEmpty()) {
+                                continue;
+                            }
+                            else for(int j = 0; j &lt; parameter; j++) {
+                                    System.out.println(command.get(j)); //Print command history
+                            }
+                        }
+                        
+                        //To ensure hist -c works
+                        if(parameter &lt; 0) {
+                            if(command.isEmpty()) {
+                                continue;
+                            }
+                            else {
+                                System.out.println(&quot;Invalid parameter &quot;);
+<A NAME="3"></A>                            }
+                        }
+                        
+                        if(commandParams.size() &gt; 2) <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match393-0.html#3',2,'match393-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{
+                            if (commandParams.get(2).equals(&quot;-c&quot;)) {
+                                System.out.println(&quot;Deleted: All command history &quot;);
+<A NAME="4"></A>                                command.clear(); //Clear array
+                            }
+                        }</B></FONT>  
+                    <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match393-0.html#4',2,'match393-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+                }
+                    
+            }
+
+            //List files and/or directories
+            if(commandSplit[0].equals(&quot;ls&quot;)) {
+                
+                String dirPath = &quot;C:\\directory&quot;</B></FONT>;
+                String newDirName = &quot;test_folder&quot;;
+                String newFileName = &quot;test_file.txt&quot;;
+                
+                //Create new directory
+                File directory = new File(dirPath);
+                boolean isCreated = directory.mkdirs();
+                
+                //Create new file
+                File newFile =  new File(dirPath + File.separator + newFileName);
+                isCreated = newFile.createNewFile();
+                
+                //Create new folder(sub-directory)
+                File newDirectory = new File(dirPath + File.separator + newDirName);
+                isCreated = newDirectory.mkdir();
+                
+                //display all items in directory
+                command.add(commandLine); //Add input into array
+                if(commandParams.isEmpty()) {
+<A NAME="0"></A>                    String[] files = directory.list();
+                    for(String string : files) {
+                        System.out.println(string);
+                    <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match393-0.html#0',2,'match393-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+                }
+                else {
+<A NAME="1"></A>                    //display files only
+                    if(commandParams.get(0).equals(&quot;-f&quot;)) {</B></FONT>
+                        
+                        <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match393-0.html#1',2,'match393-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>File[] listOfFiles = directory.listFiles();
+                        for(int i = 0; i &lt; listOfFiles.length; i++) {
+                            if(listOfFiles[i].isFile()) {
+                                System.out.println(listOfFiles[i].getName());
+                            }
+                        }</B></FONT>
+                        
+<A NAME="2"></A>                        //display folders(sub-directories) only    
+                        if(commandParams.get(0).equals(&quot;-d&quot;)) {
+                        
+                            <FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match393-0.html#2',2,'match393-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>File[] listOfDirectories = directory.listFiles();
+                            for(int i= 0; i &lt; listOfDirectories.length; i ++) {
+                                if(listOfDirectories[i].isDirectory()) {
+                                System.out.println(listOfDirectories[i].getName());
+                                }
+                            }
+                        }
+                    }
+                }</B></FONT>
+            }
+
+            //Launch notepad
+            ProcessBuilder process = new ProcessBuilder(&quot;Notepad.exe&quot;);
+            
+            if(commandSplit[0].equals(&quot;notepad&quot;)) {
+                command.add(commandLine); //Add input into array
+                process.start();
+            }
+            
+            //When user enter invalid command
+            boolean flag = false;
+            for(int i = 0; i &lt; cmd.size(); i++) {
+                if(commandSplit[0].equals(cmd.get(i))) {
+                    flag = true;
+                }
+            }
+           
+            if(flag == false) { 
+                    System.out.println(&quot;Invalid command &quot;); //display error message      
+            }
+            
+        }
+    }
+}
+
+</PRE>
+
+</BODY>
+</HTML>

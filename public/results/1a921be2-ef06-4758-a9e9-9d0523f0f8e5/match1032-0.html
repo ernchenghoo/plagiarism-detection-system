@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000142.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000142.java</CENTER></H3><HR>
+<PRE>
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author wl020
+ */
+public class myshell_00000142 {
+    
+    public static void main(String[] args) throws IOException {
+        //history is a list that stores all the command
+        ArrayList history = new ArrayList();        
+        
+        //Use commandLine to store the command and the argument(s).
+        <font color="#C0C0C0"><EM>String commandLine;
+
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        //Just a banner
+        System.out.println(&quot;My Shell Version 0.01&quot;);
+
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+        while (true) {
+            
+            //Print the console line.
+            //Remember to replace &quot;student_id&quot; with your student number.
+            System.out.print(&quot;00000142&gt; &quot;);
+
+            //Read the input from user.
+            commandLine = console.readLine();
+
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            ArrayList commandParams = new ArrayList();
+            
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.           
+            String[] commandSplit = commandLine.split</EM></font>(&quot; &quot;);
+                                    
+            // current directory
+            File curentfile = new File(&quot;.&quot;);                                 
+            
+            //Check to see if there is any parameter.
+            //If size of commandSplit is larger than one that means the user has included some parameters in the input.
+            <font color="#C0C0C0"><EM>if (commandSplit.length &gt; 1) {
+                //Add the parameters into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);                 
+                }
+            }
+            
+            //empty input does not add into history
+            if (!&quot;&quot;.equals(commandLine)){</EM></font>
+                history.add(commandSplit);   
+            }
+
+            //use switch case to select input
+            String input = commandSplit[0];            
+            switch(input){
+                
+                //Reprint the conline line if user just pressed &quot;enter&quot; without any command.
+                case &quot;&quot;:
+                    break;
+                
+                //Print the current time.
+                case &quot;time&quot;:                    
+                    Date time = new Date();
+                    //Format the output in hour:minute:second AM/PM format
+                    SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                    System.out.println(sdf.format(time));
+                    break;
+                    
+                //Print today's date.    
+                case &quot;date&quot;:
+                    Date date = new Date();
+                    //Format the output in day/month/year format
+                    sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                    System.out.println(sdf.format(date));
+                    break;
+                    
+                //Print about
+                case &quot;about&quot;:
+                    System.out.println(&quot;author: Chan Wai Loon&quot;);
+                    System.out.println(&quot;version: 0.01&quot;);    
+                    break;
+                    
+                //Exit the console when &quot;exit&quot; is entered.
+                case &quot;exit&quot;:
+                    System.exit(0);
+                    break;
+                
+                //launch notepad.     
+                case &quot;notepad&quot;:
+                    Runtime rs = Runtime.getRuntime();
+                    rs.exec(&quot;notepad&quot;);
+                    break;
+                    
+                //To retrieve files and folders (or directories) from the current directory
+                case &quot;ls&quot;:
+<A NAME="0"></A>                    File[] files = curentfile.listFiles();
+                    try{
+                        //print only files
+                        <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match1032-1.html#0',3,'match1032-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (commandParams.get(0).equals(&quot;-f&quot;)) {
+                            for(File f : files){
+                                if(f.isFile()){
+                                    System.out.println(f.getName());
+                                }
+                            }
+                        }
+                        //print only directories
+                        if (commandParams.get(0).equals(&quot;-d&quot;)) {</B></FONT>
+                            for(File f : files){
+                                if(f.isDirectory()){
+                                    System.out.println(f.getName());
+                                }
+                            }
+                        }
+                    }
+                    catch(Exception e){
+                        //print both files and directories if no argument is entered
+                        for(File f : files){
+                            if(f.isFile()){
+                                System.out.println(f.getName());
+                            }
+                            if(f.isDirectory()){
+                                System.out.println(f.getName());
+                            }
+                        }
+                    }
+                    break;
+                
+                //To print the command history.     
+                case &quot;hist&quot;:
+                    //If size of commandParam is lesser than one that means the user has not included any parameter in the input.                
+                    <font color="#C0C0C0"><EM>if (commandParams.size() &lt; 1) {
+                        //Show error
+                        System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                    }
+                    else {
+                        //Process based on the number of parameters attached to the command.
+                        if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                            System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                            System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                        }</EM></font>
+                        //If size of commandParam is lesser than 2 that means the user has only included parameter but no integer in the input.
+                        else if (commandParams.get(0).equals(&quot;-l&quot;)) {    
+                            try{
+                                //read the integer
+                                int historyInteger = Integer.valueOf((String)commandParams.get(1)) ;  
+                                int historySize = history.size();
+                                try{
+                                    for (int i = historySize -(historyInteger); i &lt; history.size(); i++) {                            
+                                        //print output without brackets and commas
+                                        System.out.println(Arrays.toString((Object[])history.get(i-1)).replace(&quot;[&quot;,&quot;&quot;).replace(&quot;]&quot;,&quot;&quot;).replace(&quot;,&quot;,&quot;&quot;));
+                                    }
+                                    
+                                    if(commandParams.get(2).equals(&quot;-c&quot;)) {
+                                        System.out.println(&quot;Deleted: All command history.&quot;);
+                                        //clear history array list
+                                        history.clear();
+                                    }
+                                }
+                                //If there is no previous history or history out of bound
+                                catch (ArrayIndexOutOfBoundsException aiofb){
+                                    int entryDisplay = historySize-1;
+                                    if (entryDisplay == 0){
+                                        System.out.println(&quot;There is no entry&quot;);
+                                    }
+                                    else if (entryDisplay == 1){
+                                        System.out.println(&quot;There is only &quot;+ entryDisplay +&quot; entry&quot;);
+                                    }
+                                    else if (entryDisplay &gt;1 ){
+                                        System.out.println(&quot;There are only &quot;+ entryDisplay + &quot; entries&quot;);
+                                    }                                
+                                }  
+                                //Show error if there is no integer
+                                if (commandParams.size() &lt; 2) {
+                                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                                }
+                                else{
+                                    try{
+                                        //If integer is negative value show an error
+                                        if (Integer.valueOf((String)commandParams.get(1))&lt;=0 ){
+                                            System.out.println(&quot;Invalid number&quot;);                            
+                                        }
+                                    }
+                                    //If input is not an integer show an error
+                                    catch (NumberFormatException nfe){
+                                        System.out.println(&quot;Invalid number&quot;);
+                                    }  
+                                }    
+                            }
+                            //If x is not an integer show an error
+                            catch (Exception nfe){
+<A NAME="1"></A>                                System.out.println(&quot;invalid input&quot;);
+                            }                                                                                                  
+                        }                   
+                        else <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match1032-1.html#1',3,'match1032-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                            System.out.println(&quot;Deleted: All command history.&quot;);
+                            //clear history array list
+                            history.clear();
+                        }
+                        else {
+                            //print error if argument is not in the list
+                            System.out.println(&quot;Invalid input argument.&quot;);
+                        }</B></FONT>
+                    }
+                    break;
+                    
+                default:
+                    //print error when input is not in the list
+                    System.out.println(&quot;Invalid command!&quot;);
+            }           
+        }
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

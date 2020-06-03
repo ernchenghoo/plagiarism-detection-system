@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>I</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>Q1.py</CENTER></H3><HR>
+<PRE>
+import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+
+
+
+airplane = cv2.imread(&quot;airplane.bmp&quot;, 1)
+
+
+
+
+b = airplane[:,:,0]
+<A NAME="0"></A>
+g = airplane[:,:,1]
+
+r = airplane<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match26-1.html#0',3,'match26-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>[:,:,2]
+
+pt.figure()
+pt.subplot(2,2,1)
+pt.imshow(r)
+pt.title(&quot;Red&quot;)
+pt.subplot(2,2,2)
+pt.imshow(g)
+pt.title(&quot;Green&quot;)
+pt.subplot(2,2,3)
+pt.imshow(</B></FONT>b)
+pt.title(&quot;Blue&quot;)
+</PRE>
+<HR>
+<H3><CENTER>Q2.py</CENTER></H3><HR>
+<PRE>
+
+
+import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+
+
+
+circuit = cv2.imread(&quot;omega_circuit.bmp&quot;,0)
+circuit_after=circuit.copy()
+circuit_after[0:512,0:64]=cv2.medianBlur(circuit[0:512,0:64],5)
+circuit_after[0:512,384:512]=cv2.medianBlur(circuit[0:512,384:512],5)
+circuit_after[0:64,0:512]=cv2.medianBlur(circuit[0:64,0:512],5)
+circuit_after[384:512,0:512]=cv2.medianBlur(circuit[384:512,0:512],5)
+
+#use pyplot to show all 
+<A NAME="1"></A>
+pt.figure()
+pt.subplot(1,2,1)
+pt<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match26-1.html#1',3,'match26-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(circuit, cmap=&quot;gray&quot;)
+pt.title(&quot;Original Image&quot;)
+pt.subplot(1,2,2)
+pt.imshow(circuit_after, cmap=&quot;gray&quot;)
+pt.title(</B></FONT>&quot;Median 5x5 Image&quot;)
+</PRE>
+<HR>
+<H3><CENTER>Q3.py</CENTER></H3><HR>
+<PRE>
+<A NAME="2"></A>
+<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match26-1.html#2',3,'match26-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+
+q4omega = cv2.imread(&quot;q4omega.tif&quot;,1)
+q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
+histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
+[nrow,ncol] = q4omega_gray.shape
+mask = np.zeros((nrow,ncol),dtype=np.uint8)
+mask1 = np.zeros(</B></FONT>(nrow,ncol),dtype=np.uint8)
+mask2 = np.zeros((nrow,ncol),dtype=np.uint8)
+pt.figure()
+#white is 255
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &gt;= 150:
+            mask1[x,y] =255
+        else:
+            mask1[x,y]=0
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &lt;= 150:
+            mask2[x,y] =255
+        else:
+            mask2[x,y]=0
+<A NAME="3"></A>
+mask1[:,0:380] = 0
+mask2[:,370:1140] = 0
+mask <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match26-1.html#3',3,'match26-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= mask1 + mask2
+
+ex_q4omega = q4omega.copy()
+ex_q4omega[:,:,0] = cv2.bitwise_and(q4omega[:,:,0],mask)
+ex_q4omega[:,:,1] = cv2.bitwise_and(q4omega[:,:,1],mask)
+ex_q4omega[:,:,2] = cv2.bitwise_and(q4omega[:,:,2],mask)
+pt.figure()
+pt.subplot(2,2,1)
+pt.imshow(cv2.cvtColor(q4omega, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Original Color Image&quot;)
+pt.subplot(2,2,2)
+pt.imshow(cv2.cvtColor(ex_q4omega, cv2.</B></FONT>COLOR_BGR2RGB))
+pt.title(&quot;Expected Color Image&quot;)
+</PRE>
+<HR>
+<H3><CENTER>Q4.py</CENTER></H3><HR>
+<PRE>
+import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+
+q4omega = cv2.imread(&quot;q4omega.tif&quot;,1)
+<A NAME="4"></A>q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
+histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
+[nrow,ncol] = q4omega_gray.shape
+mask <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match26-1.html#4',3,'match26-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= np.zeros((nrow,ncol),dtype=np.uint8)
+mask1 = np.zeros((nrow,ncol),dtype=np.uint8)
+mask2 = np.zeros((nrow,ncol),dtype=np.</B></FONT>uint8)
+pt.figure()
+#white is 255
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &gt;= 150:
+            mask1[x,y] =255
+        else:
+            mask1[x,y]=0
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &lt;= 150:
+            mask2[x,y] =255
+        else:
+            mask2[x,y]=0
+
+mask1[:,0:380] = 0
+mask2[:,370:1140] = 0
+mask = mask1 + mask2
+
+ex_q4omega = q4omega.copy()
+<A NAME="5"></A>ex_q4omega[:,:,0] = cv2.bitwise_and(q4omega[:,:,0],mask)
+ex_q4omega[:,:,1] = cv2.bitwise_and(q4omega[:,:,1],mask)
+ex_q4omega[:,:,2] = cv2.bitwise_and(q4omega[:,:,2],mask)
+pt<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match26-1.html#5',3,'match26-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.figure()
+pt.subplot(2,2,1)
+pt.imshow(cv2.cvtColor(q4omega, cv2.COLOR_BGR2RGB))
+pt.title(&quot;Original Color Image&quot;)
+pt.subplot(2,2,2)
+pt.imshow(cv2.cvtColor(ex_q4omega, cv2.</B></FONT>COLOR_BGR2RGB))
+pt.title(&quot;Expected Color Image&quot;)
+</PRE>
+
+</BODY>
+</HTML>
