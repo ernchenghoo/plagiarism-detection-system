@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000092.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000092.java</CENTER></H3><HR>
+<PRE>
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.text.*;
+
+public class myshell_00000092 {
+    
+    public static void main(String[] args) throws IOException {
+        
+        String commandLine;
+        
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        
+        System.out.println</EM></font>(&quot;My Shell Version 0.01&quot;);
+        
+        ArrayList cmdHist = new ArrayList();
+        
+        while(true) {
+            int cmd = 0;
+            <font color="#C0C0C0"><EM>System.out.print(&quot;00000092&gt; &quot;);
+            
+            commandLine = console.readLine();
+             
+            ArrayList commandParams = new ArrayList();
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+            
+            if (commandSplit.length &gt; 1) {
+                
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            } 
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue</EM></font>;
+            }
+            
+            
+            if (commandSplit[0].equals(&quot;about&quot;)){
+                System.out.println(&quot;author: Wan Ray Chi&quot;);
+                System.out.println(&quot;Version: 0.01&quot;);
+                cmd++;
+            <font color="#C0C0C0"><EM>}
+            //Q num 1
+            
+            if (commandSplit[0].equals(&quot;time&quot;)) {
+                Date time = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format(time));
+                cmd++;
+            }
+            
+            if (commandSplit[0].equals(&quot;date&quot;)) {
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format(date));
+                cmd++;
+            }
+            
+            if (commandSplit[0].equals(&quot;exit&quot;)) {
+                System.exit(0);
+            }
+            
+            
+            if (commandSplit[0].equals(&quot;hist&quot;)) {</EM></font>
+                <font color="#C0C0C0"><EM>if (commandParams.size() &lt; 1) {
+                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                    cmd++;
+                } else {
+                        if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                            System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                            System.out.println(&quot;hist -c : Clear the command history.&quot;);
+<A NAME="0"></A>                            cmd++;
+                        }
+
+                        if (commandParams.size</EM></font>() == 1)<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match163-1.html#0',3,'match163-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+                        if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                            System.out.println(&quot;Deleted: All command history.&quot;);
+                            cmdHist.clear();
+                            cmd=cmd+2;
+                        }
+                        }
+                        
+                        if (commandParams.size()&gt;1){
+                            if (commandParams.get(0).equals(&quot;-c&quot;) &amp;&amp; commandParams.get(1).equals(&quot;-l&quot;)){
+                                cmdHist.clear();
+                                cmd=cmd+2;
+                                try{
+                                   int count = Integer.parseInt(commandParams.get(2).toString());
+                                       for (int x = cmdHist.size() - count ; x&lt;cmdHist.size(); x++){
+                                            if (x &lt; 0){
+                                                x=0;
+                                            }
+                                            try{
+                                                System.out.println(cmdHist.get(x));
+                                            }catch(IndexOutOfBoundsException e){
+                                            }
+                                       }
+                                }catch(NumberFormatException e){
+                                    System.out.println(&quot;Number Format Error. Input: hist -c -l [int]&quot;);  
+                                   cmd=cmd+2;
+                               }                               
+                            }
+                        }
+                        if (commandParams.get(0).equals(&quot;-l&quot;)){
+                            if (commandParams.size() &lt;= 1){
+                                System.out.println(&quot;Missing [int] input: hist -l [int]&quot;);
+                                cmd++;
+<A NAME="1"></A>                            }
+                                if (commandParams.size() &gt; 1){</B></FONT> 
+                                    cmd++;
+                                    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match163-1.html#1',3,'match163-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>try{
+<A NAME="2"></A>                                        int count = Integer.parseInt(commandParams.get(1).toString());
+                                        if (count &lt; 0){
+                                        System.out.println</B></FONT>(&quot;Error: Invalid Number&quot;);
+                                        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match163-1.html#2',3,'match163-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+                                            for (int x = cmdHist.size() - count ; x&lt;cmdHist.size(); x++){
+                                                if (x &lt; 0){
+                                                    x=0;
+                                                }
+                                                try{
+                                                    System.out.println(cmdHist.get(x));
+                                                }catch (IndexOutOfBoundsException e){}
+                                            }
+                                    }catch(NumberFormatException e){
+                                        System.out.println(&quot;Number Format Error. Input: hist -l [int] -c&quot;);
+                                    }
+                                    
+                            if (commandParams.size() &gt; 2){
+                                if (commandParams.get(2).equals(&quot;-c&quot;)){
+                                    cmdHist.clear();
+                                    cmd=cmd+2;
+                                }
+                                else {
+                                    System.out.println(&quot;Enter input in this format to print history then clear: hist -1 [int] -c&quot;); 
+                                    cmd=cmd+2;
+                                }
+                            }
+                            }
+                        }
+                }
+           }
+<A NAME="3"></A>            //Q num 2 - 4
+            
+            if</B></FONT> (commandSplit[0].equals(&quot;ls&quot;)) {
+                <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match163-1.html#3',3,'match163-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (commandParams.size() &lt; 1){
+                    cmd++;
+                    System.out.println(&quot;List:&quot;);
+                    File f = new File(&quot;.&quot;);
+                        File[] floc = f.listFiles();
+                        for(File file:floc) {
+                            if (file.isFile() || file.isDirectory()) {
+                                System.out.println(file.getName());
+                            }
+                        }
+                }
+                else { 
+                    if (commandParams.get(0).equals(&quot;-f&quot;)){
+                        cmd++;
+                        System.out.println(&quot;Listed File:&quot;);
+                        File f = new File(&quot;.&quot;);
+                        File[] floc = f.listFiles();
+                        for (File file : floc) {
+                            if (file.isFile()) {
+                                System.out.println(file.getName());
+                            }
+<A NAME="4"></A>                        }
+                    }</B></FONT>
+                
+                else <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match163-1.html#4',3,'match163-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (commandParams.get(0).equals(&quot;-d&quot;)){
+                        cmd++;
+                        System.out.println(&quot;Directory List:&quot;);
+                        File f = new File(&quot;.&quot;);
+                        File[] floc = f.listFiles();
+                        for (File file : floc) {
+                            if (file.isDirectory()) {
+                                System.out.println(file.getName());
+<A NAME="5"></A>                            }
+                        }
+                    }</B></FONT>
+                <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match163-1.html#5',3,'match163-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+            }
+            //Q num 5
+            
+           if (commandSplit[0].equals(&quot;notepad&quot;)){
+                ProcessBuilder p = new ProcessBuilder(&quot;notepad.exe&quot;);
+                p.start</B></FONT>();
+                cmd++;
+            } // Q num 6
+           
+           if (cmd == 0) 
+               { System.out.println(&quot;Invalid command&quot;);} 
+                // Q num 7
+           
+           else if (cmd != 2){cmdHist.add(commandLine);}
+        }
+    }
+}
+
+    
+
+</PRE>
+
+</BODY>
+</HTML>

@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{Json, OWrites, Reads, Writes}
 
-case class JPlagSettings(sensitivity: String, var minPercentage: String, baseCodeExist: Boolean) {
+case class JPlagSettings(sensitivity: String, var minPercentage: String) {
 }
 
 object JPlagSettings {

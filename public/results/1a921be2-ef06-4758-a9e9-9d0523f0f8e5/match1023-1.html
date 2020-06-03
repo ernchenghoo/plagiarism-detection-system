@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000027.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000027.java</CENTER></H3><HR>
+<PRE>
+package myshell;
+
+import java.io.*;
+<font color="#C0C0C0"><EM>import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class myshell_00000027 {
+	
+	public static void main (String[] args) throws IOException {
+		
+		//to store commands
+		String commandLine;
+
+
+		//Array list to store commands in commandMem
+		ArrayList&lt;String&gt; commandMem = new ArrayList&lt;Str</EM></font>ing&gt;();
+		
+		//Read and buffered the command and the args
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+		
+		//for Date instance
+		DateFormat dateFormat = new SimpleDateFormat(&quot;yyyy/MM/dd&quot;);
+		Date date = new Date();
+		
+		//for Time instance 
+		DateFormat timeFormat = new SimpleDateFormat(&quot;HH:mm:ss&quot;);
+		Date time = new Date();
+		
+		//Just a banner
+		System.out.println(&quot;Shell Version 0.01&quot;);
+		
+		//continue loop until &quot;exit&quot; is entered
+		while(true) {
+			
+			System.out.print(&quot;00000027&gt;&quot;);
+			
+			//Read input from user
+			commandLine = console.readLine();
+			
+			//to store the commands
+			//this store only the instance it executes (one time storing only)
+			String[] commandSplit = commandLine.split(&quot; &quot;);
+			//Store the command into ArrayList for 'hist' purposes
+			//Does not store if command starts with 'hist'
+			commandMem.add(commandLine);
+			if(commandMem.get(0).contains(&quot;hist&quot;)) {
+				commandMem.remove(0);
+			} 
+			//Splits the parameters into commandParams
+			ArrayList&lt;String&gt; commandParams = new ArrayList&lt;String&gt;();
+			
+			//to check if there is any parameter
+			//if there is, then it is stored into the commandParams
+			if(commandSplit.lengt<font color="#C0C0C0"><EM>h &gt; 1) {
+				for(int i=1; i&lt; commandSplit.length; i++) {
+					commandParams.add(commandSplit[i]);						
+				}
+			}
+			
+			//When nothing is entered and the ENTER key is pressed	
+			if(commandSplit[0].equals(&quot;&quot;)) {
+				continue;
+			}
+			
+			//When &quot;exit&quot; is entered
+			if(commandSplit[0].equals(&quot;exit&quot;)) {</EM></font>
+				System.exit(0);
+			}
+			
+			//-------------------------------------------------------------------------------
+			//-------------------_______---------------------------_______-------------------
+			//------------------/		\-------------------------/		  \------------------
+			//-----------------/		 \-----------------------/ 		   \-----------------
+			//---------------------------------\			/--------------------------------
+			//----------------------------------\__________/---------------------------------
+			//Execution goes here
+			if(commandSplit.length &lt; 2 &amp;&amp; commandSplit[0].equals(&quot;about&quot;)) {
+				System.out.println(&quot;author: Loo Yoong Jian&quot;);
+				System.out.println(&quot;version: 0.01&quot;);
+			} else if(commandSplit[0].equals(&quot;hist&quot;)){
+				
+					//when no parameter after &quot;hist&quot; 
+					if (commandSplit.length&lt; 2) {
+						System.out.println(&quot;The syntax of the command in incorrect.&quot;);				
+						continue;
+					}
+					
+					//gets parameter after 'hist'
+					switch (commandSplit[1]) {
+						//clear history
+						case &quot;-c&quot;:							
+							if(commandMem.isEmpty()) {
+								System.out.println(&quot;History is empty.&quot;);
+							} else {
+								commandMem.clear();
+								System.out.println(&quot;History is cleared&quot;);
+							}							
+							break;
+							
+						case &quot;-l&quot;:
+							//commandSplit[2].contains(commandParams.get(1))
+							//run if an integer is inserted after '-l'
+							if(commandParams.size() &gt; 1 ) {
+							int a = Integer.parseInt(commandParams.get(1));
+									//to verify that int entered is a valid value for the ArrayList
+									if(a &lt;= commandMem.size()) {
+												//to print x times of history
+												for(int j=0; j&lt;Integer.parseInt(commandParams.get(1)); j++) {
+													
+													//does not print 'hist -l' if it falls in the first section of the arrayList
+													//else it would just print the list of commands entered
+													if(j==0 &amp;&amp; commandMem.get(j).equals(&quot;hist -l&quot;)) {
+														commandMem.remove(j);
+														System.out.println(&quot;History is empty.&quot;);
+													} else {
+														//print the desired amount(int) of history list
+														System.out.println(commandMem.get(j));
+													}																	
+												}	
+												//this runs if the parameter enter after integer is '-c'
+												if(commandParams.size() &gt; 2 &amp;&amp; commandSplit[3].equals(&quot;-c&quot;)) {
+													try {
+														commandMem.clear();
+														System.out.println(&quot;History cleared&quot;);
+													}catch(Exception ex) {
+														System.out.println(&quot;History is empty&quot;);
+													}
+												}
+									} else {
+											System.out.println(&quot;'&quot;+commandParams.get(1)+&quot;' is either an invalid input or history is empty.&quot;);
+											break;											
+											}
+										
+							} else {
+								//to print every list of history 
+								//all commands stored in ArrayList 'commandMem'
+								for(int i=0; i&lt;commandMem.size(); i++) {																
+									//does not print 'hist -l' if it falls in the first section of the arrayList
+									//else it would just print the list of commands entered
+									if(i==0 &amp;&amp; commandMem.get(i).equals(&quot;hist -l&quot;)) {
+										commandMem.remove(i);
+										System.out.println(&quot;History is empty.&quot;);
+									}else {										
+										System.out.println(commandMem.get(i));							
+									}														
+								}
+							}
+							break;
+							
+						default:
+							error();
+							break;
+					}
+				} else if(commandSplit[0].equals(&quot;ls&quot;)){
+					    
+						//to check if ls has parameters
+						if(commandSplit.length &gt; 1) {
+								//if 'ls' has parameters
+							    if(commandSplit[0].equals(&quot;ls&quot;) &amp;&amp; commandParams.get(0).equals(&quot;-f&quot;)) {					    	
+							    	File allFile = new File(&quot;.&quot;);
+							    	getAllFile(allFile);
+							    	continue;
+							    } else if(commandSplit[0].equals(&quot;ls&quot;) &amp;&amp; commandParams.get(0).contains(&quot;-d&quot;)) {
+							    	File allFolder = new File(&quot;.&quot;);
+							    	getAllFolder(allFolder);
+							    	continue;
+							    }
+						}
+						//to list all folders in current directory					 
+						File curDir = new File(&quot;.&quot;);
+					    getEverything(curDir);
+					    
+						} else if(commandSplit[0].equals(&quot;pwd&quot;)) {
+								//to show the current directory 
+								String currentDir = System.getProperty(&quot;user.dir&quot;);
+								System.out.println(currentDir);
+								} else if(commandSplit[0].equals(&quot;notepad&quot;)){
+<A NAME="1"></A>										//to run notepad application
+										Runtime runtime = Runtime.getRuntime();
+										Process process = runtime.exec(&quot;C:\\Windows\\notepad.exe&quot;);
+										} else if(commandSplit[0].equals(&quot;date&quot;)) {<FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1023-0.html#1',2,'match1023-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+											//to print out date details
+											System.out.println(dateFormat.format(date));
+											} else if(commandSplit[0].equals(&quot;time&quot;)) {
+												//to print out time details
+												System.out.println(timeFormat.format(time));
+												} else if(commandSplit[0].equals(&quot;help&quot;) || commandSplit[0].equals(&quot;-h&quot;)){</B></FONT>
+													help();												
+												} else {
+														error();
+														}
+					
+		}
+		
+	}
+	
+	private static void getEverything(File curDir) {
+
+        File[] filesList = curDir.listFiles();
+        for(File f : filesList){
+            if(f.isDirectory())
+                getEverything(f);
+            if(f.isFile()){
+                System.out.println(f.getName());
+            }
+        }
+
+    }
+	
+	private static void getAllFile(File allFile) {
+		
+		File[] dirList = allFile.listFiles();
+		for(File f : dirList) {
+			if(f.isDirectory()) 
+				getAllFile(f);
+			
+		}
+		
+		
+<A NAME="0"></A>	}
+	
+	private static void getAllFolder(File allFolder) {
+		File[] folList<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1023-0.html#0',2,'match1023-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B> = allFolder.listFiles();
+		for(File f : folList) {
+			if(f.isFile()) {
+				System.out.println(f.getName());</B></FONT>
+			}
+		}
+	}
+	
+	public static void error() {
+		System.out.println(&quot;Invalid command. Enter 'help' for more information.&quot;);
+	}
+	
+	public static void help() {
+		
+		System.out.println(&quot;about - To show details of system.&quot;);
+		System.out.println(&quot;date - To display currentt date.&quot;);
+		System.out.println(&quot;exit - Exit the terminal.&quot;);
+		System.out.println(&quot;hist - To view history of entered input.&quot;);
+		System.out.println(&quot;ls - To show list of files/folder in current directory.&quot;);
+		System.out.println(&quot;notepad - Execute notepad.exe(for Windows OS only).&quot;);
+		System.out.println(&quot;pwd - To show path of current directory.&quot;);
+		System.out.println(&quot;time - To display current time.&quot;);
+		
+	}
+
+}
+</PRE>
+
+</BODY>
+</HTML>

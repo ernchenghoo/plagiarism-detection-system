@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000100.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000100.java</CENTER></H3><HR>
+<PRE>
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Tan Kai Chin
+ */
+import java.io.*;
+<font color="#C0C0C0"><EM>import java.util.ArrayList;
+import java.util.Date;
+import java.text.*;
+import java.io.IOException;
+
+
+public class myshell_00000100 {
+    
+    public static void main(String[] args) throws IOException,InterruptedException  {
+            
+        //Use commandLine to store the command and the argument(s).
+        String commandLine;
+        
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        //Just a banner
+        System.out.println</EM></font>(&quot;My Shell Version 0.01&quot;);
+
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+ 
+        ArrayList ok = new ArrayList();
+        
+        while (true) {
+            //Print the console line.
+            //Remember to replace &quot;student_id&quot; with your student number.
+                    System.out.print(&quot;00000100 &gt; &quot;);
+
+            //Read the input from user.
+                    commandLine = console.readLine();
+                    <font color="#C0C0C0"><EM>ok.add(commandLine);
+
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+                    ArrayList commandParams = new ArrayList();      
+                    String[] commandSplit = commandLine.split(&quot; &quot;);
+            
+                    if (commandSplit.length &gt; 1) {
+            //Add the parameters into commandParams
+                    for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+            }
+            }</EM></font>
+            
+            
+            
+            switch (commandSplit[0]) {
+           
+                
+            case &quot;&quot;:
+            continue;
+                 
+            case &quot;about&quot;:
+	    System.out.printf(&quot;author: Tan Kai Chin %n&quot; + &quot;version: 0.01%n&quot; );
+<A NAME="1"></A>            break;
+            
+            //Print the current time.
+            <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match778-0.html#1',2,'match778-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>case &quot;time&quot;:
+            {
+                Date time = new Date();
+                //Format the output in hour:minute:second AM/PM format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format(time));
+                break;
+            }
+            
+            case</B></FONT> &quot;date&quot;:
+                Date date = new Date();
+                //Format the output in day/month/year format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format(date));
+                break;
+            
+
+            case &quot;notepad&quot;:
+                ProcessBuilder pb = new ProcessBuilder(&quot;notepad.exe&quot;);
+                pb.start();
+                break;
+<A NAME="0"></A>    
+            case &quot;ls&quot;:
+            //To retrieve files and folders (or directories) from the current directory
+                <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match778-0.html#0',2,'match778-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>File dir = new File(&quot;.&quot;);
+                File[] filesList = dir.listFiles();
+                for (File file : filesList) {
+                if (file.isFile()) {
+                     System.out.println(file.getName());
+            }
+            }</B></FONT>
+        break;
+            
+            //Example of a built-in function that can be used to print the command history. 
+         case &quot;hist&quot;:
+                <font color="#C0C0C0"><EM>if (commandParams.size() &lt; 1) {
+                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                } else {
+                    //Process based on the number of parameters attached to the command.
+                    if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                        System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                        System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                           }</EM></font>
+                    
+                  else {
+                         if (commandParams.get(0).equals(&quot;-c&quot;)){
+                             System.out.println(&quot;Cleared commands!&quot;);
+                             ok.clear();
+                           }
+                         
+                  else{
+                          if(commandParams.get(0).equals(&quot;-l&quot;)){
+                                 if (commandParams.size() &lt; 2) {
+                           }
+                  else {
+                          if (commandParams.get(0).equals(&quot;-l&quot;) &amp;&amp; commandParams.size()==3) {
+                               
+                              try{
+                              int conversion = Integer.parseInt((String) commandParams.get(1));
+                                  if (conversion&lt;=ok.size()-1){
+                                    for(int j=ok.size()-conversion-1; j&lt;ok.size()-1; j++){
+                                      System.out.println(ok.get(j));
+                            }
+                            ok.clear();
+                                 
+                            }//close for '-1 &amp; Cmdparam size ==3'
+<A NAME="2"></A>                            } catch (NumberFormatException x) {}
+                            }
+                  else {
+                           if( commandParams.get(0).equals(&quot;-l&quot;)&amp;&amp; commandParams.size()==2)<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match778-0.html#2',2,'match778-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>{
+                                     
+                             try{
+                               int conversion = Integer.parseInt((String) commandParams.get(1));
+                                  if (conversion&lt;=ok.size()-1 &amp;&amp; conversion &gt; 0 ) {
+                                     for(int j=ok.size()-conversion-1; j&lt;ok.size()-1; j++){
+                                       System.out.println(ok.get(j));
+                                          }
+                                          }   
+                                 
+<A NAME="3"></A>                   else{
+                            if</B></FONT>(conversion &gt; ok.size()|| conversion &lt; ok.size()){
+                                       System.out.print(&quot;&quot;);
+                                <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match778-0.html#3',2,'match778-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+                                }
+                                }   catch (NumberFormatException x) {} 
+                                }</B></FONT>
+                      
+                             if(commandParams.get(0).equals(&quot;-l&quot;)&amp;&amp;<font color="#C0C0C0"><EM>commandParams.get(1).equals(&quot;-c&quot;)){
+                                       System.out.println(&quot;Invalid&quot;);
+             }
+             }
+             }
+             }</EM></font>
+             }
+             }
+             }
+   break;
+             
+             //Exit the console when &quot;exit&quot; is entered.
+      case &quot;exit&quot;:
+            System.exit(0);
+                 
+      default:
+            System.out.println(&quot;Invalid command!&quot;);
+   break;
+                 
+}
+}
+}
+}
+</PRE>
+
+</BODY>
+</HTML>

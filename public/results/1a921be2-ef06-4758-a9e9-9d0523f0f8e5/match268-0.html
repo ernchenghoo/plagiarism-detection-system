@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000141.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000141.java</CENTER></H3><HR>
+<PRE>
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.util.*;
+import java.text.*;
+
+
+public class myshell_00000141 {
+    
+    public static void main(String[] args) throws IOException {
+
+        //Use commandLine to store the command and the argument(s).
+        String commandLine;
+
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new</EM></font> InputStreamReader(System.in));
+        ArrayList history = new ArrayList();
+
+        //Just a banner
+        System.out.println(&quot;My Shell Version 0.01&quot;);
+        String name = new String(&quot;Leong Jia Lin&quot;);
+        double version = 0.01;
+        
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+        while (true) {
+            boolean found = false;
+            //Print the console line.
+            //Remember to replace &quot;student_id&quot; with your student number.
+            System.out.print(&quot;00000141&gt; &quot;);
+
+            //Read the input from user.
+            commandLine = console.readLine();
+            
+            //history is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+            String commandSplit[] = commandLine.split(&quot; &quot;);
+            history.add(commandLine);       
+            
+            //Reprint the conline line if user just pressed &quot;enter&quot; without any command.
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue;
+            }
+            //Print about
+            if(commandSplit[0].equals(&quot;about&quot;) &amp;&amp; commandSplit.length == 1){
+                System.out.println(&quot;author: &quot; + name);
+                System.out.println(&quot;version: &quot; + version);
+                found = true;
+            }
+            //Open notepad application
+            if(commandSplit[0].equals(&quot;notepad&quot;) &amp;&amp; commandSplit.length == 1){
+                ProcessBuilder notepad = new ProcessBuilder(commandSplit[0]);
+                notepad.start();
+                found = true;
+            <font color="#C0C0C0"><EM>}
+            
+            //Print the current time.
+            if(commandSplit[0].equals(&quot;time&quot;) &amp;&amp; commandSplit.length == 1) {
+                Date time = new Date();
+                //Format the output in hour:minute:second AM/PM format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format</EM></font>(time));
+                found = true;
+            <font color="#C0C0C0"><EM>}
+                        
+            //Print today's date.
+            if (commandSplit[0].equals(&quot;date&quot;) &amp;&amp; commandSplit.length == 1) {
+                Date date = new Date();
+                //Format the output in day/month/year format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format</EM></font>(date));
+                found = true;
+<A NAME="0"></A>            }
+            
+            //Exit the console when &quot;exit&quot; is entered.
+            if (<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match268-1.html#0',3,'match268-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>commandSplit[0].equals(&quot;exit&quot;) &amp;&amp; commandSplit.length == 1) {
+                System.exit(0);
+                found = true;
+            }
+            
+            //To retrieve files and folders (or directories) from the current directory
+            if (commandSplit[0].equals(&quot;ls&quot;)) {</B></FONT>
+                File directory = new File(&quot;D:\\D.Document&quot;);
+<A NAME="1"></A>                File[] fList = directory.listFiles();
+                if(commandSplit.length == 2){
+                    if(commandSplit[1].equals(&quot;-f&quot;)){
+                       <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match268-1.html#1',3,'match268-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for(File file : fList){
+                           if(file.isFile()){ 
+                               System.out.println(file.getName());
+                           }
+                       }</B></FONT>
+<A NAME="2"></A>                       found = true;
+                    }
+                    if(commandSplit[1].equals(&quot;-d&quot;)){
+                        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match268-1.html#2',3,'match268-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for(File file : fList){
+                            if(file.isDirectory()){
+                                System.out.println(file.getName());
+                            }
+                        }</B></FONT>
+                       found = true; 
+                    }    
+                }
+                else{
+                    for(File file : fList){
+                        System.out.println(file.getName());
+                    } 
+                    found = true;
+                }                                  
+            <font color="#C0C0C0"><EM>}
+            
+            //Example of a built-in function that can be used to print the command history. 
+            if (commandSplit[0].equals(&quot;hist&quot;)) {
+                if (history.size() == 1) {
+                    System.out.println</EM></font>(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                    found = true;
+                } else{
+                    for(int i = 1; i&lt; commandSplit.length; i++){
+                        //Process based on the number of parameters attached to the command.
+                        if (commandSplit[i].equals(&quot;-h&quot;)) {
+                            System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                            System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                            found = true;
+                        }
+
+                        if (commandSplit[i].equals(&quot;-c&quot;)) {
+                            System.out.println(&quot;Deleted: All command history.&quot;);
+                            history.removeAll(history);
+<A NAME="3"></A>                            found = true;
+                        }
+                        if (commandSplit[i].equals(&quot;-l&quot;)){
+                            if(commandSplit.length &lt; 3)<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match268-1.html#3',3,'match268-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>{
+                                for(int count = 0; count &lt; history.size() - 1; count++){
+                                    System.out.println(history.get(count));
+                                }
+<A NAME="4"></A>                            }
+                            else {</B></FONT>
+                                //input value &gt; history size
+                                if(history.size()&lt;<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match268-1.html#4',3,'match268-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Integer.parseInt(commandSplit[i + 1])){
+                                    for(int count = 0; count &lt; history.size() - 1; count++){
+                                        System.out.println(history.get(count));
+                                    }
+                                }
+                                //negative value
+                                else if</B></FONT>(Integer.parseInt(commandSplit[i + 1]) &lt; 0){
+                                    System.out.println(&quot;Invalid integer&quot;);
+<A NAME="5"></A>                                }
+                                //input value &lt; history size
+                                else{
+                                    for(int count = history.size() - 1 - <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match268-1.html#5',3,'match268-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>Integer.parseInt(commandSplit[i + 1]); count &lt; history.size()-1; count++){
+                                        System.out.println(history.get(count));
+                                    }
+                                }
+                            }</B></FONT>
+<A NAME="6"></A>                            found = true;
+                        }
+                    }                    
+                <FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match268-1.html#6',3,'match268-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}         
+            }
+            if(found == false){
+                System.out.println(&quot;Invalid command&quot;);
+            }</B></FONT>
+        }
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

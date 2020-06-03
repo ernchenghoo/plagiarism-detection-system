@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000014.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000014.java</CENTER></H3><HR>
+<PRE>
+import java.util.*;
+import java.io.*;
+import java.text.*;
+
+public class myshell_00000014 {
+    public static void main(String[] args) throws IOException {
+        String commandLine;
+        ArrayList&lt;String&gt; commandHist = new ArrayList&lt;String&gt;();
+        <font color="#C0C0C0"><EM>BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println(&quot;My Shell Version 0.01&quot;);
+
+        while (true) {
+            System.out.print(&quot;00000014&gt; &quot;);
+            commandLine = console.readLine();
+
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after splitting them.
+            ArrayList&lt;String&gt; commandParams = new ArrayList&lt;String&gt;();
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+
+            if</EM></font> (commandSplit[0].equals(&quot;&quot;)) {
+                continue;
+            <font color="#C0C0C0"><EM>}
+
+            if (!commandLine.isEmpty()) {
+                commandHist.add(commandLine);
+            }
+
+            //Check to see if there is any parameter
+            if</EM></font> (commandSplit.length &gt; 1) <font color="#C0C0C0"><EM>{
+                //Add the parameters (if any) into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            }</EM></font>
+
+            /* Takes the command from the commandSplit array to be used
+            in the switch statement */
+            String commandString = commandSplit[0];
+            switch (commandString) {
+
+                case &quot;about&quot;:
+                    System.out.println(&quot;Author: Tang Kar Chuin&quot;);
+                    System.out.println(&quot;Version: 0.01&quot;);
+                    break;
+
+                case &quot;time&quot;:
+                    Date time = new Date();
+                    //Format the output in hour:minute:second AM/PM format
+                    SimpleDateFormat sdfTime = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                    System.out.println(sdfTime.format(time));
+                    break;
+
+                case &quot;date&quot;:
+                    Date date = new Date();
+                    //Format the output in day/month/year format
+                    SimpleDateFormat sdfDate = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                    System.out.println(sdfDate.format(date));
+                    break;
+
+                case &quot;notepad&quot;:
+                    ProcessBuilder pb = new ProcessBuilder(&quot;C:\\Windows\\system32\\notepad.exe&quot;);
+                    pb.start();
+                    break;
+
+                case &quot;exit&quot;:
+                    System.exit(0);
+<A NAME="0"></A>                    break;
+
+                case &quot;ls&quot;:
+                    <FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match600-0.html#0',2,'match600-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>File f = new File(&quot;.&quot;);
+                    File[] filesList = f.listFiles();
+
+                    if (commandParams.size() &lt; 1) {
+                        for (File i : filesList) {
+                            if (i.isDirectory()) {
+                                System.out.println(i.getName());
+                            }
+                            if (i.isFile()) {
+<A NAME="1"></A>                                System.out.println(i.getName());
+                            }
+                        }
+                    } else <FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match600-0.html#1',2,'match600-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (</B></FONT>commandParams.get(0).equals(&quot;-f&quot;)) {
+<A NAME="2"></A>                        for (File i : filesList) {
+                            if (i.isFile</B></FONT>()) System.out.println(i.getName());
+                        }
+                    } else <FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match600-0.html#2',2,'match600-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>if (commandParams.get(0).equals(&quot;-d&quot;)) {
+                        for (File i : filesList) {
+                            if (i.isDirectory</B></FONT>()) System.out.println(i.getName());
+                        }
+                    }
+                    break;
+
+                case &quot;hist&quot;:
+                    if (commandParams.size() &lt; 1) {
+                        System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                    } else {
+
+                        if(commandParams.size() == 3){
+
+                            if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                                commandHist.clear();
+                                System.out.println(&quot;Deleted: All command history.&quot;);
+
+                            } else {
+
+                                //Parses the number after -l argument into an integer
+                                String histCArgNum = commandParams.get(1);
+                                int histCInput = Integer.valueOf(histCArgNum);
+
+                                if (histCInput &lt; 1 || histCInput &gt; commandHist.size()) {
+                                    System.out.println(&quot;Invalid number&quot;);
+                                } else {
+                                    for (int i = 0; i &lt;= histCInput - 1; i++) {
+                                        System.out.println(commandHist.get(i));
+                                    }
+                                }
+
+                                commandHist.clear();
+                                System.out.println(&quot;Deleted: All command history.&quot;);
+                            }
+
+                        <font color="#C0C0C0"><EM>} else {
+                            //Do the shit at the bottom
+
+
+                            //Process based on the number of parameters attached to the command.
+                            if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                                System.out.println(&quot;hist -l [int] : Retrieves the last [int] commands entered by the user.&quot;);
+                                System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                            }
+<A NAME="3"></A>
+                            if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                                commandHist.clear</EM></font>();
+                                <FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match600-0.html#3',2,'match600-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>System.out.println(&quot;Deleted: All command history.&quot;);
+                            }
+
+                            if (commandParams.get(0).equals(&quot;-l&quot;)) {
+
+                                //Parses the number after -l argument into an integer
+                                String histCArgNum = commandParams.get</B></FONT>(1);
+                                int histCInput = Integer.valueOf(histCArgNum);
+
+                                if (histCInput &lt; 1 || histCInput &gt; commandHist.size()) {
+                                    System.out.println(&quot;Invalid number&quot;);
+<A NAME="4"></A>                                } else {
+                                    for (int i = 0; i &lt;= histCInput - 1; i++) {
+                                        System.out.println(commandHist.get(i));
+                                    <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match600-0.html#4',2,'match600-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>}
+                                }
+                            }
+                        } }</B></FONT>
+                    break;
+                default:
+                    System.out.println(&quot;Invalid command&quot;);
+            }
+
+        }
+    }
+}
+</PRE>
+
+</BODY>
+</HTML>

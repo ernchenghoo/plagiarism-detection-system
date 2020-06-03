@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000075.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000075.java</CENTER></H3><HR>
+<PRE>
+import java.io.*;
+import java.util.ArrayList;
+<font color="#C0C0C0"><EM>import java.util.Date;
+import java.text.*;
+import java.util.ListIterator;
+import java.util.Scanner;
+
+public class myshell_00000075 {
+    
+    public static void main(String[] args) throws IOException {
+
+        //Use commandLine to store the command and the argument(s).
+        String commandLine;
+        
+
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        //Just a banner
+        System.out.println</EM></font>(&quot;Shell Version 0.01&quot;);
+        
+        ArrayList cmd = new ArrayList();
+
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+        while (true) {
+            
+            //Print the console line.
+            System.out.print(&quot;00000075&gt; &quot;);
+
+            //Read and store the input from user.
+            commandLine = console.readLine();
+            <font color="#C0C0C0"><EM>cmd.add(commandLine);
+            
+            
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+            ArrayList commandParams = new ArrayList();
+            
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+            
+            
+            
+
+            //Check to see if there is any parameter.
+            //If size of commandSplit is larger than one that means the user has included some parameters in the input.
+            if (commandSplit.length &gt; 1) {
+                //Add the parameters into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            }
+
+           
+            
+            //Reprint the conline line if user just pressed &quot;enter&quot; without any command.
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue;
+            }
+            
+            //Prints shell information
+            if(commandSplit[0].equals(&quot;about&quot;)){</EM></font>
+<A NAME="0"></A>                
+                System.out.println(&quot;Author:Kok Jiunn Yan&quot;);
+                System.out.println(&quot;Version:0.01&quot;); 
+            <FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match470-1.html#0',3,'match470-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>}
+            else if(commandSplit[0].equals(&quot;notepad&quot;)){
+                
+                ProcessBuilder pb = new ProcessBuilder(&quot;Notepad.exe&quot;);
+                pb.start();
+                
+            }
+            else <font color="#C0C0C0"><EM>if (</B></FONT>commandSplit[0].equals(&quot;time&quot;)) {
+                Date time = new Date();
+                //Format the output in hour:minute:second AM/PM format
+                SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                System.out.println(sdf.format(time));
+                
+            }</EM></font>
+            else if (commandSplit[0].equals(&quot;date&quot;)) {
+                Date date = new Date();
+                //Format the output in day/month/year format
+<A NAME="1"></A>                SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                System.out.println(sdf.format(date));
+            }
+            else <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match470-1.html#1',3,'match470-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if (commandSplit[0].equals(&quot;exit&quot;)) {
+                System.exit(0);
+            }
+            else if (commandSplit[0].equals(&quot;ls&quot;)) {</B></FONT>
+                
+<A NAME="2"></A>                File folder = new File(&quot;C:/Users/kokjy/Documents/NetBeansProjects/myshell&quot;);
+                File[] listOfFiles = folder.listFiles();
+
+                <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match470-1.html#2',3,'match470-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int i = 0; i &lt; listOfFiles.length; i++) {
+                        if (listOfFiles[i].isFile()) {
+                            System.out.println(&quot;File &quot; + listOfFiles[i].getName());
+                                     } else if (listOfFiles[i].isDirectory()) {
+                                            System.out.println(&quot;Directory &quot; + listOfFiles[i].getName());
+      }
+    }
+               
+            }</B></FONT>else{
+                System.out.println(&quot;Invalid Command&quot;);
+            <font color="#C0C0C0"><EM>}
+            
+            
+            if (commandSplit[0].equals(&quot;hist&quot;)) {
+                if (commandParams.size() &lt; 1) {
+                    System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                } else {
+                    //Process based on the number of parameters attached to the command.
+                    if (commandParams.get(0).equals(&quot;-h&quot;)) {
+                        System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                        System.out.println</EM></font>(&quot;hist -c : Clear the command history.&quot;);
+                        System.out.println(&quot;date: Displays current date&quot;);
+                        System.out.println(&quot;about: Displays author information&quot;);
+                        System.out.println(&quot;time: Displays current time&quot;);
+                        System.out.println(&quot;hist -l [int] -c: Retrieve the last [int] commands entered by the user and clears command history.&quot;);
+                        System.out.println(&quot;ls: Display all files at the directory&quot;);
+                        System.out.println(&quot;notepad: Opens notepad&quot;);
+                        continue;
+                        
+                    }
+                    
+                    if (commandParams.get(0).equals(&quot;-l&quot;)) {
+                               
+              String character = (String)commandParams.get(1);
+              
+              int lg = character.length();
+              char positive = '\000';char negative = '\000';
+
+              if (lg == 1)
+              {
+                positive = character.charAt(0);
+              }
+              
+
+              if (lg &gt;= 2)
+              {
+                negative = character.charAt(1);
+              }
+              
+              boolean num = false;
+              
+
+                if ((Character.isDigit(positive)) || (Character.isDigit(negative))) {
+                 num = true;
+                }
+              
+                       if (num)
+                    {
+                        int x = Integer.parseInt((String)commandParams.get(1));
+                        int size = cmd.size();
+                
+
+                if (x &lt; 0) {
+                  System.out.println(&quot;Invalid Number&quot;);
+                  continue;
+                }
+             
+<A NAME="3"></A>                ListIterator it = cmd.listIterator(size - 1);
+                
+
+                <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match470-1.html#3',3,'match470-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int i = 0; i &lt; x; i++)
+                {
+
+                  if (it.hasPrevious())
+                  {
+
+                    System.out.println((String)it.previous());
+                  }
+                }</B></FONT>
+                continue;
+              }
+
+              System.out.println(&quot;Invalid Command&quot;);
+              continue;
+              
+            }
+            
+                    }
+
+                    if (commandParams.get(0).equals(&quot;-c&quot;)) {
+                        
+                cmd.clear();
+                
+                System.out.println(&quot;Command history has been deleted.&quot;);
+                continue;
+                    }
+                    
+                    
+                    
+            if ((commandParams.get(0).equals(&quot;-l&quot;)) || (commandParams.get(2).equals(&quot;-c&quot;)))
+          {
+
+            String char1 = (String)commandParams.get(1);
+            
+
+            char check = char1.charAt(0);
+            boolean num = false;
+            
+
+            if (Character.isDigit(check)) {
+              num = true;
+            }
+            
+            if (num)
+            {
+
+              int a = Integer.parseInt((String)commandParams.get(1));
+              int size = cmd.size();
+              
+
+<A NAME="4"></A>              ListIterator it = cmd.listIterator(size - 1);
+              
+
+              <FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match470-1.html#4',3,'match470-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for (int i = 0; i &lt; a; i++)
+              {
+
+                if (it.hasPrevious())
+                {
+
+                  System.out.println((String)it.previous());
+                }
+              }</B></FONT>
+              
+
+              cmd.clear();
+              System.out.println(&quot;Command history has been deleted.&quot;);
+              
+              continue;
+            }
+            
+
+
+            System.out.println(&quot;Invalid Command&quot;);
+            continue;
+          <font color="#C0C0C0"><EM>}
+        }
+                }
+            }
+        }</EM></font>
+    
+    
+
+    
+
+    
+
+    
+
+</PRE>
+
+</BODY>
+</HTML>

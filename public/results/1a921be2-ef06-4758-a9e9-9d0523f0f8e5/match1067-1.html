@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000020.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff" style="margin-left:25">
+<HR>
+<H3><CENTER>myshell_00000020.java</CENTER></H3><HR>
+<PRE>
+package myshell;
+
+import java.io.*;
+import java.util.ArrayList;
+<font color="#C0C0C0"><EM>import java.util.Date;
+import java.util.Objects;
+import java.text.*;
+import java.util.regex.*;
+
+public class myshell_00000020 {
+
+	public static void main(String[] args) {
+		
+		//Use commandLine to store the command and the argument(s).
+        String commandLine = &quot;&quot;;
+        ArrayList&lt;String&gt; history = new</EM></font> ArrayList&lt;String&gt;();
+        String commandList = &quot;(about|time|hist|ls|notepad|date|exit)&quot;;
+        String histParam = &quot;(-h|-l|-c)|\\d+&quot;;
+        String lsParam = &quot;(-f|-d|-h|-p)&quot;;
+        
+        Pattern matchCommands = Pattern.compile(commandList);
+        Pattern matchHistParam = Pattern.compile(histParam);
+        Pattern matchLsParam = Pattern.compile(lsParam);
+        
+        //Read and buffered the command and the argument(s).
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        //Just a banner
+        System.out.println(&quot;My Shell Version 0.01&quot;);
+
+        //Continue to loop until &quot;exit&quot; is entered.
+        //Although it is uncommon for a normal application, it is normal for a shell.
+        while (true) {
+            //Print the console line.
+            //Remember to replace &quot;student_id&quot; with your student number.
+            System.out.print(&quot;00000020&gt; &quot;);
+            
+            //Read the input from user.
+            try {
+				commandLine = console.readLine();
+				if (!commandLine.isEmpty()) {
+					history.add(commandLine);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+            //Split the input into command and parameters.
+            //commandParams is a list that is pre-created to store all the parameters.
+            //commandSplit is a string array that is used to store the command and the parameters after spliting them.
+            <font color="#C0C0C0"><EM>ArrayList&lt;String&gt; commandParams = new ArrayList&lt;String&gt;();
+            String[] commandSplit = commandLine.split(&quot; &quot;);
+            
+            //Check to see if there is any parameter.
+            //If size of commandSplit is larger than one that means the user has included some parameters in the input.
+            if (commandSplit.length &gt; 1) {
+                //Add the parameters into commandParams
+                for (int i = 1; i &lt; commandSplit.length; i++) {
+                    commandParams.add(commandSplit[i]);
+                }
+            }
+            
+            //Reprint the conline line if user just pressed &quot;enter&quot; without any command.
+            if (commandSplit[0].equals(&quot;&quot;)) {
+                continue</EM></font>;
+            }
+            
+            if (matchCommands.matcher(commandSplit[0]).matches()) {
+            	if (commandSplit[0].equals(&quot;about&quot;)) {
+                	System.out.println(&quot;author: Mark Anthony&quot;);
+                	System.out.println(&quot;version: 0.01&quot;);
+                <font color="#C0C0C0"><EM>}
+
+                //Print the current time.
+                if (commandSplit[0].equals(&quot;time&quot;)) {
+                    Date time = new Date();
+                    //Format the output in hour:minute:second AM/PM format
+                    SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+                    System.out.println(sdf.format(time));
+                }
+                
+                //Print today's date.
+                if (commandSplit[0].equals(&quot;date&quot;)) {
+                    Date date = new Date();
+                    //Format the output in day/month/year format
+                    SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+                    System.out.println(sdf.format(date));
+                }
+                
+                //Exit the console when &quot;exit&quot; is entered.
+                if (commandSplit[0].equals(&quot;exit&quot;)) {
+                	System.out.println(&quot;Statu</EM></font>s : Shell terminated&quot;);
+                    System.exit(0);
+                }
+                
+                //To retrieve files and folders (or directories) from the current directory
+                if (commandSplit[0].equals(&quot;ls&quot;)) {
+                    //*****Your Code*****
+                	String dir = System.getProperty(&quot;user.dir&quot;);
+            		File currentDir = new File(dir);
+            		File[] list = currentDir.listFiles();
+                	
+                	if (commandParams.size() &lt; 1) {
+                		if (list == null) {
+                			System.out.println(&quot;Error : No files found&quot;);
+                		} else {
+                			for (int x = 0; x &lt; list.length; x++) {
+                				if (list[x].isFile()) {
+                					System.out.println(&quot;File\t: &quot; + list[x].getName());
+                				} else {
+                					System.out.println(&quot;Folder\t: &quot; + list[x].getName());
+                				}
+                			}
+                		}
+                	} else {
+                		boolean invalidParameterLs = false;
+                		
+                    	for (int x = 0; x &lt; commandParams.size(); x++) {
+                    		if (!matchLsParam.matcher(commandParams.get(x)).matches()) {
+                    			invalidParameterLs = true;
+                    		}
+                    	}
+                    	
+                    	if (!invalidParameterLs) {
+                    		for (int x = 0; x &lt; commandParams.size(); x++) {
+                    			if (commandParams.get(x).equals(&quot;-h&quot;)) {
+                    				System.out.println(&quot;ls -f : Retrieve all the files in the current working directory.&quot;);
+                    				System.out.println(&quot;ls -d : Retrieve all the folders in the current working directory.&quot;);
+                    				System.out.println(&quot;ls -p : List the current working directory path&quot;);
+                    			}
+                    			
+                    			if (commandParams.get(x).equals(&quot;-p&quot;)) {
+                    				System.out.println(&quot;Current working directory: '&quot; + dir + &quot;'&quot;);
+                    			}
+                    			
+                    			if (commandParams.get(x).equals(&quot;-f&quot;)) {
+                    				if (list == null) {
+<A NAME="1"></A>                    					System.out.println(&quot;Error : No files found&quot;);
+                    				} else {
+                    					System.out.println(&quot;File list: &quot;);
+                        				for (int y = 0; y &lt; list.len<FONT color="#f63526"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1067-0.html#1',2,'match1067-top.html#1',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>gth; y++) {
+                        					if (list[y].isFile()) {
+                        						System.out.println(list[y].getName());
+                        					}
+                        				}
+                    				}</B></FONT>
+                    			}
+                    			
+                    			if (commandParams.get(x).equals(&quot;-d&quot;)) {
+                    				if (list == null) {
+<A NAME="0"></A>                    					System.out.println(&quot;Error : No files found&quot;);
+                    				} else {
+                    					System.out.println(&quot;Folder list: &quot;);
+                        				for (int y = 0; y &lt; list.len<FONT color="#0000ff"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1067-0.html#0',2,'match1067-top.html#0',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>gth; y++) {
+                        					if (!list[y].isFile()) {
+                        						System.out.println(list[y].getName());
+                        					}
+<A NAME="3"></A>                        				}
+                    				}</B></FONT>
+                    			}
+                    		}<FONT color="#6cc417"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1067-0.html#3',2,'match1067-top.html#3',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+                    	} else {
+                    		System.out.println(&quot;Error : Invalid parameter for command '&quot; + commandSplit[0] + &quot;', enter 'ls -h' for help.&quot;);
+                    	}
+                	}
+                }</B></FONT>
+                
+                if (commandSplit[0].equals(&quot;notepad&quot;)) {
+                	String[] notepad = {&quot;notepad.exe&quot;};
+                	ProcessBuilder notepadexe = new ProcessBuilder(notepad);
+                	
+                	try {
+                		Process p = notepadexe.start();
+                	} catch (Exception e) {
+                		System.out.println(&quot;Error : Unable to open Notepad.exe&quot;);
+                	}
+                <font color="#C0C0C0"><EM>}
+                
+                //Example of a built-in function that can be used to print the command history. 
+                if (commandSplit[0].equals(&quot;hist&quot;)) {
+                    if (commandParams.size() &lt; 1) {
+                        System.out.println(&quot;Error : Not enough input argument(s). Please enter hist -h for help.&quot;);
+                    } else {</EM></font>
+                    	boolean invalidParameter = false;
+                    	for (int x = 0; x &lt; commandParams.size(); x++) {
+                    		if (!matchHistParam.matcher(commandParams.get(x)).matches()) {
+                    			invalidParameter = true;
+                    		}
+                    	}
+                    	
+                    	if (!invalidParameter) {
+                    		for (int x = 0; x &lt; commandParams.size(); x++) {<font color="#C0C0C0"><EM>
+                        		
+                        		//Process based on the number of parameters attached to the command.
+                                if (commandParams.get(x).equals(&quot;-h&quot;)) {
+                                    System.out.println(&quot;hist -l [int] : Retrieve the last [int] commands entered by the user.&quot;);
+                                    System.out.println(&quot;hist -c : Clear the command history.&quot;);
+                                }
+
+<A NAME="2"></A>                                if (commandParams.get(x).equals(&quot;-c&quot;)) {
+                                    //*****Your Code*****
+                                	System.out.println(&quot;Delet</EM></font>ed : All command history.&quot;);
+                                	for (int y = 0; y &lt; history.size(); y++) {<FONT color="#77bfc7"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1067-0.html#2',2,'match1067-top.html#2',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>
+                                		history.clear();
+                                	}
+                                }
+                                
+                                if (commandParams.get(x).equals(&quot;-l&quot;)) {
+                                	boolean printLatest = false;</B></FONT>
+                                	boolean invalid = false;
+                                	int count = 0;
+                                	int latest = history.size();
+                                	
+                                	if ((x + 1) != commandParams.size()) {
+                                		if (commandParams.get(x + 1).contains(&quot;-&quot;)) {
+                                			printLatest = true;
+                                		} else {
+                                			int k = Integer.parseInt(commandParams.get(x + 1));
+                                			
+                            				if (k &lt; 1) {
+                            					System.out.println(&quot;Error : Invalid number for hist -l&quot;);
+                            					invalid = true;
+                            				} else {
+                            					if (k &lt; history.size()) {
+                            						count = k;
+                            					} else {
+                            						count = history.size() - 1;
+                            					}
+                            				}
+                                		}
+                                	} else {
+                                		printLatest = true;
+                                	}
+                                	
+                                	if ((history.size() - 1) == 0 || history.isEmpty()) {
+                                		System.out.println(&quot;No command history found or command history had been cleared.&quot;);
+                                	} else {
+                                		if (printLatest) {
+                                    		System.out.println(&quot;Last command&quot;);
+                                    		System.out.println(history.get(history.size() - 2));
+                                    	} else {
+                                    		if (!invalid) {
+                                    			System.out.println(&quot;Showing last &quot; + count + &quot; command history&quot;);
+                                    			while (count &gt; 0) {
+                                        			System.out.println(history.get(latest - 2));
+                                        			latest--;
+                                        			count--;
+                                        		}
+                                    		}
+                                    	}
+                                	} 
+                                } // hist -l closing bracket 
+                        	} // commandParams for loop closing bracket
+<A NAME="4"></A>                    	} else {
+                    		System.out.println(&quot;Error : Invalid paramater for command '&quot; + commandSplit[0] + &quot;', enter 'hist -h' for help&quot;);
+                    	}
+                    <FONT color="#151b8d"><div style="position:absolute;left:0"><A HREF="javascript:ZweiFrames('match1067-0.html#4',2,'match1067-top.html#4',1)"><IMG SRC="back.gif" ALT="other" BORDER="0" ALIGN="left"></A></div><B>} // hist no input argument &quot;else&quot; closing bracket
+                } // hist closing bracket
+            } else {
+            	System.out.println(&quot;Error : Invalid command entered&quot;);
+            }
+        } // main while loop closing bracket
+	} // public static void main closing bracket
+}</B></FONT>
+</PRE>
+
+</BODY>
+</HTML>

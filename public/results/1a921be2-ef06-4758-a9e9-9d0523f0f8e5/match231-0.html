@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>myshell_00000068.java</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>myshell_00000068.java</CENTER></H3><HR>
+<PRE>
+package myshell;
+
+<font color="#C0C0C0"><EM>import java.io.*;
+import java.util.*;
+import java.text.*;
+
+public class myshell_00000068 {
+
+	public static void main(String[] args) throws IOException {
+        
+		String commandLine;
+		BufferedReader console = new BufferedReade</EM></font>r(new InputStreamReader(System.in));
+        
+		List&lt;String&gt; history = new ArrayList&lt;<font color="#C0C0C0"><EM>String&gt;();
+		
+		System.out.println(&quot;My Shell Version 0.01&quot;);
+				
+		while (true) {
+			
+			System.out.print(&quot;00000068&gt; &quot;);
+            
+			commandLine = console.readLine();
+			
+			ArrayList commandParams = new ArrayList();
+			String[] commandSplit = commandLine.split(&quot; &quot;);
+			
+			if(commandSplit.length&gt;1) {
+				for(int i = 1; i &lt; commandSplit.length; i++) {
+					commandParams.add(commandSplit[i]);
+				}
+			}
+			
+			if (commandSplit[0].equals(&quot;&quot;)) {
+				continue;
+			}</EM></font>
+			
+			else if (commandSplit[0].e<font color="#C0C0C0"><EM>quals(&quot;time&quot;)) {
+				Date time = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);
+				System.out.println(sdf.format(time));</EM></font>
+				history.add(commandLine);
+			}
+			
+			else if (commandSplit[0].e<font color="#C0C0C0"><EM>quals(&quot;date&quot;)) {
+<A NAME="0"></A>				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat(&quot;E dd/MM/yyyy&quot;);
+				System.out.println(sdf.format(date));</EM></font>
+				history.add(commandLine);<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match231-1.html#0',3,'match231-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+			}
+			
+			else if (commandSplit[0].equals(&quot;exit&quot;)) {
+				System.exit(0);
+			}
+
+//------------------------------------------------------------------------
+			
+			//Displays the author and the version number
+			else if (commandSplit[0].equals(&quot;about&quot;)) {</B></FONT>
+				System.out.println(&quot;author: Amanda Tan Joy Mun&quot;);
+				System.out.println(&quot;version: 0.01&quot;);
+				history.add(commandLine);
+			}
+
+//------------------------------------------------------------------------
+
+			//Create a process to launch notepad
+<A NAME="1"></A>			else if (commandSplit[0].equals(&quot;notepad&quot;)) {
+				ProcessBuilder pb = new ProcessBuilder();
+				pb.command(&quot;notepad.exe&quot;);
+				pb.start();<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match231-1.html#1',3,'match231-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+				history.add(commandLine);
+			}
+			
+//------------------------------------------------------------------------
+			
+			//List both files and directory
+			else if (commandSplit[0].equals(&quot;ls&quot;)) {
+				
+				File folder = new File(&quot;.&quot;);
+				File[] listOfFiles = folder.listFiles();
+				
+				if(commandParams.size()&lt;1) {
+					for (int j=0; j&lt;listOfFiles.length; j++) {</B></FONT>
+						if(listOfFiles[j].isFile()) {
+							System.out.println(listOfFiles[j].getName());
+						} else if(listOfFiles[j].isDirectory()) {
+<A NAME="2"></A>							System.out.println(listOfFiles[j].getName());
+						}
+					} history.add(commandLine);
+				} <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match231-1.html#2',3,'match231-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+				else {
+					//List files
+					if (commandParams.get(0).equals(&quot;-f&quot;)) {
+						for (int j=0; j&lt;listOfFiles.length; j++) {
+							if(listOfFiles[j].isFile()) {
+								System.out.println(listOfFiles[j].getName());
+							}
+<A NAME="3"></A>						} history.add(commandLine);</B></FONT>
+					}
+					//List directory
+					if (commandParams.get(0).equals(&quot;-d<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match231-1.html#3',3,'match231-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>&quot;)){
+						for (int j=0; j&lt;listOfFiles.length; j++) {
+							if(listOfFiles[j].isFile()) {
+								System.out.println(listOfFiles[j].getName());
+							}
+						} history.add(commandLine);</B></FONT>
+					}
+				}
+			}
+			
+//------------------------------------------------------------------------
+			
+			else if (commandSplit[0].equals(&quot;hist&quot;)) {
+				if (commandParams.size() &lt; 1) {
+					System.out.println(&quot;Error. Not enough input argument(s). Please enter -h for help.&quot;);
+					history.add(commandLine);	
+<A NAME="4"></A>				} 
+				
+				else {
+					for(int i = 0; i &lt; commandParams.si<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match231-1.html#4',3,'match231-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>ze(); i++) {
+						if (commandParams.get(i).equals(&quot;-h&quot;)) {
+							System.out.println(&quot;hist -l [int] : Retrieve the last [int] command</B></FONT>s entered by the user.&quot;);
+							System.out.println(&quot;hist -c : Clear the command h<font color="#C0C0C0"><EM>istory.&quot;);
+							history.add(commandLine);
+						}
+					
+					//Clear the command history
+					if (commandParams.get(i).equals(&quot;-c&quot;)) {
+						history.clear();
+					}</EM></font>
+					
+					//Prints previous x number of used commands
+					if (commandParams.get(i).equals(&quot;-l&quot;)) {
+						if (commandParams.size()&lt;2) {
+							for (i = 0; i &lt; history.size(); i++) {
+								System.out.println(history.get(i));
+							} history.add(commandLine);
+						}
+						
+						else if (commandParams.size()&lt;3) {
+							if (history.isEmpty()) {
+								history.add(commandLine);
+								break;
+							}
+								else {
+									if(history.size() &lt; Integer.parseInt((String) commandParams.get(1))) {
+										System.out.println(&quot;Not enough commands&quot;);
+										break;
+									}
+									else {
+										for (i = Integer.parseInt((String) commandParams.get(1)); i &gt; 0; i--) {
+											System.out.println(history.get(history.size()-i));
+										} history.add(commandLine);
+									} 
+									
+								}
+							
+							}
+						}
+					}
+				}
+			}
+<A NAME="5"></A>			else {
+				System.out.println(&quot;Invalid command&quot;);
+				history.add(commandLine);
+			}<FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match231-1.html#5',3,'match231-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+		}
+	}
+}</B></FONT>
+</PRE>
+
+</BODY>
+</HTML>
