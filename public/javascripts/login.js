@@ -11,6 +11,7 @@ $(document).ready(function() {
             method: 'POST',
             url: 'https://plagiarism-detection-system.herokuapp.com/login',
             data: formData,
+            crossDomain: true,
             processData: false,
             contentType: false,
             success : function(response) {
