@@ -24,15 +24,15 @@
                 <div id="login-box" class="col">
                     <form method="post" id="login-form" enctype="multipart/form-data">
                         <div class="form-group">
-                            <input type="text" name="username" id="username" class="form-control" placeholder="Enter username">
+                            <input type="text" name="username" id="username" class="form-control username" placeholder="Enter username">
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control"  placeholder="Enter password">
+                            <input type="password" name="password" id="password" class="form-control password"  placeholder="Enter password">
                         </div>
                         <div class="form-group text-center">
-                            <input type="submit" name="submit" class="btn btn-primary" value="Login" id="login_submit_button">
+                            <input type="submit" name="submit" class="btn btn-primary submit_button" value="Login">
                         </div>
-                        <div class="text-center" id="register_link">
+                        <div class="text-center register_link">
                             <a href="@routes.RunJPlagController.getRegisterPage">Don't have an account yet? Register here.</a>
                         </div>
                     </form>

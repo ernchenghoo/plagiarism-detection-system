@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
   "org.zeroturnaround" % "zt-zip" % "1.14",
   "mysql" % "mysql-connector-java" % "8.0.20",
+  "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
   javaJdbc
 )
 

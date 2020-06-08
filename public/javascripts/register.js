@@ -2,6 +2,7 @@ $(document).ready(function() {
     $('.logo_image').hide();
     $('.logout_button').hide();
     $('#registerPageAlert').hide();
+    $('.navigation_bar').hide();
 
     //register ajax
     $("#registration-form").submit(function(e) {
@@ -18,8 +19,6 @@ $(document).ready(function() {
             accountObject.password = $('#password').val();
             accountObject = JSON.stringify(accountObject);
             console.log(accountObject);
-
-
             $.ajax({
                 method: 'POST',
                 url: 'http://localhost:9000/register',
