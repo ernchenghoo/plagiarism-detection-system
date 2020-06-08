@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/plagiarism-detection-system -Dhttp.port=${PORT} -Dplay.evolutions.db.default.autoApply=true -Ddb.default.url=${JAWSDB_URL}
+web: target/universal/stage/bin/play-scala-seed -Dhttp.port=${PORT} -Dplay.evolutions.db.default.autoApply=true -Ddb.default.url=${JAWSDB_URL}
