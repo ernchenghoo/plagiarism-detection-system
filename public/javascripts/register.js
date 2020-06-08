@@ -21,13 +21,13 @@ $(document).ready(function() {
             console.log(accountObject);
             $.ajax({
                 method: 'POST',
-                url: 'http://localhost:9000/register',
+                url: 'https://plagiarism-detection-system.herokuapp.com/register',
                 data: accountObject,
                 dataType: "json",
                 contentType: 'application/json',
                 success : function(response) {
                     if (response.message === "Pass") {
-                        window.location = 'http://localhost:9000/home';
+                        window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                     }
                     else {
 

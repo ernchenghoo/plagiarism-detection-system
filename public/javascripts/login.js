@@ -9,15 +9,14 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/login',
+            url: 'https://plagiarism-detection-system.herokuapp.com/login',
             data: formData,
             processData: false,
             contentType: false,
             success : function(response) {
                 console.log(response);
                 if (response === "Pass") {
-
-                    window.location = 'http://localhost:9000/home';
+                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                 }
                 else {
                     $('#loginPageAlert').fadeIn(300).delay(3000).fadeOut(300).text(response);

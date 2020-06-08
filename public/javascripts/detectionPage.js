@@ -23,13 +23,13 @@ $(document).ready(function() {
         var formData = new FormData(this);
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/validateDetection',
+            url: 'https://plagiarism-detection-system.herokuapp.com/validateDetection',
             data: formData,
             processData: false,
             contentType: false,
             success : function(response) {
                 if (response.message === "Pass") {
-                    window.location = 'http://localhost:9000/home';
+                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -44,7 +44,7 @@ $(document).ready(function() {
     function clearUploadedFiles() {
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/clearUploadedFiles',
+            url: 'https://plagiarism-detection-system.herokuapp.com/clearUploadedFiles',
             processData: false,
             contentType: false,
             success : function(response) {
@@ -57,7 +57,7 @@ $(document).ready(function() {
     function getUploadedBaseFile() {
         $.ajax({
             method: 'GET',
-            url: 'http://localhost:9000/getUploadedBasefile',
+            url: 'https://plagiarism-detection-system.herokuapp.com/getUploadedBasefile',
             processData: false,
             contentType: false,
             success : function(response) {
@@ -81,7 +81,7 @@ $(document).ready(function() {
         if (!files) {
             $.ajax({
                 method: 'GET',
-                url: 'http://localhost:9000/getUploadedFiles',
+                url: 'https://plagiarism-detection-system.herokuapp.com/getUploadedFiles',
                 processData: false,
                 contentType: false,
                 success : function(response) {
@@ -138,7 +138,7 @@ $(document).ready(function() {
         var fileName = $('td:nth-child(1)', cRow).text();
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/deleteSingleUploadedFile',
+            url: 'https://plagiarism-detection-system.herokuapp.com/deleteSingleUploadedFile',
             processData: false,
             contentType: false,
             data: fileName,
@@ -160,7 +160,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/studentFileUpload',
+            url: 'https://plagiarism-detection-system.herokuapp.com/studentFileUpload',
             processData: false,
             contentType: false,
             data: formData,
@@ -180,7 +180,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'http://localhost:9000/submitSettings',
+            url: 'https://plagiarism-detection-system.herokuapp.com/submitSettings',
             data: formData,
             contentType: false,
             processData: false,
