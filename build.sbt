@@ -17,7 +17,6 @@ libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
   "org.zeroturnaround" % "zt-zip" % "1.14",
   "mysql" % "mysql-connector-java" % "8.0.20",
-  "com.github.play2war" %% "play2-war-core-common" % "1.4.0",
   javaJdbc
 )
 
