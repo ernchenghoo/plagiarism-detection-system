@@ -3,10 +3,10 @@ package models
 import java.sql.{Connection, DriverManager, SQLException}
 
 trait Database {
-  val url = "jdbc:mysql://localhost:3306/fyp?useTimezone=true&serverTimezone=UTC"
+  val url = "jdbc:mysql://sq65ur5a5bj7flas.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/hxam54z8bn8akfgd?useTimezone=true&serverTimezone=UTC"
   val driver = "com.mysql.cj.jdbc.Driver"
-  val username = "erncheng"
-  val password = "password"
+  val username = "xlgi69op5dtxcv6a"
+  val password = "ll2mnxm6mr45b87q"
   var connection: Connection = _
 }
 
