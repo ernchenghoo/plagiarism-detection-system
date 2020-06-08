@@ -1,3 +1,5 @@
+
+
 name := """play-scala-seed"""
 organization := "plagiarism-detection-system"
 
@@ -5,8 +7,9 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.13.1"
 
+scalaVersion := "2.13.1"
+enablePlugins(JavaAppPackaging)
 libraryDependencies ++= Seq(
   guice,
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test,
@@ -14,8 +17,11 @@ libraryDependencies ++= Seq(
   "net.ruippeixotog" %% "scala-scraper" % "2.2.0",
   "org.zeroturnaround" % "zt-zip" % "1.14",
   "mysql" % "mysql-connector-java" % "8.0.20",
+  "com.github.play2war" %% "play2-war-core-common" % "1.4.0",
   javaJdbc
 )
+
+
 
 
 // Adds additional packages into Twirl
