@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-    var url = document.location.ref
-
     // $(".logout_button").click (function(e) {
     //     $.ajax({
     //         method: 'POST',

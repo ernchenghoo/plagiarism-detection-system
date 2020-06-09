@@ -19,7 +19,6 @@ object DetectionManager extends Database {
   var detectionResult: Option[DetectionResult] = None
 
   def validateLoginCredentials(loginUsername: String, loginPassword: String): String = {
-    println(username)
     val connection = DriverManager.getConnection(url, username, password)
     val statement = connection.createStatement()
     var loggedIn = false

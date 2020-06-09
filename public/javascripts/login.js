@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $('#loginPageAlert').hide();
     $('.navigation_bar').hide();
-
+    console.log(url);
     //login ajax
     $("#login-form").submit(function(e) {
         e.preventDefault();
