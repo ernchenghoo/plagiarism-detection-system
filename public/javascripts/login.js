@@ -9,11 +9,10 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/login',
+            url: document.location.href + 'login',
             data: formData,
             processData: false,
             contentType: false,
-            headers: {  'Access-Control-Allow-Origin': 'http://The web site allowed to access' },
             success : function(response) {
                 console.log(response);
                 if (response === "Pass") {

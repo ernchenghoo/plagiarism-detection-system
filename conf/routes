@@ -18,6 +18,7 @@ GET     /getUploadedFiles                   controllers.RunJPlagController.getUp
 GET     /getUploadedBasefile                controllers.RunJPlagController.getUploadedBaseFile
 GET     /logout                             controllers.RunJPlagController.logout
 
+
 POST    /login                              controllers.RunJPlagController.login
 POST    /register                           controllers.RunJPlagController.register
 POST    /validateDetection                  controllers.RunJPlagController.validateDetection
