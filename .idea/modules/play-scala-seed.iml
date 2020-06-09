@@ -155,5 +155,7 @@
     <orderEntry type="library" name="sbt: org.zeroturnaround:zt-zip:1.14:jar" level="project" />
     <orderEntry type="library" name="sbt: mysql:mysql-connector-java:8.0.20:jar" level="project" />
     <orderEntry type="library" name="sbt: org.slf4j:slf4j-api:1.7.29:jar" level="project" />
+    <orderEntry type="library" name="lottie-player" level="application" />
+    <orderEntry type="library" name="font-awesome" level="application" />
   </component>
 </module>

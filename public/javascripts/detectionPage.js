@@ -91,7 +91,7 @@ $(document).ready(function() {
                             if(response.uploadedFiles[i].fileName){
                                 txt += '<tr>';
                                 txt += '<td>' + response.uploadedFiles[i].fileName +  '</td>';
-                                txt += '<td><button type="button" class="btn delete" style="background: transparent"><i class="fas fa-trash-alt fa-lg"></i></button></td>';
+                                txt += '<td><button type="button" class="btn delete" style="background: transparent"><i class="fa fa-trash-o fa-lg"></i></button></td>';
                                 txt += '</tr>'
                             }
                         }
@@ -116,7 +116,7 @@ $(document).ready(function() {
                     if(files[i].fileName){
                         txt += '<tr>';
                         txt += '<td>' + files[i].fileName +  '</td>';
-                        txt += '<td><button type="button" class="btn btn-primary delete"><i class="fas fa-trash-alt"></i></button></td>';
+                        txt += '<td><button type="button" class="btn btn-primary delete"><i class="fa fa-trash-o"></i></button></td>';
                         txt += '</tr>'
                     }
                 }

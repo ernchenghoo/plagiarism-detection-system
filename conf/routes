@@ -20,7 +20,7 @@ GET     /logout                                 controllers.RunJPlagController.l
 
 
 POST    /login                                  controllers.RunJPlagController.login
-POST    /registration/register                               controllers.RunJPlagController.register
+POST    /registration/register                  controllers.RunJPlagController.register
 POST    /detection/validateDetection            controllers.RunJPlagController.validateDetection
 POST    /detection/studentFileUpload            controllers.RunJPlagController.studentFileUpload
 POST    /detection/clearUploadedFiles           controllers.RunJPlagController.clearUploadedFiles
