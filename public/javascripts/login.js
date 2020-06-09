@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $('#loginPageAlert').hide();
     $('.navigation_bar').hide();
-    console.log(url);
+
     //login ajax
     $("#login-form").submit(function(e) {
         e.preventDefault();
@@ -13,10 +13,11 @@ $(document).ready(function() {
             data: formData,
             processData: false,
             contentType: false,
+            headers: {  'Access-Control-Allow-Origin': 'http://The web site allowed to access' },
             success : function(response) {
                 console.log(response);
                 if (response === "Pass") {
-                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
+                    window.location = document.location.href + 'home';
                 }
                 else {
                     $('#loginPageAlert').fadeIn(300).delay(3000).fadeOut(300).text(response);

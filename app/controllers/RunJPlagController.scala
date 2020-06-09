@@ -2,7 +2,6 @@ package controllers
 import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util.Calendar
-
 import javax.inject.Inject
 import models.{Account, Database, Detection, DetectionDetail, DetectionManager, JPlagSettings, PotentialPlagiarismGroup, StudentFilePairs}
 import play.api.libs.Files
@@ -10,7 +9,6 @@ import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc._
 import play.api.routing.JavaScriptReverseRouter
 import play.twirl.api.MimeTypes
-
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future, Promise, blocking}
 
@@ -29,7 +27,9 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getLoginPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.login_page())
+    Ok(views.html.login_page()).withHeaders(
+      "Access-Control-Allow-Origin" -> "http://localhost:3000"
+    )
   }
 
 
