@@ -23,13 +23,13 @@ $(document).ready(function() {
         var formData = new FormData(this);
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/validateDetection',
+            url: document.location.href + 'validateDetection',
             data: formData,
             processData: false,
             contentType: false,
             success : function(response) {
                 if (response.message === "Pass") {
-                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
+                    window.location = document.location.href + 'home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -44,7 +44,7 @@ $(document).ready(function() {
     function clearUploadedFiles() {
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/clearUploadedFiles',
+            url: document.location.href + '/clearUploadedFiles',
             processData: false,
             contentType: false,
             success : function(response) {
@@ -57,11 +57,10 @@ $(document).ready(function() {
     function getUploadedBaseFile() {
         $.ajax({
             method: 'GET',
-            url: 'https://plagiarism-detection-system.herokuapp.com/getUploadedBasefile',
+            url: document.location.href + '/getUploadedBasefile',
             processData: false,
             contentType: false,
             success : function(response) {
-                console.log(response.uploadedBaseFile)
                 if (response.uploadedBaseFile === "None") {
                     $('#baseCodeUploadedSection').hide()
                 }
@@ -81,7 +80,7 @@ $(document).ready(function() {
         if (!files) {
             $.ajax({
                 method: 'GET',
-                url: 'https://plagiarism-detection-system.herokuapp.com/getUploadedFiles',
+                url: document.location.href + '/getUploadedFiles',
                 processData: false,
                 contentType: false,
                 success : function(response) {
@@ -97,7 +96,6 @@ $(document).ready(function() {
                             }
                         }
                         if(txt !== ""){
-                            console.log("tbody append");
                             $('tbody').append(txt);
                             $(".no_file_uploaded_message").hide();
                             $(".table_body_container").show();
@@ -138,7 +136,7 @@ $(document).ready(function() {
         var fileName = $('td:nth-child(1)', cRow).text();
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/deleteSingleUploadedFile',
+            url: document.location.href + '/deleteSingleUploadedFile',
             processData: false,
             contentType: false,
             data: fileName,
@@ -160,7 +158,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/studentFileUpload',
+            url: document.location.href + '/studentFileUpload',
             processData: false,
             contentType: false,
             data: formData,
@@ -180,7 +178,7 @@ $(document).ready(function() {
 
         $.ajax({
             method: 'POST',
-            url: 'https://plagiarism-detection-system.herokuapp.com/submitSettings',
+            url: document.location.href + '/submitSettings',
             data: formData,
             contentType: false,
             processData: false,

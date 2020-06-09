@@ -4,33 +4,33 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                                   controllers.RunJPlagController.getLoginPage
-GET     /registration                       controllers.RunJPlagController.getRegisterPage
-GET     /home                               controllers.RunJPlagController.getHomepage
-GET     /detection                          controllers.RunJPlagController.getDetectionMainPage
-GET     /result                             controllers.RunJPlagController.getSelectPastDetectionPage
-GET     /result/:detectionID                controllers.RunJPlagController.getResultPage(detectionID: String)
-GET     /result/codeComparison/:matchIndex  controllers.RunJPlagController.getCodeComparisonPage(fromPlagiarisedGroup: Option[String], matchIndex: String)
-GET     /result/detail/:group               controllers.RunJPlagController.getResultDetailPage(group: String)
-GET     /checkForRunningDetection           controllers.RunJPlagController.getRunningDetections
-GET     /checkForDetectionRan               controllers.RunJPlagController.getDetectionRan
-GET     /getUploadedFiles                   controllers.RunJPlagController.getUploadedFiles
-GET     /getUploadedBasefile                controllers.RunJPlagController.getUploadedBaseFile
-GET     /logout                             controllers.RunJPlagController.logout
+GET     /                                       controllers.RunJPlagController.getLoginPage
+GET     /registration                           controllers.RunJPlagController.getRegisterPage
+GET     /home                                   controllers.RunJPlagController.getHomepage
+GET     /detection                              controllers.RunJPlagController.getDetectionMainPage
+GET     /result                                 controllers.RunJPlagController.getSelectPastDetectionPage
+GET     /result/:detectionID                    controllers.RunJPlagController.getResultPage(detectionID: String)
+GET     /result/codeComparison/:matchIndex      controllers.RunJPlagController.getCodeComparisonPage(fromPlagiarisedGroup: Option[String], matchIndex: String)
+GET     /result/detail/:group                   controllers.RunJPlagController.getResultDetailPage(group: String)
+GET     /home/checkForRunningDetection          controllers.RunJPlagController.getRunningDetections
+GET     /home/checkForDetectionRan              controllers.RunJPlagController.getDetectionRan
+GET     /detection/getUploadedFiles             controllers.RunJPlagController.getUploadedFiles
+GET     /detection/getUploadedBasefile          controllers.RunJPlagController.getUploadedBaseFile
+GET     /logout                                 controllers.RunJPlagController.logout
 
 
-POST    /login                              controllers.RunJPlagController.login
-POST    /register                           controllers.RunJPlagController.register
-POST    /validateDetection                  controllers.RunJPlagController.validateDetection
-POST    /studentFileUpload                  controllers.RunJPlagController.studentFileUpload
-POST    /clearUploadedFiles                 controllers.RunJPlagController.clearUploadedFiles
-POST    /runJPlag                           controllers.RunJPlagController.runJPlag
-POST    /submitSettings                     controllers.RunJPlagController.submitSettings
-POST    /deleteSingleUploadedFile           controllers.RunJPlagController.deleteSingleUploadedFile
+POST    /login                                  controllers.RunJPlagController.login
+POST    /registration/register                               controllers.RunJPlagController.register
+POST    /detection/validateDetection            controllers.RunJPlagController.validateDetection
+POST    /detection/studentFileUpload            controllers.RunJPlagController.studentFileUpload
+POST    /detection/clearUploadedFiles           controllers.RunJPlagController.clearUploadedFiles
+POST    /detection/runJPlag                     controllers.RunJPlagController.runJPlag
+POST    /detection/submitSettings               controllers.RunJPlagController.submitSettings
+POST    /detection/deleteSingleUploadedFile     controllers.RunJPlagController.deleteSingleUploadedFile
 
 
 # Javascript route
-GET     /javascriptRoutes                   controllers.RunJPlagController.javascriptRoutes()
+GET     /javascriptRoutes                       controllers.RunJPlagController.javascriptRoutes()
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

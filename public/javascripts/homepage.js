@@ -6,12 +6,12 @@ $(document).ready(function() {
 
     $.ajax({
         method: 'GET',
-        url: 'https://plagiarism-detection-system.herokuapp.com/checkForDetectionRan',
+        url: document.location.href + '/checkForDetectionRan',
         success : function(response) {
             if (response.Status === "Run") {
                 $.ajax({
                     method: 'POST',
-                    url: 'https://plagiarism-detection-system.herokuapp.com/runJPlag',
+                    url: document.location.href + '/runJPlag',
                     success : function(response) {
                         if (response.Status === "Success") {
                             checkRunningDetections();
@@ -29,7 +29,7 @@ $(document).ready(function() {
     function checkRunningDetections() {
         $.ajax({
             method: 'GET',
-            url: 'https://plagiarism-detection-system.herokuapp.com/checkForRunningDetection',
+            url: document.location.href + '/checkForRunningDetection',
             success : function(response) {
                 var len = response.length;
                 var txt = "";

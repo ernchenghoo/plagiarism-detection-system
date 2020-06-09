@@ -13,7 +13,6 @@ $(document).ready(function() {
             data: formData,
             processData: false,
             contentType: false,
-            headers: {  'Access-Control-Allow-Origin': 'http://The web site allowed to access' },
             success : function(response) {
                 console.log(response);
                 if (response === "Pass") {
