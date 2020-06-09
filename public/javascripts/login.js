@@ -11,7 +11,6 @@ $(document).ready(function() {
             method: 'POST',
             url: 'https://plagiarism-detection-system.herokuapp.com/login',
             data: formData,
-            crossDomain: true,
             processData: false,
             contentType: false,
             headers: {  'Access-Control-Allow-Origin': 'http://The web site allowed to access' },
