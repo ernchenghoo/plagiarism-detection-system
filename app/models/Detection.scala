@@ -273,7 +273,7 @@ class Detection extends Database {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     val uploadedFilesName = new ListBuffer[UploadedFile]()
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.getName != "baseCodeDirectory") {
+      if (uploadedFile.getName != "baseCodeDirectory" && uploadedFile.getName != "dummyfile") {
         uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
       }
     }
