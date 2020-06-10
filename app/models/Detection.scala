@@ -15,7 +15,7 @@ class Detection extends Database {
 
   Class.forName(driver)
   var destinationPath = "./public/results"
-  val sourcePath = "./public/studentFiles"
+  val sourcePath = "./public/studentfiles"
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
   val baseCodeDirectory = "baseCodeDirectory"
