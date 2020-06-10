@@ -2,8 +2,8 @@ package models
 
 import java.io.File
 import java.sql.{DriverManager, SQLException}
+import java.util
 import java.util.{Calendar, UUID}
-
 import scala.jdk.CollectionConverters._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-object DetectionManager extends Database {
+object DetectionManager extends Database with AmazonS3 {
 
   var loggedInUsername = ""
   val runningDetections: ListBuffer[Detection] = ListBuffer[Detection]()

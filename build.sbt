@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "org.zeroturnaround" % "zt-zip" % "1.14",
   "mysql" % "mysql-connector-java" % "8.0.20",
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
+  "com.amazonaws" % "aws-java-sdk" % "1.3.11",
   javaJdbc
 )
 

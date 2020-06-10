@@ -1,8 +1,13 @@
 package models
 import java.io.{ByteArrayOutputStream, File, PrintWriter}
 import java.sql.{Date, DriverManager, ResultSet, SQLException}
+
+import com.amazonaws.services.s3.iterable.S3Objects
+import com.amazonaws.services.s3.model.{ProgressEvent, ProgressListener, PutObjectRequest, S3ObjectSummary}
+import models.DetectionManager.{amazonS3Client, bucketName}
 import org.apache.commons.io.FileUtils
 import org.zeroturnaround.zip.ZipUtil
+
 import scala.collection.mutable.ListBuffer
 import scala.sys.process.{Process, ProcessLogger}
 
@@ -132,12 +137,11 @@ class Detection extends Database {
   }
 
   def unZipUploadedFiles(): List[UploadedFile] = {
+    emptyS3StudentFiles()
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (file <- uploadedFilesDirectory.listFiles()) {
       val extension = file.toString.split("\\.").last
-
       if (extension == "zip" || extension == "rar") {
-        println("Zip file detected")
         val fileName = file.getName
         ZipUtil.unpack(new File(s"./studentFiles/${fileName}"), new File("./studentFiles"))
         if (file.delete()) {
@@ -160,12 +164,79 @@ class Detection extends Database {
 
     val uploadedFilesName = new ListBuffer[UploadedFile]()
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
+      if (uploadedFile.isDirectory) {
+        for (innerFile <- uploadedFile.listFiles) {
+          val extension = innerFile.toString.split("\\.").last
+          if (extension != "py" || extension == "java") {
+            innerFile.delete
+
+          }
+        }
+        uploadStudentFilesToS3(uploadedFile)
+      }
       uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
     }
+
     getUploadedFiles()
   }
 
+  def emptyS3StudentFiles(): Unit = {
+    S3Objects.inBucket(amazonS3Client, bucketName).forEach((objectSummary: S3ObjectSummary) => {
+      println(objectSummary.getKey)
+      if (!objectSummary.getKey.contains("baseCodeDirectory")) {
+        amazonS3Client.deleteObject(bucketName, objectSummary.getKey)
+      }
+    })
+  }
+
+  def emptyS3BaseCodeDirectory(): Unit = {
+    amazonS3Client.deleteObject(bucketName, "baseCodeDirectory")
+  }
+
+  def uploadBaseCodeFileToS3(): Unit = {
+    val uploadedFilesDirectory = new java.io.File(baseCodeDirectoryPath)
+    for (file <- uploadedFilesDirectory.listFiles()) {
+      val request: PutObjectRequest = new PutObjectRequest(bucketName, uploadedFilesDirectory.getName + "/" + file.getName, file)
+      request.setProgressListener(new ProgressListener() {
+        def progressChanged(progressEvent: ProgressEvent): Unit = {
+          println("Transferred bytes: " + progressEvent.getBytesTransfered)
+        }
+      })
+      amazonS3Client.putObject(request)
+    }
+  }
+
+  def uploadStudentFilesToS3 (file: File): Unit = {
+    if (file.isDirectory) {
+      for (innerFile <- file.listFiles) {
+        if (innerFile.isDirectory) {
+          for (innerFile2 <- innerFile.listFiles) {
+            val request: PutObjectRequest = new PutObjectRequest(bucketName, file.getName + "/" + innerFile2.getName, innerFile2)
+            request.setProgressListener(new ProgressListener() {
+              def progressChanged(progressEvent: ProgressEvent): Unit = {
+                println("Transferred bytes: " + progressEvent.getBytesTransfered)
+              }
+            })
+            amazonS3Client.putObject(request)
+
+          }
+        }
+        else {
+          val request: PutObjectRequest = new PutObjectRequest(bucketName, file.getName + "/" + innerFile.getName, innerFile)
+          request.setProgressListener(new ProgressListener() {
+            def progressChanged(progressEvent: ProgressEvent): Unit = {
+              println("Transferred bytes: " + progressEvent.getBytesTransfered)
+            }
+          })
+          amazonS3Client.putObject(request)
+        }
+
+      }
+    }
+  }
+
   def clearUploadedFiles(): String = {
+    emptyS3StudentFiles()
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.isDirectory) {
@@ -180,6 +251,12 @@ class Detection extends Database {
 
   def deleteSingleUploadedFile(fileName: String): String = {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
+    S3Objects.inBucket(amazonS3Client, bucketName).forEach((objectSummary: S3ObjectSummary) => {
+      println(objectSummary.getKey)
+      if (objectSummary.getKey.contains(fileName + "/")) {
+        amazonS3Client.deleteObject(bucketName, objectSummary.getKey)
+      }
+    })
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.getName == fileName) {
         if (uploadedFile.isDirectory) {

@@ -190,14 +190,11 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def studentFileUpload: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
-    println("Backend got it")
     request.body.files.foreach( file => {
       val filename = Paths.get(file.filename).getFileName.toFile
-      println("File name: " + filename)
       file.ref.moveTo(Paths.get(s"./studentFiles/$filename").toFile, replace = true)
     })
     val uploadedFiles = DetectionManager.currentDetection.get.unZipUploadedFiles()
-
     Ok(Json.obj("message" -> "Your files have been uploaded!",
       "uploadedFiles" -> uploadedFiles))
   }
@@ -213,15 +210,16 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     })
 
     if (request.body.files.nonEmpty) {
+      DetectionManager.currentDetection.get.emptyS3BaseCodeDirectory()
       new File(s"${DetectionManager.currentDetection.get.baseCodeDirectoryPath}").mkdirs()
       request.body.files.foreach( file => {
         val filename = file.filename
         val baseCodeFile = Paths.get(file.filename).getFileName.toFile
         println(s"File name: ${filename}")
         file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.baseCodeDirectoryPath}/$baseCodeFile").toFile, replace = true)
-
         DetectionManager.currentDetection.get.settings = Some(new JPlagSettings(sensitivity, minPercentage))
         DetectionManager.currentDetection.get.baseCodeExist = true
+        DetectionManager.currentDetection.get.uploadBaseCodeFileToS3()
       })
     }
     else {
