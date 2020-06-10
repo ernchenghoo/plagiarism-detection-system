@@ -240,7 +240,9 @@ class Detection extends Database {
         FileUtils.deleteDirectory(uploadedFile)
       }
       else if (uploadedFile.isFile) {
-        uploadedFile.delete()
+        if (uploadedFile.getName != "dummyfile") {
+          uploadedFile.delete()
+        }
       }
     }
     "Success"
