@@ -15,7 +15,7 @@ class Detection extends Database {
 
   Class.forName(driver)
   var destinationPath = "./public/results"
-  val sourcePath = "./studentFiles"
+  val sourcePath = "./public/studentFiles"
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
   val baseCodeDirectory = "baseCodeDirectory"
@@ -137,13 +137,12 @@ class Detection extends Database {
   }
 
   def unZipUploadedFiles(): List[UploadedFile] = {
-    emptyS3StudentFiles()
-    val uploadedFilesDirectory = new java.io.File(sourcePath)
+      val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (file <- uploadedFilesDirectory.listFiles()) {
       val extension = file.toString.split("\\.").last
       if (extension == "zip" || extension == "rar") {
         val fileName = file.getName
-        ZipUtil.unpack(new File(s"./studentFiles/${fileName}"), new File("./studentFiles"))
+        ZipUtil.unpack(new File(s"$sourcePath/${fileName}"), new File(s"$sourcePath"))
         if (file.delete()) {
           println(s"${file.getName} deleted")
         }
@@ -155,7 +154,7 @@ class Detection extends Database {
       val extension = extractedFile.toString.split("\\.").last
       if (extension == "zip") {
         val extractedFileName = extractedFile.getName
-        ZipUtil.unpack(new File(s"./studentFiles/${extractedFileName}"), new File("./studentFiles"))
+        ZipUtil.unpack(new File(s"$sourcePath/${extractedFileName}"), new File(s"$sourcePath"))
         if (extractedFile.delete()) {
           println(s"${extractedFile.getName} deleted")
         }
@@ -172,7 +171,6 @@ class Detection extends Database {
 
           }
         }
-        uploadStudentFilesToS3(uploadedFile)
       }
       uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
     }
@@ -236,7 +234,6 @@ class Detection extends Database {
   }
 
   def clearUploadedFiles(): String = {
-    emptyS3StudentFiles()
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.isDirectory) {

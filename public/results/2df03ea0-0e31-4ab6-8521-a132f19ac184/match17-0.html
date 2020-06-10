@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>J</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>QUESTION_1.py</CENTER></H3><HR>
+<PRE>
+import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+#question 1
+
+book = cv2.imread(&quot;omega_book.bmp&quot;,0)
+book = book -17*2
+book_eq = cv2.equalizeHist(book)
+
+hist_book = cv2.calcHist([book],[0],None,[256],[0,256])
+hist_book_eq = cv2.calcHist([book_eq],[0],None,[256],[0,256])
+
+<A NAME="0"></A>pt.figure()
+pt.subplot(2,2,1)
+pt.imshow(book,cmap=&quot;gray&quot;)
+pt<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match17-1.html#0',3,'match17-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.title(&quot;manually adjusted&quot;)
+
+pt.subplot(2,2,2)
+pt.imshow(book_eq,cmap=&quot;gray&quot;)
+pt.title(&quot;histogram equalized version&quot;)
+
+pt.subplot(2,2,3)
+pt.plot(hist_book)
+pt.title(&quot;manually adjusted histogram&quot;)
+
+pt.subplot(2,2,4)
+pt.</B></FONT>plot(hist_book_eq)
+pt.title(&quot;histogram equalized version&quot;)
+pt.show()
+</PRE>
+<HR>
+<H3><CENTER>QUESTION_4.py</CENTER></H3><HR>
+<PRE>
+<A NAME="1"></A><FONT color="#f63526"><A HREF="javascript:ZweiFrames('match17-1.html#1',3,'match17-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import numpy as np
+import cv2
+from matplotlib import pyplot as pt
+#question 4
+q4omega = cv2.imread(&quot;q4omega.tif&quot;,1)
+q4omega_gray = cv2.cvtColor(q4omega, cv2.COLOR_BGR2GRAY)
+histq4omega = cv2.calcHist([q4omega_gray],[0],None,[256],[0,256])
+
+[nrow,ncol] = q4omega_gray.shape
+mask = np.zeros((nrow,ncol),dtype=np.uint8)
+
+threshold =</B></FONT> 150
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &gt;= threshold:
+            mask[x,y] =255
+        else:
+            mask[x,y]=0
+
+mask2 = q4omega_gray.copy()
+
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &lt;= threshold:
+            mask2[x,y] =255
+        else:
+            mask2[x,y]=0
+
+mask3 = q4omega_gray.copy()
+
+for x in range (0,nrow):
+    for y in range(0,ncol):
+        if q4omega_gray[x,y] &lt;= threshold:
+            mask2[x,y] =255
+        else:
+            mask2[x,y]=0
+<A NAME="2"></A>
+mask[:,0:380]=0
+mask2[:,380:1140]=0
+mask3<FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match17-1.html#2',3,'match17-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= mask + mask2
+ex_q4omega = q4omega.copy()
+ex_q4omega[:,:,0] = cv2.bitwise_and(q4omega[:,:,0],mask3)
+ex_q4omega[:,:,1] = cv2.bitwise_and(q4omega[:,:,1],mask3)
+ex_q4omega[:,:,2] = cv2.bitwise_and(q4omega[:,:,2],mask3)
+
+pt.figure()
+
+pt.subplot(2,4,1)
+pt.imshow(q4omega)
+<A NAME="3"></A>pt.title(&quot;Original Color Image&quot;)
+
+pt.</B></FONT>subplot(2,4,2)
+pt<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match17-1.html#3',3,'match17-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.imshow(q4omega_gray, cmap=&quot;gray&quot;)
+pt.title(&quot;Original Gray Image&quot;)
+
+pt.subplot(2,4,3)
+pt.imshow(mask, cmap=&quot;gray&quot;)
+pt.title(&quot;Mask&quot;)
+
+pt.subplot(</B></FONT>2,4,4)
+pt.title(&quot;Histogram&quot;)
+pt.plot(histq4omega)
+pt.xlim([0,256])
+
+pt.subplot(2,4,5)
+pt.title(&quot;2nd mask&quot;)
+pt.imshow(mask2, cmap=&quot;gray&quot;)
+
+pt.subplot(2,4,6)
+pt.title(&quot;3rd mask&quot;)
+pt.imshow(mask3,cmap=&quot;gray&quot;)
+
+pt.subplot(2,4,7)
+pt.title(&quot;Extracted Color Image &quot;)
+pt.imshow(cv2.cvtColor(ex_q4omega, cv2.COLOR_BGR2RGB))
+</PRE>
+
+</BODY>
+</HTML>

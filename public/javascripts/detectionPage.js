@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $("#detectionMainAlert").hide();
+    $("#loading_gif").hide();
     getUploadedFiles();
     getUploadedBaseFile();
 
@@ -23,13 +24,13 @@ $(document).ready(function() {
         var formData = new FormData(this);
         $.ajax({
             method: 'POST',
-            url: document.location.href + 'validateDetection',
+            url: document.location.href + '/validateDetection',
             data: formData,
             processData: false,
             contentType: false,
             success : function(response) {
                 if (response.message === "Pass") {
-                    window.location = document.location.href + 'home';
+                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -42,12 +43,17 @@ $(document).ready(function() {
     });
 
     function clearUploadedFiles() {
+        $("#loading_gif").show();
         $.ajax({
             method: 'POST',
             url: document.location.href + '/clearUploadedFiles',
             processData: false,
             contentType: false,
             success : function(response) {
+                if (response.message === "Success") {
+                    alert("Success")
+                }
+                $("#loading_gif").hide();
                 $(".table_body_container").hide();
                 $(".no_file_uploaded_message").show();
             }
@@ -153,6 +159,7 @@ $(document).ready(function() {
 
     //student file upload ajax
     $("#studentFileUploadForm").submit(function(e) {
+        $("#loading_gif").show();
         var formData = new FormData(this);
         e.preventDefault();
 
@@ -163,6 +170,7 @@ $(document).ready(function() {
             contentType: false,
             data: formData,
             success : function(response) {
+                $("#loading_gif").hide();
                 $('#detectionMainAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.message);
                 getUploadedFiles(response.uploadedFiles)
             }
@@ -171,6 +179,7 @@ $(document).ready(function() {
 
     //settings submission ajax
     $("#settingsForm").submit(function(e) {
+        $("#loading_gif").show();
         var formData = new FormData(this);
         e.preventDefault();
 
@@ -183,6 +192,7 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             success : function(response) {
+                $("#loading_gif").hide();
                 $("#detectionMainAlert").fadeIn(100).delay(3000).fadeOut(300).text(response.message);
                 getUploadedBaseFile()
             }

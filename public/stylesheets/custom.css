@@ -40,7 +40,8 @@ body {
 }
 
 .loading_gif {
-    float: right;
+    margin-right: -60px;
+    margin-left: 10px;
 }
 
 .logo_image {
