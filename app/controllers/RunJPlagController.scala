@@ -192,7 +192,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def studentFileUpload: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
     request.body.files.foreach( file => {
       val filename = Paths.get(file.filename).getFileName.toFile
-      file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.sourcePath}/$filename").toFile, replace = true)
+      file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.sourcePath}/$filename"), replace = true)
     })
     val uploadedFiles = DetectionManager.currentDetection.get.unZipUploadedFiles()
     Ok(Json.obj("message" -> "Your files have been uploaded!",

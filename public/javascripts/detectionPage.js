@@ -154,7 +154,8 @@ $(document).ready(function() {
 
 
     $("#studentCodeUpload").change(function(e) {
-        $("#studentFileUploadForm").submit()
+        $("#studentFileUploadForm").submit();
+        console.log("on change file upload")
     });
 
     //student file upload ajax
@@ -172,7 +173,8 @@ $(document).ready(function() {
             success : function(response) {
                 $("#loading_gif").hide();
                 $('#detectionMainAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.message);
-                getUploadedFiles(response.uploadedFiles)
+                getUploadedFiles(response.uploadedFiles);
+                $("#studentCodeUpload").val('');
             }
         });
     });
