@@ -14,12 +14,12 @@ import scala.sys.process.{Process, ProcessLogger}
 class Detection extends Database {
 
   Class.forName(driver)
-  var destinationPath = "./public/results"
-  val sourcePath = "./public/studentfiles"
+  var destinationPath = s"${System.getProperty("user.dir")}/public/results"
+  val sourcePath = s"${System.getProperty("user.dir")}/public/studentfiles"
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
   val baseCodeDirectory = "baseCodeDirectory"
-  val baseCodeDirectoryPath = s"./$sourcePath/$baseCodeDirectory"
+  val baseCodeDirectoryPath = s"$sourcePath/$baseCodeDirectory"
   var error: String = _
   var settings: Option[JPlagSettings] = None
   var exitCode: Int = 0
@@ -237,6 +237,7 @@ class Detection extends Database {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.getName != "dummyfile.txt") {
+        println("File path: " + uploadedFile.getAbsolutePath)
         if (uploadedFile.isDirectory) {
           FileUtils.deleteDirectory(uploadedFile)
         }
