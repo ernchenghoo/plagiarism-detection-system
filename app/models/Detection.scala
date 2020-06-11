@@ -59,7 +59,9 @@ class Detection extends Database {
     }
     val process = processRunner(command)
     println("Process runner result: " + process._2)
+
     exitCode = process._1.toString.toInt
+    println("Exit code: " + exitCode)
     //errors during detection
     if (exitCode == 1) {
       error = process._2
