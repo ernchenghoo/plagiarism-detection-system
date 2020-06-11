@@ -27,9 +27,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getLoginPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.login_page()).withHeaders(
-      "Access-Control-Allow-Origin" -> "http://localhost:3000"
-    )
+    Ok(views.html.login_page())
   }
 
 

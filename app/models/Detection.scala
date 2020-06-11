@@ -57,6 +57,7 @@ class Detection extends Database {
     if (baseCodeExist) {
       command = command.concat(s" -bc $baseCodeDirectory")
     }
+    println("Run command: " + command)
     val process = processRunner(command)
     println("Process runner result: " + process._2)
 
@@ -113,8 +114,15 @@ class Detection extends Database {
     val stderrStream = new ByteArrayOutputStream
     val stdoutWriter = new PrintWriter(stdoutStream)
     val stderrWriter = new PrintWriter(stderrStream)
-    val process = Process(cmd)
-    val exitValue = process.!(ProcessLogger(stdoutWriter.println, stderrWriter.println))
+    var exitValue = 0
+    try {
+      val process = Process(cmd)
+      exitValue = process.!(ProcessLogger(stdoutWriter.println, stderrWriter.println))
+    }
+    catch {
+      case e: Exception => println(e.printStackTrace())
+    }
+
     stdoutWriter.close()
     stderrWriter.close()
     (exitValue, stdoutStream.toString, stderrStream.toString)
