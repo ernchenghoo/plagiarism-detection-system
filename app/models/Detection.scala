@@ -58,7 +58,7 @@ class Detection extends Database {
       command = command.concat(s" -bc $baseCodeDirectory")
     }
     val process = processRunner(command)
-    println(process._2)
+    println("Process runner result: " + process._2)
     exitCode = process._1.toString.toInt
     //errors during detection
     if (exitCode == 1) {
@@ -105,6 +105,7 @@ class Detection extends Database {
   }
 
   def processRunner(cmd: String): (Any, String, String) = {
+    println("Process runner running")
     val stdoutStream = new ByteArrayOutputStream
     val stderrStream = new ByteArrayOutputStream
     val stdoutWriter = new PrintWriter(stdoutStream)
