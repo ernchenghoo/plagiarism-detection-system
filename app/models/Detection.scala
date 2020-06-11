@@ -52,26 +52,25 @@ class Detection extends Database {
 
     generateNewDetectionInstance()
 
-    var command = s"java -jar ./jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath/${detectionDetails.get.detectionID} -s $sourcePath -m ${settings.get.minPercentage}%"
+    var command = s"java -jar ${System.getProperty("user.dir")}/jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath/${detectionDetails.get.detectionID} -s $sourcePath -m ${settings.get.minPercentage}%"
 
     if (baseCodeExist) {
       command = command.concat(s" -bc $baseCodeDirectory")
     }
-
     val process = processRunner(command)
     println(process._2)
     exitCode = process._1.toString.toInt
-    val rawResults = process._2.trim()
-    println("Raw results: " + rawResults)
-    println("Raw results end")
-    val results = rawResults.split("===")
-    val resultData = results(2)
     //errors during detection
     if (exitCode == 1) {
       error = process._2
       Some(error)
     }
     else {
+      val rawResults = process._2.trim()
+      println("Raw results: " + rawResults)
+      println("Raw results end")
+      val results = rawResults.split("===")
+      val resultData = results(2)
       try {
         //create new detection in database
         val connection = DriverManager.getConnection(url, username, password)
