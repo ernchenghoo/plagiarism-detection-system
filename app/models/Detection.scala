@@ -65,6 +65,7 @@ class Detection extends Database {
     //errors during detection
     if (exitCode == 1) {
       error = process._2
+      println("Error" + error)
       Some(error)
     }
     else {
