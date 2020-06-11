@@ -236,11 +236,12 @@ class Detection extends Database {
   def clearUploadedFiles(): String = {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.isDirectory) {
-        FileUtils.deleteDirectory(uploadedFile)
-      }
-      else if (uploadedFile.isFile) {
-        if (uploadedFile.getName != "dummyfile") {
+      println(uploadedFile.getName)
+      if (uploadedFile.getName != "dummyfile.txt") {
+        if (uploadedFile.isDirectory) {
+          FileUtils.deleteDirectory(uploadedFile)
+        }
+        else if (uploadedFile.isFile) {
           uploadedFile.delete()
         }
       }
@@ -273,7 +274,7 @@ class Detection extends Database {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     val uploadedFilesName = new ListBuffer[UploadedFile]()
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.getName != "baseCodeDirectory" && uploadedFile.getName != "dummyfile") {
+      if (uploadedFile.getName != "baseCodeDirectory" && uploadedFile.getName != "dummyfile.txt") {
         uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
       }
     }
