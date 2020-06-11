@@ -199,6 +199,10 @@ input[id="studentCodeUpload"] {
     font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
 }
 
+.table_delete_button {
+    background: transparent;
+}
+
 .uploaded_student_file_table_container {
     margin-top: 26px;
 }

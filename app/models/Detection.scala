@@ -236,7 +236,6 @@ class Detection extends Database {
   def clearUploadedFiles(): String = {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      println(uploadedFile.getName)
       if (uploadedFile.getName != "dummyfile.txt") {
         if (uploadedFile.isDirectory) {
           FileUtils.deleteDirectory(uploadedFile)
