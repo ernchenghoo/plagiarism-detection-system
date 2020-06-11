@@ -52,8 +52,8 @@ class Detection extends Database {
 
     generateNewDetectionInstance()
 
-    var command = s"java -jar ${System.getProperty("user.dir")}/jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath/${detectionDetails.get.detectionID} -s $sourcePath -m ${settings.get.minPercentage}%"
-
+    var command = s"java -jar jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r ./public/results/${detectionDetails.get.detectionID} -s ./public/studentfiles -m ${settings.get.minPercentage}%"
+    println("Current path: " + System.getProperty("user.dir"))
     if (baseCodeExist) {
       command = command.concat(s" -bc $baseCodeDirectory")
     }
