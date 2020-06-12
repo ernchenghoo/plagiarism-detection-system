@@ -11,14 +11,12 @@ import org.zeroturnaround.zip.ZipUtil
 import scala.collection.mutable.ListBuffer
 import scala.sys.process.{Process, ProcessLogger}
 
-class Detection extends Database {
+class Detection extends Database with DetectionInfo{
 
   Class.forName(driver)
-  var destinationPath = s"${System.getProperty("user.dir")}/public/results"
-  val sourcePath = s"${System.getProperty("user.dir")}/public/studentfiles"
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
-  val baseCodeDirectory = "baseCodeDirectory"
+
   val baseCodeDirectoryPath = s"$sourcePath/$baseCodeDirectory"
   var error: String = _
   var settings: Option[JPlagSettings] = None
