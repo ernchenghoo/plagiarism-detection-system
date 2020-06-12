@@ -30,7 +30,7 @@ $(document).ready(function() {
             contentType: false,
             success : function(response) {
                 if (response.message === "Pass") {
-                    window.location = 'https://plagiarism-detection-system/home';
+                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
