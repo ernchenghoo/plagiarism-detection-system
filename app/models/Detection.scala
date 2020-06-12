@@ -55,12 +55,9 @@ class Detection extends Database with DetectionInfo{
     if (baseCodeExist) {
       command = command.concat(s" -bc $baseCodeDirectory")
     }
-    println("Run command: " + command)
     val process = processRunner(command)
-    println("Process runner result: " + process._2)
-
     exitCode = process._1.toString.toInt
-    println("Exit code: " + exitCode)
+
     //errors during detection
     if (exitCode == 1) {
       error = process._2
@@ -69,8 +66,7 @@ class Detection extends Database with DetectionInfo{
     }
     else {
       val rawResults = process._2.trim()
-      println("Raw results: " + rawResults)
-      println("Raw results end")
+
       val results = rawResults.split("===")
       val resultData = results(2)
       try {
@@ -87,9 +83,6 @@ class Detection extends Database with DetectionInfo{
       }
       //remove all uploaded files
       clearUploadedFiles()
-      if (baseCodeExist) {
-        clearUploadedBasecodeFiles()
-      }
       None
     }
 
@@ -107,7 +100,6 @@ class Detection extends Database with DetectionInfo{
   }
 
   def processRunner(cmd: String): (Any, String, String) = {
-    println("Process runner running")
     val stdoutStream = new ByteArrayOutputStream
     val stderrStream = new ByteArrayOutputStream
     val stdoutWriter = new PrintWriter(stdoutStream)
@@ -251,16 +243,6 @@ class Detection extends Database with DetectionInfo{
         else if (uploadedFile.isFile) {
           uploadedFile.delete()
         }
-      }
-    }
-    "Success"
-  }
-
-  def clearUploadedBasecodeFiles(): String = {
-    val uploadedFilesDirectory = new java.io.File(baseCodeDirectoryPath)
-    for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.getName != "dummyfile.txt") {
-        uploadedFile.delete()
       }
     }
     "Success"

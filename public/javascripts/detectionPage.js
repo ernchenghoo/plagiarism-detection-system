@@ -30,7 +30,7 @@ $(document).ready(function() {
             contentType: false,
             success : function(response) {
                 if (response.message === "Pass") {
-                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
+                    window.location = 'http://localhost:9000/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -152,11 +152,11 @@ $(document).ready(function() {
 
     $("#studentCodeUpload").change(function(e) {
         $("#studentFileUploadForm").submit();
-        console.log("on change file upload")
     });
 
     //student file upload ajax
     $("#studentFileUploadForm").submit(function(e) {
+        $('#no_file_uploaded_message').text('Uploading... Please wait');
         $("#loading_gif").show();
         var formData = new FormData(this);
         e.preventDefault();
@@ -168,6 +168,7 @@ $(document).ready(function() {
             contentType: false,
             data: formData,
             success : function(response) {
+                $('#no_file_uploaded_message').text('You have not uploaded any files. Please do so to proceed.');
                 $("#loading_gif").hide();
                 $('#detectionMainAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.message);
                 getUploadedFiles(response.uploadedFiles);

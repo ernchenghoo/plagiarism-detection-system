@@ -9,6 +9,7 @@ $(document).ready(function() {
         url: document.location.href + '/checkForDetectionRan',
         success : function(response) {
             if (response.Status === "Run") {
+                checkRunningDetections();
                 $.ajax({
                     method: 'POST',
                     url: document.location.href + '/runJPlag',
@@ -28,6 +29,7 @@ $(document).ready(function() {
     });
 
     function checkRunningDetections() {
+        $("#ongoing_detection_table tbody > tr").empty();
         $.ajax({
             method: 'GET',
             url: document.location.href + '/checkForRunningDetection',

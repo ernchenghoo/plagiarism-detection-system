@@ -41,26 +41,22 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     Redirect(routes.RunJPlagController.getLoginPage())
   }
 
-
   def getDetectionMainPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     DetectionManager.currentDetection = Some(new Detection())
     Ok(views.html.detection_main())
   }
 
   def getHomepage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-      println("Current running detections: ")
-      for (detection <- DetectionManager.currentDetection) {
-        println(detection.detectionDetails.get.detectionName)
-      }
       Ok(views.html.homepage())
   }
 
   def getDetectionRan : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     if (DetectionManager.currentDetection.isDefined) {
+      println("Current detection exist")
       if (DetectionManager.currentDetection.get.readyToExecute) {
         DetectionManager.currentDetection.get.readyToExecute = false
         DetectionManager.runningDetections += DetectionManager.currentDetection.get
-        DetectionManager.currentDetection.isEmpty
+        DetectionManager.currentDetection = None
         Ok(Json.obj("Status" -> "Run"))
       }
       else {
@@ -68,11 +64,18 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
       }
     }
     else {
+      println("Current detection does not exist")
       Ok(Json.obj("Status" -> "No run"))
     }
   }
 
   def getRunningDetections : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    if (DetectionManager.runningDetections.nonEmpty) {
+      println("Current running detections: ")
+      for (detection <- DetectionManager.runningDetections) {
+        println(detection.detectionDetails.get.detectionName)
+      }
+    }
     Ok(Json.toJson(DetectionManager.getRunningDetectionDetails))
   }
 
@@ -156,20 +159,36 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def runJPlag: Action[AnyContent] = Action.async {
+    val runningDetectionIndex =  DetectionManager.runningDetections.size-1
     val runResponse: Future[Option[String]] = scala.concurrent.Future {
       DetectionManager.runningDetections.last.runJPlag()
     }
     var status = ""
     runResponse.map(
-      response =>
+      response => {
         if (response.isEmpty) {
-          DetectionManager.runningDetections.remove(0)
+          //remove complete detection from running detections list
+          DetectionManager.runningDetections.remove(runningDetectionIndex)
+          println("Running detections after delete: ")
+          if (DetectionManager.runningDetections.nonEmpty) {
+            for (detection <- DetectionManager.runningDetections) {
+              println(detection.detectionDetails.get.detectionName)
+            }
+          }
           Ok(Json.obj("Status" -> "Success"))
         }
         else {
-          DetectionManager.runningDetections.remove(0)
+          //remove complete detection from running detections list
+          DetectionManager.runningDetections.remove(runningDetectionIndex)
+          println("Running detections after delete: ")
+          if (DetectionManager.runningDetections.nonEmpty) {
+            for (detection <- DetectionManager.runningDetections) {
+              println(detection.detectionDetails.get.detectionName)
+            }
+          }
           Ok(Json.obj("Status" -> response))
         }
+      }
     )
   }
 
