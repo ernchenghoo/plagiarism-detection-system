@@ -12,6 +12,7 @@ $(document).ready(function() {
                 $.ajax({
                     method: 'POST',
                     url: document.location.href + '/runJPlag',
+
                     success : function(response) {
                         if (response.Status === "Success") {
                             checkRunningDetections();

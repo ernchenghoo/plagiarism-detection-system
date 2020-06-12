@@ -48,13 +48,19 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getHomepage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+      println("Current running detections: ")
+      for (detection <- DetectionManager.currentDetection) {
+        println(detection.detectionDetails.get.detectionName)
+      }
       Ok(views.html.homepage())
   }
 
   def getDetectionRan : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    if (DetectionManager.runningDetections.nonEmpty) {
-      if (DetectionManager.runningDetections.last.readyToExecute) {
-        DetectionManager.runningDetections.last.readyToExecute = false
+    if (DetectionManager.currentDetection.isDefined) {
+      if (DetectionManager.currentDetection.get.readyToExecute) {
+        DetectionManager.currentDetection.get.readyToExecute = false
+        DetectionManager.runningDetections += DetectionManager.currentDetection.get
+        DetectionManager.currentDetection.isEmpty
         Ok(Json.obj("Status" -> "Run"))
       }
       else {
@@ -67,13 +73,8 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getRunningDetections : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-
-    for (detection <- DetectionManager.runningDetections) {
-      detection.detectionDetails
-    }
     Ok(Json.toJson(DetectionManager.getRunningDetectionDetails))
   }
-
 
   def getSelectPastDetectionPage : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     Ok(views.html.select_result_page(DetectionManager.getPastDetectionList))
@@ -150,10 +151,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     })
     DetectionManager.setDetectionDetail(detectionLanguage, detectionName)
     val runCheck = DetectionManager.currentDetection.get.checkJPlagRunConditions()
-    if (runCheck == "Pass") {
-      DetectionManager.runningDetections += DetectionManager.currentDetection.get
-      DetectionManager.currentDetection = None
-    }
+
     Ok(Json.obj("message" -> runCheck))
   }
 
