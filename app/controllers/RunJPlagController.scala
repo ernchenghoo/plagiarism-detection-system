@@ -1,14 +1,16 @@
 package controllers
 import java.io.File
 import java.nio.file.{Path, Paths}
-import java.util.Calendar
+import java.util.{Calendar, Date}
+
 import javax.inject.Inject
 import models.{Account, Database, Detection, DetectionDetail, DetectionManager, JPlagSettings, PotentialPlagiarismGroup, StudentFilePairs}
 import play.api.libs.Files
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc._
 import play.api.routing.JavaScriptReverseRouter
-import play.twirl.api.MimeTypes
+import play.twirl.api.{Html, MimeTypes}
+
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future, Promise, blocking}
 
@@ -27,6 +29,10 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getLoginPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    request.session.get("username").map(_ => Ok(views.html.homepage())) match {
+      case Some(r) => r
+      case None => Ok(views.html.login_page()).withSession("not_the_first_time" -> "true")
+    }
     Ok(views.html.login_page())
   }
 
@@ -38,16 +44,23 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def logout: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     DetectionManager.loggedInUsername = ""
-    Redirect(routes.RunJPlagController.getLoginPage())
+    Redirect(routes.RunJPlagController.getLoginPage()).withNewSession
   }
 
   def getDetectionMainPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    DetectionManager.currentDetection = Some(new Detection())
-    Ok(views.html.detection_main())
+    val session = request.session.get("username")
+    println(session)
+    session.map { username =>
+      DetectionManager.currentDetection = Some(new Detection())
+      Ok(views.html.detection_main())
+    }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getHomepage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-      Ok(views.html.homepage())
+      val session = request.session.get("username")
+      session.map { username =>
+          Ok(views.html.homepage())
+      }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getDetectionRan : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -64,7 +77,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
       }
     }
     else {
-      println("Current detection does not exist")
       Ok(Json.obj("Status" -> "No run"))
     }
   }
@@ -80,33 +92,44 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getSelectPastDetectionPage : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.select_result_page(DetectionManager.getPastDetectionList))
+    val session = request.session.get("username")
+    session.map { username =>
+      Ok(views.html.select_result_page(DetectionManager.getPastDetectionList))
+    }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getResultPage (detectionID: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.result(DetectionManager.fetchResultFromDB(detectionID)))
+    val session = request.session.get("username")
+    session.map { username =>
+      DetectionManager.currentDetection = Some(new Detection())
+      Ok(views.html.result(DetectionManager.fetchResultFromDB(detectionID)))
+    }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getResultDetailPage (groupID: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-
-    Ok(views.html.result_detail(DetectionManager.detectionResult.get.resultPlagiarismGroups.find(pairs => pairs.groupID == groupID).get))
+    val session = request.session.get("username")
+    session.map { username =>
+      DetectionManager.currentDetection = Some(new Detection())
+      Ok(views.html.result_detail(DetectionManager.detectionResult.get.resultPlagiarismGroups.find(pairs => pairs.groupID == groupID).get))
+    }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getCodeComparisonPage (groupID: Option[String], matchIndex: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    var selectedPair: Option[StudentFilePairs] = null
-    if (groupID.isDefined) {
-      for (plgGroup <- DetectionManager.detectionResult.get.resultPlagiarismGroups) {
-        if (plgGroup.groupID == groupID.get) {
-          selectedPair = plgGroup.studentPairs.find(student => student.studentFilePairID == matchIndex)
+    val session = request.session.get("username")
+    session.map { username =>
+      var selectedPair: Option[StudentFilePairs] = null
+      if (groupID.isDefined) {
+        for (plgGroup <- DetectionManager.detectionResult.get.resultPlagiarismGroups) {
+          if (plgGroup.groupID == groupID.get) {
+            selectedPair = plgGroup.studentPairs.find(student => student.studentFilePairID == matchIndex)
+          }
         }
       }
-    }
-    else {
-      selectedPair = DetectionManager.detectionResult.get.resultNonPlagiarismStudentPairs.find(student => student.studentFilePairID == matchIndex)
-    }
-
-    Ok(views.html.result_code_comparison(matchIndex, selectedPair))
-
+      else {
+        selectedPair = DetectionManager.detectionResult.get.resultNonPlagiarismStudentPairs.find(student => student.studentFilePairID == matchIndex)
+      }
+      Ok(views.html.result_code_comparison(matchIndex, selectedPair))
+    }.getOrElse(Ok(views.html.no_login_page()))
   }
 
   def getUploadedFiles: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -126,7 +149,14 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
         case "password" => password = data._2.head
       }
     })
-    Ok(DetectionManager.validateLoginCredentials(username, password))
+    val loginStatus = DetectionManager.validateLoginCredentials(username, password)
+    if (loginStatus == "Pass") {
+      Ok(loginStatus).withSession("username" -> username)
+    }
+    else {
+      Ok(loginStatus)
+    }
+
   }
 
   def register: Action[JsValue] = Action(parse.json) { request =>

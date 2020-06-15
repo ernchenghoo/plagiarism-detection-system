@@ -5,8 +5,8 @@
     <div class="container-fluid mt-5" id="similarity_report_container">
         <h3 id="title_text">Potential plagiarisms</h3>
         @for(file <- result.resultPlagiarismGroups) {
-            <div class="row mb-5">
-                <div class="col-8 red-background">
+            <div class="row mb-5 plagiarism-group-box">
+                <div class="col-8 red-background result-file-name-container">
                     <div class="row">
                     @for(student <- file.getIndividualStudent) {
                         <div class="col-2 pt-2">

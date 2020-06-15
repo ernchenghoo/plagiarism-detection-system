@@ -34,9 +34,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
           loggedInUsername = accountIDQuery.getString("username")
           loggedIn = true
         }
-
       }
-
     }
     catch {
       case e: SQLException =>

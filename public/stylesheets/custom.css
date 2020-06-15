@@ -5,7 +5,16 @@ body {
 
 }
 
+a.no_login_link {
+    color: black;
+    font-size: 24px;
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
 
+.no_login_image {
+    max-width: 350px;
+    margin-top: 100px;
+}
 
 .btn:focus {
     outline: none;
@@ -168,11 +177,18 @@ input[id="studentCodeUpload"] {
     width: auto;
 }
 
+.result-file-name-container {
+    border-right: solid 1px black;
+}
+
 .red-background {
     background-image: linear-gradient(to bottom, #ff8c8c , #ff8282);
-    border-style: solid;
-    border-width: 1px;
-    border-color: #000000;
+}
+
+.plagiarism-group-box {
+    -webkit-box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
+    -moz-box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
+    box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
 }
 
 #result_details_button {
