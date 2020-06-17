@@ -11,13 +11,13 @@ import org.zeroturnaround.zip.ZipUtil
 import scala.collection.mutable.ListBuffer
 import scala.sys.process.{Process, ProcessLogger}
 
-class Detection extends Database with DetectionInfo{
+class Detection (val detectionID: String) extends Database with DetectionInfo{
 
   Class.forName(driver)
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
-
-  val baseCodeDirectoryPath = s"$sourcePath/$baseCodeDirectory"
+  val baseCodeDirectoryPath = s"$defaultSourcePath/$detectionID/$baseCodeDirectory"
+  val sourcePath = s"$defaultSourcePath/$detectionID"
   var error: String = _
   var settings: Option[JPlagSettings] = None
   var exitCode: Int = 0
@@ -25,7 +25,7 @@ class Detection extends Database with DetectionInfo{
   var baseCodeExist = false
 
   def checkJPlagRunConditions(): String = {
-
+    println("Checking JPlag run condition")
     if (language == "") {
       "Please enter a detection language"
     }
@@ -37,6 +37,7 @@ class Detection extends Database with DetectionInfo{
     }
     else {
       readyToExecute = true
+      println("JPlag ready to run!")
       "Pass"
     }
   }
@@ -45,16 +46,23 @@ class Detection extends Database with DetectionInfo{
 
     //default settings
     if (settings.isEmpty) {
+      println("Using default settings")
       settings = Some(new JPlagSettings("50", "30"))
     }
 
-    generateNewDetectionInstance()
-
-    var command = s"java -jar jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath/${detectionDetails.get.detectionID} -s $sourcePath -m ${settings.get.minPercentage}%"
+    var command = s"java -jar jplag-2.12.1-SNAPSHOT-jar-with-dependencies.jar -l $language -r $destinationPath/${detectionID} -s $sourcePath -m ${settings.get.minPercentage}%"
 
     if (baseCodeExist) {
+      println("Base code detected")
       command = command.concat(s" -bc $baseCodeDirectory")
     }
+    else {
+      println("No base code detected")
+      val baseCodeDirectory = new java.io.File(baseCodeDirectoryPath)
+      baseCodeDirectory.delete()
+    }
+
+    generateNewDetectionInstance()
     val process = processRunner(command)
     exitCode = process._1.toString.toInt
 
@@ -65,8 +73,8 @@ class Detection extends Database with DetectionInfo{
       Some(error)
     }
     else {
+      println("Extracting JPlag results")
       val rawResults = process._2.trim()
-
       val results = rawResults.split("===")
       val resultData = results(2)
       try {
@@ -74,8 +82,8 @@ class Detection extends Database with DetectionInfo{
         val connection = DriverManager.getConnection(url, username, password)
         val statement = connection.createStatement()
         //create a record for detection
-        statement.executeUpdate(s"Insert into rawData values('${resultData}', '${detectionDetails.get.detectionID}')")
-        statement.executeUpdate(s"Insert into detectionSettings values('${language}', '${settings.get.sensitivity}', '${settings.get.minPercentage}', '${detectionDetails.get.detectionID}')")
+        statement.executeUpdate(s"Insert into rawData values('${resultData}', '${detectionID}')")
+        statement.executeUpdate(s"Insert into detectionSettings values('${language}', '${settings.get.sensitivity}', '${settings.get.minPercentage}', '${detectionID}')")
       }
       catch {
         case e: SQLException =>
@@ -83,6 +91,7 @@ class Detection extends Database with DetectionInfo{
       }
       //remove all uploaded files
       clearUploadedFiles()
+      println("JPlag run complete")
       None
     }
 
@@ -107,7 +116,9 @@ class Detection extends Database with DetectionInfo{
     var exitValue = 0
     try {
       val process = Process(cmd)
+      println("Running JPlag")
       exitValue = process.!(ProcessLogger(stdoutWriter.println, stderrWriter.println))
+      println("JPlag run complete")
     }
     catch {
       case e: Exception => println(e.printStackTrace())
@@ -118,13 +129,14 @@ class Detection extends Database with DetectionInfo{
     (exitValue, stdoutStream.toString, stderrStream.toString)
   }
 
-  def generateNewDetectionInstance() = {
+  def generateNewDetectionInstance(): Boolean = {
+    println("Generating new detection instance")
     try {
       //create new detection in database
       val connection = DriverManager.getConnection(url, username, password)
       val statement = connection.createStatement()
       //create a record for detection
-      statement.executeUpdate(s"Insert into detection values('${detectionDetails.get.detectionID}', '${detectionDetails.get.detectionDateTime}', " +
+      statement.executeUpdate(s"Insert into detection values('${detectionID}', '${detectionDetails.get.detectionDateTime}', " +
         s"'${detectionDetails.get.detectionName}', '${DetectionManager.loggedInUsername}')")
     }
     catch {
@@ -132,12 +144,16 @@ class Detection extends Database with DetectionInfo{
         println(e.printStackTrace())
     }
     //create new folder to store results generated by JPlag
-    new File(s"$destinationPath/${detectionDetails.get.detectionID}").mkdirs()
-
+    new File(s"$destinationPath/${detectionID}").mkdirs()
   }
 
-  def unZipUploadedFiles(): List[UploadedFile] = {
-      val uploadedFilesDirectory = new java.io.File(sourcePath)
+  def generateDetectionDirectories(): Unit = {
+    val studentCodeDirectory = new java.io.File(sourcePath)
+    val baseCodeDirectory = new java.io.File(baseCodeDirectoryPath)
+  }
+
+  def unZipUploadedFiles(): Option[List[UploadedFile]] = {
+    val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (file <- uploadedFilesDirectory.listFiles()) {
       val extension = file.toString.split("\\.").last
       if (extension == "zip" || extension == "rar") {
@@ -174,7 +190,6 @@ class Detection extends Database with DetectionInfo{
       }
       uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
     }
-
     getUploadedFiles()
   }
 
@@ -234,7 +249,7 @@ class Detection extends Database with DetectionInfo{
   }
 
   def clearUploadedFiles(): String = {
-    val uploadedFilesDirectory = new java.io.File(sourcePath)
+    val uploadedFilesDirectory = new java.io.File(defaultSourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.getName != "dummyfile.txt") {
         if (uploadedFile.isDirectory) {
@@ -269,15 +284,20 @@ class Detection extends Database with DetectionInfo{
     "Success"
   }
 
-  def getUploadedFiles(): List[UploadedFile] = {
+  def getUploadedFiles(): Option[List[UploadedFile]] = {
     val uploadedFilesDirectory = new java.io.File(sourcePath)
-    val uploadedFilesName = new ListBuffer[UploadedFile]()
-    for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.getName != "baseCodeDirectory" && uploadedFile.getName != "dummyfile.txt") {
-        uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
+    if (uploadedFilesDirectory.exists) {
+      val uploadedFilesName = new ListBuffer[UploadedFile]()
+      for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
+        if (uploadedFile.getName != "baseCodeDirectory" && uploadedFile.getName != "dummyfile.txt") {
+          uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
+        }
       }
+      Some(uploadedFilesName.toList)
     }
-    uploadedFilesName.toList
+    else {
+      None
+    }
   }
 
   def getUploadedBaseFile(): String = {

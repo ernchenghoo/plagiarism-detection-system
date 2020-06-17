@@ -160,5 +160,9 @@
     <orderEntry type="library" name="sbt: com.zaxxer:HikariCP:3.4.1:jar" level="project" />
     <orderEntry type="library" name="sbt: net.jodah:typetools:0.5.0:jar" level="project" />
     <orderEntry type="library" name="sbt: tyrex:tyrex:1.0.1:jar" level="project" />
+    <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="lottie-player" level="application" />
+    <orderEntry type="library" name="default" level="application" />
+    <orderEntry type="library" name="highlightjs-line-numbers" level="application" />
   </component>
 </module>

@@ -4,7 +4,7 @@ import java.nio.file.{Path, Paths}
 import java.util.{Calendar, Date}
 
 import javax.inject.Inject
-import models.{Account, Database, Detection, DetectionDetail, DetectionManager, JPlagSettings, PotentialPlagiarismGroup, StudentFilePairs}
+import models.{Account, Database, Detection, DetectionDetail, DetectionManager, JPlagSettings, PotentialPlagiarismGroup, StudentFilePair}
 import play.api.libs.Files
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc._
@@ -29,14 +29,8 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getLoginPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
-    request.session.get("username").map(_ => Ok(views.html.homepage())) match {
-      case Some(r) => r
-      case None => Ok(views.html.login_page()).withSession("not_the_first_time" -> "true")
-    }
     Ok(views.html.login_page())
   }
-
-
 
   def getRegisterPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     Ok(views.html.register_page())
@@ -51,7 +45,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     val session = request.session.get("username")
     println(session)
     session.map { username =>
-      DetectionManager.currentDetection = Some(new Detection())
+      DetectionManager.generateNewDetectionInstance()
       Ok(views.html.detection_main())
     }.getOrElse(Ok(views.html.no_login_page()))
   }
@@ -64,13 +58,15 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getDetectionRan : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    var detectionToRunID = ""
     if (DetectionManager.currentDetection.isDefined) {
-      println("Current detection exist")
       if (DetectionManager.currentDetection.get.readyToExecute) {
+        detectionToRunID = DetectionManager.currentDetection.get.detectionDetails.get.detectionID
         DetectionManager.currentDetection.get.readyToExecute = false
         DetectionManager.runningDetections += DetectionManager.currentDetection.get
         DetectionManager.currentDetection = None
-        Ok(Json.obj("Status" -> "Run"))
+        Ok(Json.obj("Status" -> "Run",
+                            "DetectionID" -> s"${detectionToRunID}"))
       }
       else {
         Ok(Json.obj("Status" -> "No run"))
@@ -83,7 +79,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def getRunningDetections : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     if (DetectionManager.runningDetections.nonEmpty) {
-      println("Current running detections: ")
       for (detection <- DetectionManager.runningDetections) {
         println(detection.detectionDetails.get.detectionName)
       }
@@ -101,7 +96,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def getResultPage (detectionID: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     val session = request.session.get("username")
     session.map { username =>
-      DetectionManager.currentDetection = Some(new Detection())
       Ok(views.html.result(DetectionManager.fetchResultFromDB(detectionID)))
     }.getOrElse(Ok(views.html.no_login_page()))
   }
@@ -109,7 +103,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def getResultDetailPage (groupID: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     val session = request.session.get("username")
     session.map { username =>
-      DetectionManager.currentDetection = Some(new Detection())
       Ok(views.html.result_detail(DetectionManager.detectionResult.get.resultPlagiarismGroups.find(pairs => pairs.groupID == groupID).get))
     }.getOrElse(Ok(views.html.no_login_page()))
   }
@@ -117,7 +110,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def getCodeComparisonPage (groupID: Option[String], matchIndex: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     val session = request.session.get("username")
     session.map { username =>
-      var selectedPair: Option[StudentFilePairs] = null
+      var selectedPair: Option[StudentFilePair] = null
       if (groupID.isDefined) {
         for (plgGroup <- DetectionManager.detectionResult.get.resultPlagiarismGroups) {
           if (plgGroup.groupID == groupID.get) {
@@ -182,24 +175,25 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
         case "detectionLanguage" => detectionLanguage = data._2.head
       }
     })
+    //set details that is sent from frontend
     DetectionManager.setDetectionDetail(detectionLanguage, detectionName)
     val runCheck = DetectionManager.currentDetection.get.checkJPlagRunConditions()
 
     Ok(Json.obj("message" -> runCheck))
   }
 
-  def runJPlag: Action[AnyContent] = Action.async {
+  def runJPlag(detectionID: String): Action[AnyContent] = Action.async {
+    val runningDetection = DetectionManager.runningDetections.find(_ .detectionDetails.get.detectionID == detectionID)
+    println(s"Running Detection: ${runningDetection.get.detectionDetails.get.detectionName}")
     val runningDetectionIndex =  DetectionManager.runningDetections.size-1
     val runResponse: Future[Option[String]] = scala.concurrent.Future {
-      DetectionManager.runningDetections.last.runJPlag()
+      runningDetection.get.runJPlag()
     }
-    var status = ""
     runResponse.map(
       response => {
         if (response.isEmpty) {
           //remove complete detection from running detections list
           DetectionManager.runningDetections.remove(runningDetectionIndex)
-          println("Running detections after delete: ")
           if (DetectionManager.runningDetections.nonEmpty) {
             for (detection <- DetectionManager.runningDetections) {
               println(detection.detectionDetails.get.detectionName)
@@ -210,7 +204,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
         else {
           //remove complete detection from running detections list
           DetectionManager.runningDetections.remove(runningDetectionIndex)
-          println("Running detections after delete: ")
           if (DetectionManager.runningDetections.nonEmpty) {
             for (detection <- DetectionManager.runningDetections) {
               println(detection.detectionDetails.get.detectionName)
@@ -241,8 +234,14 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
       file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.sourcePath}/$filename"), replace = true)
     })
     val uploadedFiles = DetectionManager.currentDetection.get.unZipUploadedFiles()
-    Ok(Json.obj("message" -> "Your files have been uploaded!",
-      "uploadedFiles" -> uploadedFiles))
+    if (uploadedFiles.isDefined) {
+      Ok(Json.obj("message" -> "Your files have been uploaded!",
+        "uploadedFiles" -> uploadedFiles))
+    }
+    else {
+      Ok(Json.obj("message" -> "Error uploading file",
+        "uploadedFiles" -> "None"))
+    }
   }
 
   def submitSettings: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>

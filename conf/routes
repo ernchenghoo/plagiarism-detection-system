@@ -24,7 +24,7 @@ POST    /registration/register                  controllers.RunJPlagController.r
 POST    /detection/validateDetection            controllers.RunJPlagController.validateDetection
 POST    /detection/studentFileUpload            controllers.RunJPlagController.studentFileUpload
 POST    /detection/clearUploadedFiles           controllers.RunJPlagController.clearUploadedFiles
-POST    /home/runJPlag                          controllers.RunJPlagController.runJPlag
+POST    /home/runJPlag/:id                      controllers.RunJPlagController.runJPlag(id: String)
 POST    /detection/submitSettings               controllers.RunJPlagController.submitSettings
 POST    /detection/deleteSingleUploadedFile     controllers.RunJPlagController.deleteSingleUploadedFile
 

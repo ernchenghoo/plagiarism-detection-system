@@ -12,12 +12,10 @@ $(document).ready(function() {
                 checkRunningDetections();
                 $.ajax({
                     method: 'POST',
-                    url: document.location.href + '/runJPlag',
-
+                    url: document.location.href + '/runJPlag/' + response.DetectionID,
                     success : function(response) {
                         if (response.Status === "Success") {
-                            checkRunningDetections();
-                            $('#homepageAlert').fadeIn(300).delay(3000).fadeOut(300).text("Plagiarism detection has complete!");
+                            checkRunningDetections("Ran");
                         }
                         else {
                             $('#detectionSuccessAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.Status);
@@ -28,12 +26,12 @@ $(document).ready(function() {
         }
     });
 
-    function checkRunningDetections() {
-        $("#ongoing_detection_table tbody > tr").empty();
+    function checkRunningDetections(runStatus) {
         $.ajax({
             method: 'GET',
             url: document.location.href + '/checkForRunningDetection',
             success : function(response) {
+                $("#ongoing_detection_table tbody > tr").empty();
                 var len = response.length;
                 var txt = "";
                 if(len > 0){
@@ -50,6 +48,9 @@ $(document).ready(function() {
                 }
                 else {
                     $(".ongoing_detection_table").hide();
+                }
+                if (runStatus === "Ran") {
+                    $('#homepageAlert').fadeIn(300).delay(3000).fadeOut(300).text("Plagiarism detection has complete!");
                 }
             }
         });

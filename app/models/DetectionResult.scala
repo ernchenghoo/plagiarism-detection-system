@@ -1,6 +1,6 @@
 package models
 
-class DetectionResult(val resultNonPlagiarismStudentPairs: List[StudentFilePairs], val resultPlagiarismGroups: List[PotentialPlagiarismGroup]) {
+class DetectionResult(val resultNonPlagiarismStudentPairs: List[StudentFilePair], val resultPlagiarismGroups: List[PotentialPlagiarismGroup]) {
 
 
 }

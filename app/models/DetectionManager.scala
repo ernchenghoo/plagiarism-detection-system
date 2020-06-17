@@ -2,8 +2,10 @@ package models
 
 import java.io.File
 import java.sql.{DriverManager, SQLException}
+import java.text.SimpleDateFormat
 import java.util
-import java.util.{Calendar, UUID}
+import java.util.{Calendar, TimeZone, UUID}
+
 import scala.jdk.CollectionConverters._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -77,7 +79,30 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
 
   def setDetectionDetail(detectionLanguage: String, detectionName: String): Unit = {
     currentDetection.get.language = detectionLanguage
-    currentDetection.get.detectionDetails = Some(new DetectionDetail(detectionName, UUID.randomUUID().toString, Calendar.getInstance().getTime.toString))
+    val currentTime = Calendar.getInstance()
+    currentTime.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"))
+    val year = currentTime.get(Calendar.YEAR)
+    val month = currentTime.get(Calendar.MONTH) + 1
+    val day = currentTime.get(Calendar.DAY_OF_MONTH)
+    val hour = currentTime.get(Calendar.HOUR_OF_DAY)
+    val minute = currentTime.get(Calendar.MINUTE)
+    var minuteString = minute.toString
+    if (minute < 10) {
+      minuteString = "0" + minute.toString
+    }
+    var formattedDateTimeString = ""
+    if (hour >= 12) {
+      formattedDateTimeString = s"${hour-12}:${minuteString}pm, $day-$month-$year"
+    }
+    else {
+      formattedDateTimeString = s"$hour:${minuteString}am, $day-$month-$year"
+    }
+    currentDetection.get.detectionDetails = Some(new DetectionDetail(detectionName, currentDetection.get.detectionID, formattedDateTimeString))
+  }
+
+  def generateNewDetectionInstance(): Unit = {
+    currentDetection = Some(new Detection(UUID.randomUUID().toString))
+    currentDetection.get.generateDetectionDirectories()
   }
 
   def getPastDetectionList: List[DetectionDetail] = {
@@ -146,7 +171,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
 
   def processResults(result: String, settings: JPlagSettings, detectionID: String): DetectionResult = {
     val resultData = result.split("&").map(_.trim())
-    val unplagiarisedGroup = new ListBuffer[StudentFilePairs]
+    val unplagiarisedGroup = new ListBuffer[StudentFilePair]
     val plagiarisedGroup = new ListBuffer[PotentialPlagiarismGroup]
 
     var counter = 0
@@ -159,8 +184,10 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
       //  Index 3: File pair match index
       if ((counter+1) %4 != 0) {
         //get each code file pair comparisons
-        val studentCodeFilePairs = getCodeFilePairs(resultData(counter+3).toString, detectionID)
-        val highToken = studentCodeFilePairs.find(pairs => pairs.tokenNum >= settings.sensitivity.toInt)
+        val studentFilePair = getStudentFilePairs(resultData(counter), resultData(counter+1),
+          BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble, resultData(counter+3), detectionID)
+
+        val highToken = studentFilePair.tokenList.find(pairs => pairs.tokenNum >= settings.sensitivity.toInt)
         //only matches that have similarity higher than minPercentage will be saved
         if (resultData(counter+2).toDouble >= settings.minPercentage.toInt) {
           //high chance to be plagiarising
@@ -170,32 +197,44 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
               var addedIntoGroup = false
               // loop to check if token matches, if yes assume they are in the same plagiarism group
               for (group <- plagiarisedGroup) {
+                //Todo: change algorithm for categorizing groups
                 //token matches, add into same group
                 if (group.tokenNo == highToken.get.tokenNum) {
-                  group.studentPairs += new StudentFilePairs(resultData(counter).toString, resultData(counter+1).toString, BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-                    resultData(counter+3).toString, studentCodeFilePairs)
+                  group.studentPairs += studentFilePair
                   addedIntoGroup = true
+                }
+                for (studentPair <- group.studentPairs) {
+                  if (studentPair.studentA == resultData(counter)) {
+                    println(studentPair.studentA)
+                    addedIntoGroup = true
+                  }
+                  else if (studentPair.studentA == resultData(counter+1)) {
+                    addedIntoGroup = true
+                  }
+                  else if (studentPair.studentB == resultData(counter)) {
+                    addedIntoGroup = true
+                  }
+                  else if (studentPair.studentB == resultData(counter+1)) {
+                    addedIntoGroup = true
+                  }
                 }
               }
               // boolean check failed, token is not similar to any groups currently available, create a new group
               if (!addedIntoGroup) {
-                val studentPair = new StudentFilePairs(resultData(counter).toString, resultData(counter+1).toString, BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-                  resultData(counter+3).toString, studentCodeFilePairs)
-                plagiarisedGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), UUID.randomUUID().toString, highToken.get.tokenNum)
+                val studentPair = studentFilePair
+                plagiarisedGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePair](), UUID.randomUUID().toString, highToken.get.tokenNum)
                 plagiarisedGroup.last.studentPairs += studentPair
               }
             }
             else {
-              val studentPair = new StudentFilePairs(resultData(counter).toString, resultData(counter+1).toString, BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-                resultData(counter+3).toString, studentCodeFilePairs)
-              plagiarisedGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePairs](), UUID.randomUUID().toString, highToken.get.tokenNum)
+              val studentPair = studentFilePair
+              plagiarisedGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePair](), UUID.randomUUID().toString, highToken.get.tokenNum)
               plagiarisedGroup.last.studentPairs += studentPair
             }
           }
           //unplagiarised student pair
           else {
-            unplagiarisedGroup += new StudentFilePairs(resultData(counter).toString, resultData(counter+1).toString, BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble,
-              resultData(counter+3).toString, studentCodeFilePairs)
+            unplagiarisedGroup += studentFilePair
           }
         }
       }
@@ -210,10 +249,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
     processedResults
   }
 
-  def getCodeFilePairs (matchIndex: String, resultFolderName: String): List[CodeFilePair] = {
-    println("Match index")
-    println(matchIndex)
-    val connection = DriverManager.getConnection(url, username, password)
+  def getStudentFilePairs (studentA: String, studentB: String, percentage: Double, matchIndex: String, resultFolderName: String): StudentFilePair = {
 
     //get the file paths of the matches generated by JPlag
     val studentAMatchFile = s"${destinationPath}/$resultFolderName/match" + matchIndex + "-0.html"
@@ -251,44 +287,55 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
     comparisonTableDoc.getElementsByTag("font").asScala.foreach(comparisonTokens += _.html())
     comparisonTableDoc.getElementsByTag("th").asScala.foreach(tableHeaders += _.html())
 
-    val studentFileA = new ListBuffer[CodeFile]()
-    val studentFileB = new ListBuffer[CodeFile]()
-
-    for (index <- studentACodes.indices) {
-      studentFileA += new CodeFile(studentAtitles(index), studentACodes(index))
+    //generate token list
+    var tokenCounter = 0
+    var tokenList: ListBuffer[CodeTokens] = new ListBuffer[CodeTokens]()
+    while (tokenCounter < comparisonLines.length) {
+//      val split1 = comparisonLines(tokenCounter).split("\\(")(1)
+//      val linesNumbersA = split1.split("\\)")(0)
+//      val split2 = comparisonLines(tokenCounter+1).split("\\(")(1)
+//      val linesNumbersB = split2.split("\\)")(0)
+      tokenList += new CodeTokens(comparisonTokens(tokenCounter+1).toInt, comparisonLines(tokenCounter), comparisonLines(tokenCounter+1))
+      tokenCounter += 2
     }
-    for (index <- studentBCodes.indices) {
-      studentFileB += new CodeFile(studentBtitles(index), studentBCodes(index))
-    }
 
+    //generate code file pairs list
     val codeFilePairs = new ListBuffer[CodeFilePair]()
+    var comparisonLinesIterator = 0
+    var codeFileIterator = 0
 
-    var counter = 0
-    while (counter < comparisonLines.length) {
-      var codeFileA: Option[CodeFile] = None
-      var codeFileB: Option[CodeFile] = None
-      var token: Option[Int] = None
-
-      for (element <- studentFileA) {
-        //for titles in comparisonLines, counter is file on the left, counter+1 is file on the right
-        if (comparisonLines(counter).contains(element.fileName)) {
-          codeFileA = Some(element)
-        }
-      }
-      for (element <- studentFileB) {
-        if (comparisonLines(counter+1).contains(element.fileName)) {
-          codeFileB = Some(element)
-        }
-      }
-      token = Some(comparisonTokens(counter+1).toInt)
-      connection.close()
-      val codeFilePair = new CodeFilePair(codeFileA.get, codeFileB.get, token.get)
-
-      codeFilePairs += codeFilePair
-      counter += 2
+    //if file mode
+    if (studentAtitles.length == 1) {
+      val codeFileA = new CodeFile(studentAtitles.head, studentACodes.head)
+      val codeFileB = new CodeFile(studentBtitles.head, studentBCodes.head)
+      codeFilePairs += new CodeFilePair(codeFileA, codeFileB)
     }
-
-    codeFilePairs.toList
+    //if directory mode
+    else {
+      while (comparisonLinesIterator < comparisonLines.length) {
+        var codeFileA: Option[CodeFile] = None
+        var codeFileB: Option[CodeFile] = None
+        //loop through student A titles
+        for (element <- studentAtitles) {
+          if (comparisonLines(comparisonLinesIterator).contains(element)) {
+            val index = studentAtitles.indexOf(element)
+            codeFileA = Some(new CodeFile(element, studentACodes(index)))
+          }
+        }
+        //loop through student B titles
+        for (element <- studentBtitles) {
+          if (comparisonLines(comparisonLinesIterator+1).contains(element)) {
+            val index = studentBtitles.indexOf(element)
+            codeFileB = Some(new CodeFile(element, studentBCodes(index)))
+          }
+        }
+        codeFilePairs += new CodeFilePair(codeFileA.get, codeFileB.get)
+        comparisonLinesIterator += 2
+      }
+    }
+    //generate student pairs
+    val studentFilePair = new StudentFilePair(studentA, studentB, percentage, UUID.randomUUID().toString, codeFilePairs.toList, tokenList.toList)
+    studentFilePair
   }
 
 }

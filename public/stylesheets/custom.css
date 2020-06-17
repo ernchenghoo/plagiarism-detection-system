@@ -5,6 +5,10 @@ body {
 
 }
 
+.content-container {
+    margin-top: 130px;
+}
+
 a.no_login_link {
     color: black;
     font-size: 24px;
@@ -25,7 +29,11 @@ a.no_login_link {
     background: #232526;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to top  , #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to top  , #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    width: 100%;
+    margin: 0;
+    top: 0;
+    z-index: 999;
+    position: fixed;
 }
 
 .alert {
@@ -50,12 +58,13 @@ a.no_login_link {
 
 .loading_gif {
     margin-right: -60px;
-    margin-left: 10px;
+    vertical-align: center;
+    margin-top: 7px;
 }
 
 .logo_image {
     padding: 0;
-    margin-left: 50px;
+    margin-left: 35px;
 }
 
 .no_results_image {
@@ -67,7 +76,11 @@ a.no_login_link {
 }
 
 .token-table {
+    margin-top: 46px;
+    position: fixed;
     font-size: 12px;
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+    width: auto;
 }
 
 input[id="studentCodeUpload"] {
@@ -78,7 +91,7 @@ input[id="studentCodeUpload"] {
     background-color: #f5f5f5;
 }
 .homepage_button_container {
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 .homepage_image {
@@ -183,6 +196,17 @@ input[id="studentCodeUpload"] {
 
 .red-background {
     background-image: linear-gradient(to bottom, #ff8c8c , #ff8282);
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
+
+.plagiarism-group-students {
+    font-size: 18px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.plagiarism-group-token {
+    margin-top: 10px;
 }
 
 .plagiarism-group-box {
@@ -197,21 +221,43 @@ input[id="studentCodeUpload"] {
     margin-bottom: 20px;
 }
 
+.code-comparison-table {
+    width:100%;
+    table-layout: fixed;
+    overflow-wrap: break-word;
+}
+
+.token-list-dropdown {
+    margin-top: 15px;
+    position: fixed;
+}
+
+.codes {
+    background-color: #f7f7f7;
+}
+
 .table_custom {
     width: 100%;
     font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
 }
 
-.table_title {
+.select_result_table_title {
     margin-left: 14%;
     font-size: 18px;
+    margin-bottom: 10px
 }
 
-.table_title {
-    margin-left: 2%;
+.table_title_small {
+    margin-left: 2px;
     font-size: 20px;
     margin-top: 10px;
-    margin-bottom: 0;
+    font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
+}
+
+.table_title_large {
+    margin-left: 2px;
+    font-size: 24px;
+    margin-top: 10px;
     font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
 }
 
@@ -234,8 +280,41 @@ input[id="studentCodeUpload"] {
     padding-left: 25px;
     padding-right: 25px;
     font-size: 16px;
+    margin-right: -120px;
     font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
 }
 
+pre {
+    overflow:auto;
+    margin:0 0 1em;
+    padding:.5em 1em;
+}
+
+
+pre code,
+pre .line-number {
+    /* Ukuran line-height antara teks di dalam tag <code> dan <span class="line-number"> harus sama! */
+    font:normal normal 12px/14px "Courier New",Courier,Monospace;
+    color:black;
+    display:block;
+}
+
+pre .line-number {
+    float:left;
+    margin:5px 1em 0 -1em;
+    border-right:1px solid;
+    text-align:right;
+}
+
+pre .line-number span {
+    display:block;
+    padding:0 .5em 0 1em;
+    margin-bottom: 7.01px;
+}
+
+pre .cl {
+    display:block;
+    clear:both;
+}
 
 

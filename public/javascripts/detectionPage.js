@@ -20,6 +20,7 @@ $(document).ready(function() {
 
     //run JPlag ajax
     $("#runForm").submit(function(e) {
+        $("#loading_gif").show();
         e.preventDefault();
         var formData = new FormData(this);
         $.ajax({
@@ -29,9 +30,10 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success : function(response) {
+                $("#loading_gif").hide();
                 if (response.message === "Pass") {
                     window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
-                    //window.location = 'http://localhost:9000/home';
+                    // window.location = 'http://localhost:9000/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -88,24 +90,29 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success : function(response) {
-                    var len = response.uploadedFiles.length;
-                    var txt = "";
-                    if(len > 0){
-                        for(var i=0; i<len; i++){
-                            if(response.uploadedFiles[i].fileName){
-                                txt += '<tr>';
-                                txt += '<td>' + response.uploadedFiles[i].fileName +  '</td>';
-                                txt += '<td><button type="button" class="btn table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
-                                txt += '</tr>'
+                    if (response.uploadedFiles === "None") {
+                        $('#detectionMainAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.message);
+                    }
+                    else {
+                        var len = response.uploadedFiles.length;
+                        var txt = "";
+                        if(len > 0){
+                            for(var i=0; i<len; i++){
+                                if(response.uploadedFiles[i].fileName){
+                                    txt += '<tr>';
+                                    txt += '<td>' + response.uploadedFiles[i].fileName +  '</td>';
+                                    txt += '<td><button type="button" class="btn table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
+                                    txt += '</tr>'
+                                }
                             }
-                        }
-                        if(txt !== ""){
-                            $('tbody').append(txt);
-                            $(".no_file_uploaded_message").hide();
-                            $(".table_body_container").show();
-                        }
-                        else {
+                            if(txt !== ""){
+                                $('tbody').append(txt);
+                                $(".no_file_uploaded_message").hide();
+                                $(".table_body_container").show();
+                            }
+                            else {
 
+                            }
                         }
                     }
                 }

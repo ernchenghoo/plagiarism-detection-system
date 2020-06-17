@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{Json, Reads, Writes}
 
-case class DetectionDetail(detectionName: String,  detectionID: String,  detectionDateTime: String){
+case class DetectionDetail(detectionName: String, detectionID: String, detectionDateTime: String){
 
 }
 
