@@ -6,12 +6,15 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.{Calendar, TimeZone, UUID}
 
+import org.apache.commons.io.FileUtils
+
 import scala.jdk.CollectionConverters._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+
 
 object DetectionManager extends Database with AmazonS3 with DetectionInfo {
   var loggedInUsername = ""
@@ -20,7 +23,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
   var detectionResult: Option[DetectionResult] = None
 
   def validateLoginCredentials(loginUsername: String, loginPassword: String): String = {
-    val connection = DriverManager.getConnection(url, username, password)
+    connection = DriverManager.getConnection(url, username, password)
     val statement = connection.createStatement()
     var loggedIn = false
     try {
@@ -52,7 +55,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
   }
 
   def registerAccount(registrationUsername: String, registrationPassword: String): String = {
-    val connection = DriverManager.getConnection(url, username, password)
+    connection = DriverManager.getConnection(url, username, password)
     val statement = connection.createStatement()
     var status = "Pass"
 
@@ -78,6 +81,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
   }
 
   def setDetectionDetail(detectionLanguage: String, detectionName: String): Unit = {
+    println("Settings detection details")
     currentDetection.get.language = detectionLanguage
     val currentTime = Calendar.getInstance()
     currentTime.setTimeZone(TimeZone.getTimeZone("Asia/Singapore"))
@@ -103,10 +107,11 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
   def generateNewDetectionInstance(): Unit = {
     currentDetection = Some(new Detection(UUID.randomUUID().toString))
     currentDetection.get.generateDetectionDirectories()
+    println("Generate new detection instance complete")
   }
 
   def getPastDetectionList: List[DetectionDetail] = {
-    val connection = DriverManager.getConnection(url, username, password)
+    connection = DriverManager.getConnection(url, username, password)
     val statement = connection.createStatement()
     var resultList = new ListBuffer[DetectionDetail]()
     try {
@@ -134,9 +139,19 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
     resultList.toList
   }
 
-  def fetchResultFromDB (detectionID: String): DetectionResult = {
+  def clearAllStudentFiles(): Unit = {
+    val uploadedFilesDirectory = new java.io.File(defaultSourcePath)
+    for (studentFiles <- uploadedFilesDirectory.listFiles()) {
+      if (studentFiles.getName != "dummyfile.txt") {
+        if (studentFiles.isDirectory) {
+          FileUtils.deleteDirectory(studentFiles)
+        }
+      }
+    }
+  }
 
-    val connection = DriverManager.getConnection(url, username, password)
+  def fetchResultFromDB (detectionID: String): DetectionResult = {
+    connection = DriverManager.getConnection(url, username, password)
     val statement = connection.createStatement()
     var result: Option[DetectionResult] = None
     try {

@@ -9,13 +9,17 @@ $(document).ready(function() {
         url: document.location.href + '/checkForDetectionRan',
         success : function(response) {
             if (response.Status === "Run") {
-                checkRunningDetections();
                 $.ajax({
                     method: 'POST',
                     url: document.location.href + '/runJPlag/' + response.DetectionID,
                     success : function(response) {
+                        console.log("Run returned response");
+                        console.log(response.Status);
                         if (response.Status === "Success") {
                             checkRunningDetections("Ran");
+                        }
+                        else if(response.Status === "Running") {
+                            checkRunningDetections();
                         }
                         else {
                             $('#detectionSuccessAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.Status);
@@ -31,6 +35,7 @@ $(document).ready(function() {
             method: 'GET',
             url: document.location.href + '/checkForRunningDetection',
             success : function(response) {
+
                 $("#ongoing_detection_table tbody > tr").empty();
                 var len = response.length;
                 var txt = "";

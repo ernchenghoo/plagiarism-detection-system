@@ -11,7 +11,7 @@ trait Database {
 //  val driver = "com.mysql.cj.jdbc.Driver"
 //  val username = "root"
 //  val password = "password"
-  var connection: Connection = _
+  var connection: Connection = DriverManager.getConnection(url, username, password)
 }
 
 object Database extends Database {
@@ -19,7 +19,7 @@ object Database extends Database {
   def testDatabase(): Unit = {
     try {
       Class.forName(driver)
-      val connection = DriverManager.getConnection(url, username, password)
+      connection = DriverManager.getConnection(url, username, password)
       val statement = connection.createStatement()
       val result  = statement.executeQuery("select * from codefile")
 

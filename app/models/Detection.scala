@@ -1,6 +1,7 @@
 package models
 import java.io.{ByteArrayOutputStream, File, PrintWriter}
 import java.sql.{Date, DriverManager, ResultSet, SQLException}
+import java.util.concurrent.{ExecutorService, Executors}
 
 import com.amazonaws.services.s3.iterable.S3Objects
 import com.amazonaws.services.s3.model.{ProgressEvent, ProgressListener, PutObjectRequest, S3ObjectSummary}
@@ -9,6 +10,7 @@ import org.apache.commons.io.FileUtils
 import org.zeroturnaround.zip.ZipUtil
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.{ExecutionContext, Future}
 import scala.sys.process.{Process, ProcessLogger}
 
 class Detection (val detectionID: String) extends Database with DetectionInfo{
@@ -16,16 +18,27 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
   Class.forName(driver)
   var language = ""
   var detectionDetails: Option[DetectionDetail] = None
-  val baseCodeDirectoryPath = s"$defaultSourcePath/$detectionID/$baseCodeDirectory"
   val sourcePath = s"$defaultSourcePath/$detectionID"
+  val baseCodeDirectoryPath = s"$sourcePath/$baseCodeDirectory"
   var error: String = _
   var settings: Option[JPlagSettings] = None
   var exitCode: Int = 0
   var readyToExecute = false
   var baseCodeExist = false
 
+  implicit val ec: ExecutionContext = new ExecutionContext {
+    val threadPool: ExecutorService = Executors.newFixedThreadPool(25)
+
+    def execute(runnable: Runnable) {
+      threadPool.submit(runnable)
+    }
+
+    def reportFailure(t: Throwable) {}
+  }
+
+
   def checkJPlagRunConditions(): String = {
-    println("Checking JPlag run condition")
+    println("Validating detection")
     if (language == "") {
       "Please enter a detection language"
     }
@@ -65,6 +78,9 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
     generateNewDetectionInstance()
     val process = processRunner(command)
     exitCode = process._1.toString.toInt
+    println("Exit code: " + exitCode)
+    println("")
+    //errors during detection
 
     //errors during detection
     if (exitCode == 1) {
@@ -79,11 +95,14 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
       val resultData = results(2)
       try {
         //create new detection in database
-        val connection = DriverManager.getConnection(url, username, password)
+        println("Connecting to database")
+        connection = DriverManager.getConnection(url, username, password)
         val statement = connection.createStatement()
         //create a record for detection
+        println("Inserting into database")
         statement.executeUpdate(s"Insert into rawData values('${resultData}', '${detectionID}')")
         statement.executeUpdate(s"Insert into detectionSettings values('${language}', '${settings.get.sensitivity}', '${settings.get.minPercentage}', '${detectionID}')")
+        println("Database insertion complete")
       }
       catch {
         case e: SQLException =>
@@ -91,10 +110,10 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
       }
       //remove all uploaded files
       clearUploadedFiles()
-      println("JPlag run complete")
+      println("Detection complete")
       None
     }
-
+    None
 
   }
 
@@ -133,7 +152,7 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
     println("Generating new detection instance")
     try {
       //create new detection in database
-      val connection = DriverManager.getConnection(url, username, password)
+      connection = DriverManager.getConnection(url, username, password)
       val statement = connection.createStatement()
       //create a record for detection
       statement.executeUpdate(s"Insert into detection values('${detectionID}', '${detectionDetails.get.detectionDateTime}', " +
@@ -153,30 +172,28 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
   }
 
   def unZipUploadedFiles(): Option[List[UploadedFile]] = {
+    println("Unzipping files:\n")
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (file <- uploadedFilesDirectory.listFiles()) {
       val extension = file.toString.split("\\.").last
       if (extension == "zip" || extension == "rar") {
         val fileName = file.getName
+        println("Unzipping " + file.getName)
         ZipUtil.unpack(new File(s"$sourcePath/${fileName}"), new File(s"$sourcePath"))
-        if (file.delete()) {
-          println(s"${file.getName} deleted")
-        }
+        file.delete
       }
-
     }
+    println("\nSecond round of unzipping files:\n")
     //second round of checking
     for (extractedFile <- uploadedFilesDirectory.listFiles()) {
       val extension = extractedFile.toString.split("\\.").last
       if (extension == "zip") {
         val extractedFileName = extractedFile.getName
         ZipUtil.unpack(new File(s"$sourcePath/${extractedFileName}"), new File(s"$sourcePath"))
-        if (extractedFile.delete()) {
-          println(s"${extractedFile.getName} deleted")
-        }
+        extractedFile.delete
       }
     }
-
+    println("\nDeleting non-source code files:\n")
     val uploadedFilesName = new ListBuffer[UploadedFile]()
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.isDirectory) {
@@ -184,12 +201,13 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
           val extension = innerFile.toString.split("\\.").last
           if (extension != "py" || extension == "java") {
             innerFile.delete
-
+            println(innerFile.getName + " deleted")
           }
         }
       }
       uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
     }
+    println("Unzip complete")
     getUploadedFiles()
   }
 
@@ -249,10 +267,12 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
   }
 
   def clearUploadedFiles(): String = {
-    val uploadedFilesDirectory = new java.io.File(defaultSourcePath)
+    println("\nClearing uploaded files\n")
+    val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
       if (uploadedFile.getName != "dummyfile.txt") {
         if (uploadedFile.isDirectory) {
+          println(uploadedFile.getName + " deleted")
           FileUtils.deleteDirectory(uploadedFile)
         }
         else if (uploadedFile.isFile) {
@@ -296,6 +316,7 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
       Some(uploadedFilesName.toList)
     }
     else {
+
       None
     }
   }

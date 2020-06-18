@@ -1,6 +1,9 @@
 package controllers
 import java.io.File
 import java.nio.file.{Path, Paths}
+import java.util.concurrent.{ExecutorService, Executors}
+
+import scala.concurrent.duration.Duration
 import java.util.{Calendar, Date}
 
 import javax.inject.Inject
@@ -16,9 +19,20 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future, Pro
 
 class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Assets) extends MessagesAbstractController(cc) {
 
-  implicit val ec: ExecutionContextExecutor = ExecutionContext.global
+  implicit val ec: ExecutionContext = new ExecutionContext {
+    val threadPool: ExecutorService = Executors.newFixedThreadPool(25)
+
+    def execute(runnable: Runnable) {
+      threadPool.submit(runnable)
+    }
+
+    def reportFailure(t: Throwable) {}
+  }
+
   DetectionManager.runningDetections.clear()
   DetectionManager.loggedInUsername = "ernchenghoo"
+  DetectionManager.clearAllStudentFiles()
+  println("Clear student files")
 
   def javascriptRoutes: Action[AnyContent] = Action { implicit request =>
     Ok(
@@ -43,11 +57,15 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def getDetectionMainPage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     val session = request.session.get("username")
-    println(session)
     session.map { username =>
       DetectionManager.generateNewDetectionInstance()
       Ok(views.html.detection_main())
     }.getOrElse(Ok(views.html.no_login_page()))
+  }
+
+  def generateNewDetectionInstance: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+
+    Ok("Pass")
   }
 
   def getHomepage: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -78,6 +96,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def getRunningDetections : Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    println("\nChecking for running detections")
     if (DetectionManager.runningDetections.nonEmpty) {
       for (detection <- DetectionManager.runningDetections) {
         println(detection.detectionDetails.get.detectionName)
@@ -175,6 +194,8 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
         case "detectionLanguage" => detectionLanguage = data._2.head
       }
     })
+    println("Detection name: " + detectionName)
+    println("Detection language: " + detectionLanguage)
     //set details that is sent from frontend
     DetectionManager.setDetectionDetail(detectionLanguage, detectionName)
     val runCheck = DetectionManager.currentDetection.get.checkJPlagRunConditions()
@@ -183,15 +204,20 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   }
 
   def runJPlag(detectionID: String): Action[AnyContent] = Action.async {
+    println("\nRunning JPlag")
     val runningDetection = DetectionManager.runningDetections.find(_ .detectionDetails.get.detectionID == detectionID)
-    println(s"Running Detection: ${runningDetection.get.detectionDetails.get.detectionName}")
-    val runningDetectionIndex =  DetectionManager.runningDetections.size-1
+
+    val runningDetectionIndex =  DetectionManager.runningDetections.indexOf(runningDetection)
+
     val runResponse: Future[Option[String]] = scala.concurrent.Future {
       runningDetection.get.runJPlag()
     }
+    Ok(Json.obj("Status" -> "Running"))
     runResponse.map(
-      response => {
-        if (response.isEmpty) {
+      runResponse => {
+        println("Future callback received")
+        if (runResponse.isEmpty) {
+          println("Response is empty")
           //remove complete detection from running detections list
           DetectionManager.runningDetections.remove(runningDetectionIndex)
           if (DetectionManager.runningDetections.nonEmpty) {
@@ -202,6 +228,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
           Ok(Json.obj("Status" -> "Success"))
         }
         else {
+          println("Response not empty")
           //remove complete detection from running detections list
           DetectionManager.runningDetections.remove(runningDetectionIndex)
           if (DetectionManager.runningDetections.nonEmpty) {
@@ -209,7 +236,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
               println(detection.detectionDetails.get.detectionName)
             }
           }
-          Ok(Json.obj("Status" -> response))
+          Ok(Json.obj("Status" -> runResponse))
         }
       }
     )
@@ -230,7 +257,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def studentFileUpload: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
     request.body.files.foreach( file => {
       val filename = Paths.get(file.filename).getFileName
-      println(System.getProperty("user.dir"))
       file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.sourcePath}/$filename"), replace = true)
     })
     val uploadedFiles = DetectionManager.currentDetection.get.unZipUploadedFiles()

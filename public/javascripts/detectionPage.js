@@ -90,10 +90,7 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success : function(response) {
-                    if (response.uploadedFiles === "None") {
-                        $('#detectionMainAlert').fadeIn(300).delay(3000).fadeOut(300).text(response.message);
-                    }
-                    else {
+                    if (response.uploadedFiles != null) {
                         var len = response.uploadedFiles.length;
                         var txt = "";
                         if(len > 0){
@@ -109,9 +106,6 @@ $(document).ready(function() {
                                 $('tbody').append(txt);
                                 $(".no_file_uploaded_message").hide();
                                 $(".table_body_container").show();
-                            }
-                            else {
-
                             }
                         }
                     }
