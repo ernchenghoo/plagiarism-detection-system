@@ -207,11 +207,11 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     println("\nRunning JPlag")
     val runningDetection = DetectionManager.runningDetections.find(_ .detectionDetails.get.detectionID == detectionID)
 
-    val runningDetectionIndex =  DetectionManager.runningDetections.indexOf(runningDetection)
+    val runningDetectionIndex =  DetectionManager.runningDetections.indexOf(runningDetection.get)
 
     val runResponse: Future[Option[String]] = scala.concurrent.Future {
       runningDetection.get.runJPlag()
-    }
+    }(ec)
     Ok(Json.obj("Status" -> "Running"))
     runResponse.map(
       runResponse => {

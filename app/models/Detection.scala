@@ -135,7 +135,6 @@ class Detection (val detectionID: String) extends Database with DetectionInfo{
     var exitValue = 0
     try {
       val process = Process(cmd)
-      println("Running JPlag")
       exitValue = process.!(ProcessLogger(stdoutWriter.println, stderrWriter.println))
       println("JPlag run complete")
     }
