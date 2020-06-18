@@ -31,8 +31,8 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   DetectionManager.runningDetections.clear()
   DetectionManager.loggedInUsername = "ernchenghoo"
-  DetectionManager.clearAllStudentFiles()
-  println("Clear student files")
+//  DetectionManager.clearAllStudentFiles()
+//  println("Clear student files")
 
   def javascriptRoutes: Action[AnyContent] = Action { implicit request =>
     Ok(
