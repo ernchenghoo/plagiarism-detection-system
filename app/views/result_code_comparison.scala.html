@@ -1,13 +1,12 @@
 @import views.html.helper.script
-@(matchIndex: String, selectedPair: Option[StudentFilePair])
+@(matchIndex: String, selectedPair: Option[StudentFilePair], detectionMode: String)
 
 @main("Result Code Comparison") {
 
 
     <div class="row">
 
-        <div class="col-3">
-            <h3 class="table_title_small" style="position: fixed">Token matches</h3>
+        <div class="col-12">
             <table class="table table-bordered token-table">
                 <thead>
                     <tr>
@@ -33,48 +32,40 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-9">
-            <h3 class="text-center table_title_large">Similarity comparison</h3>
-            <table class="table table-bordered text-left code-comparison-table" id="code_comparison_table">
-                <thead>
-                    <tr>
-                    @if(selectedPair.isDefined) {
-                        <th scope="col" class="text-center">Student @selectedPair.get.studentA</th>
-                        <th scope="col" class="text-center">Student @selectedPair.get.studentB</th>
-                    } else {
-                        <p>no student results pair defined</p>
-                    }
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6">
+                    <p class="table_title_small text-center">Student @selectedPair.get.studentA</p>
+                    <div class="overflow-auto code-overflow">
+                        @if(detectionMode == "file") {
+                            @Html(selectedPair.get.studentAFiles.head.code)
+                        } else {
+                            @for(fileA <- selectedPair.get.studentAFiles) {
+                                <p class="code-file-title">@fileA.fileName</p>
+                                @Html(fileA.code)
+                            }
+                        }
 
-                    </tr>
-                </thead>
-                <tbody>
-                @if(selectedPair.get.similarFiles.head.codeFileA.fileName == selectedPair.get.studentA){
-                    <tr>
-                        <td>@Html(selectedPair.get.similarFiles.head.codeFileA.code)</td>
-                        <td>@Html(selectedPair.get.similarFiles.head.codeFileB.code)</td>
-                    </tr>
-                } else {
-                    @if(selectedPair.isDefined) {
-                        @for(pairs <- selectedPair.get.similarFiles) {
-                            <tr>
-                                <th>@Html(pairs.codeFileA.fileName)</th>
-                                <th>@Html(pairs.codeFileB.fileName)</th>
-                            </tr>
-                            <tr class="codes">
-                                <td>@Html(pairs.codeFileA.code)</td>
-                                <td>@Html(pairs.codeFileB.code)</td>
-                            </tr>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <p class="table_title_small text-center">Student @selectedPair.get.studentB</p>
+                    <div class="overflow-auto code-overflow">
+                    @if(selectedPair.get.studentBFiles.size == 1) {
+                        @Html(selectedPair.get.studentBFiles.head.code)
+                    } else {
+                        @for(fileB <- selectedPair.get.studentBFiles) {
+                            <p class="code-file-title">@fileB.fileName</p>
+                            @Html(fileB.code)
                         }
                     }
-                }
-                </tbody>
-            </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-
 
 
 

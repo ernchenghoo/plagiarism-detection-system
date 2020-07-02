@@ -80,7 +80,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     if (DetectionManager.currentDetection.isDefined) {
       if (DetectionManager.currentDetection.get.readyToExecute) {
         detectionToRunID = DetectionManager.currentDetection.get.detectionDetails.get.detectionID
-        DetectionManager.currentDetection.get.readyToExecute = false
         DetectionManager.runningDetections += DetectionManager.currentDetection.get
         DetectionManager.currentDetection = None
         Ok(Json.obj("Status" -> "Run",
@@ -115,7 +114,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def getResultPage (detectionID: String): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     val session = request.session.get("username")
     session.map { username =>
-      Ok(views.html.result(DetectionManager.fetchResultFromDB(detectionID)))
+      Ok(views.html.result(DetectionManager.getResultsFromDB(detectionID)))
     }.getOrElse(Ok(views.html.no_login_page()))
   }
 
@@ -140,7 +139,7 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
       else {
         selectedPair = DetectionManager.detectionResult.get.resultNonPlagiarismStudentPairs.find(student => student.studentFilePairID == matchIndex)
       }
-      Ok(views.html.result_code_comparison(matchIndex, selectedPair))
+      Ok(views.html.result_code_comparison(matchIndex, selectedPair, DetectionManager.detectionResult.get.detectionMode))
     }.getOrElse(Ok(views.html.no_login_page()))
   }
 
@@ -203,43 +202,28 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
     Ok(Json.obj("message" -> runCheck))
   }
 
-  def runJPlag(detectionID: String): Action[AnyContent] = Action.async {
+  def runJPlag(detectionID: String): Action[AnyContent] = Action {
     println("\nRunning JPlag")
     val runningDetection = DetectionManager.runningDetections.find(_ .detectionDetails.get.detectionID == detectionID)
-
-    val runningDetectionIndex =  DetectionManager.runningDetections.indexOf(runningDetection.get)
-
-    val runResponse: Future[Option[String]] = scala.concurrent.Future {
-      runningDetection.get.runJPlag()
-    }(ec)
-    Ok(Json.obj("Status" -> "Running"))
-    runResponse.map(
-      runResponse => {
-        println("Future callback received")
-        if (runResponse.isEmpty) {
-          println("Response is empty")
-          //remove complete detection from running detections list
-          DetectionManager.runningDetections.remove(runningDetectionIndex)
-          if (DetectionManager.runningDetections.nonEmpty) {
-            for (detection <- DetectionManager.runningDetections) {
-              println(detection.detectionDetails.get.detectionName)
-            }
-          }
-          Ok(Json.obj("Status" -> "Success"))
-        }
-        else {
-          println("Response not empty")
-          //remove complete detection from running detections list
-          DetectionManager.runningDetections.remove(runningDetectionIndex)
-          if (DetectionManager.runningDetections.nonEmpty) {
-            for (detection <- DetectionManager.runningDetections) {
-              println(detection.detectionDetails.get.detectionName)
-            }
-          }
-          Ok(Json.obj("Status" -> runResponse))
-        }
-      }
-    )
+//    val runResponse: Future[Option[String]] = scala.concurrent.Future {
+//      runningDetection.get.runJPlag()
+//    }(ec)
+    val runResponse = runningDetection.get.runJPlag()
+    Ok(Json.obj("Status" -> runResponse))
+//    runResponse.map(
+//      runResponse => {
+//        println("Future callback received")
+//        if (runResponse.isEmpty) {
+//          println("Response is empty")
+//          Ok(Json.obj("Status" -> "Success"))
+//        }
+//        else {
+//          println("Response not empty")
+//
+//          Ok(Json.obj("Status" -> runResponse))
+//        }
+//      }
+//    )
   }
 
   def clearUploadedFiles: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
@@ -285,7 +269,6 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
       request.body.files.foreach( file => {
         val filename = file.filename
         val baseCodeFile = Paths.get(file.filename).getFileName.toFile
-        println(s"File name: ${filename}")
         file.ref.moveTo(Paths.get(s"${DetectionManager.currentDetection.get.baseCodeDirectoryPath}/$baseCodeFile").toFile, replace = true)
         DetectionManager.currentDetection.get.settings = Some(new JPlagSettings(sensitivity, minPercentage))
         DetectionManager.currentDetection.get.baseCodeExist = true

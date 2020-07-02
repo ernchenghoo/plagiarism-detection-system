@@ -6,32 +6,63 @@
         <h3 class="table_title_large">Potential plagiarisms</h3>
         @for(file <- result.resultPlagiarismGroups) {
             <div class="row mb-5 plagiarism-group-box">
-                <div class="col-8 red-background result-file-name-container">
-                    <div class="row plagiarism-group-students">
-                    @for(student <- file.getIndividualStudent) {
-                        <div class="col-3 pt-2">
-                            <p>@student</p>
-                        </div>
-                    }
-                    </div>
-                </div>
-                <div class="col-4 text-center red-background">
-                    <div class="row plagiarism-group-token">
-                        <div class="col-12">
-                            <p><u>Token No.</u></p>
+                @if(file.tokenNo > 150) {
+                    <div class="col-8 red-background result-file-name-container">
+                        <div class="row plagiarism-group-students">
+                        @for(student <- file.getIndividualStudent) {
+                            <div class="col-3 pt-2">
+                                <p>@student</p>
+                            </div>
+                        }
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <p>@file.tokenNo</p>
+                    <div class="col-4 text-center red-background result-token-container">
+                        <div class="row plagiarism-group-token">
+                            <div class="col-12">
+                                <p><u>Token No.</u></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="token-number-text">@file.tokenNo</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <a href="@routes.RunJPlagController.getResultDetailPage(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <a href="@routes.RunJPlagController.getResultDetailPage(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                } else {
+                    <div class="col-8 yellow-background result-file-name-container">
+                        <div class="row plagiarism-group-students">
+                        @for(student <- file.getIndividualStudent) {
+                            <div class="col-3 pt-2">
+                                <p>@student</p>
+                            </div>
+                        }
                         </div>
                     </div>
-                </div>
+                    <div class="col-4 text-center yellow-background result-token-container">
+                        <div class="row plagiarism-group-token">
+                            <div class="col-12">
+                                <p><u>Token No.</u></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="token-number-text">@file.tokenNo</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <a href="@routes.RunJPlagController.getResultDetailPage(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
             </div>
         }
 
@@ -40,8 +71,8 @@
             <table class="table table-hover table-bordered text-center table_custom">
                 <thead>
                     <tr>
-                        <th scope="col">File A</th>
-                        <th scope="col">File B</th>
+                        <th scope="col">Student A</th>
+                        <th scope="col">Student B</th>
                         <th scope="col">Similarity (%)</th>
                     </tr>
                 </thead>

@@ -5,6 +5,8 @@ body {
 
 }
 
+
+
 .content-container {
     margin-top: 130px;
 }
@@ -75,9 +77,16 @@ a.no_login_link {
     width: 50%;
 }
 
+.token-table th {
+    padding: 6px;
+}
+
+.token-table td {
+    padding: 6px;
+}
+
 .token-table {
-    margin-top: 46px;
-    position: fixed;
+    /*position: fixed;*/
     font-size: 12px;
     font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
     width: auto;
@@ -192,11 +201,26 @@ input[id="studentCodeUpload"] {
 
 .result-file-name-container {
     border-right: solid 1px black;
+    border-radius: 12px 0 0 12px;
+}
+
+.result-token-container {
+    border-radius: 0 12px 12px 0;
 }
 
 .red-background {
-    background-image: linear-gradient(to bottom, #ff8c8c , #ff8282);
+    background: #ff8a8a;
     font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
+
+.yellow-background {
+    background: #ffcc8a;
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
+
+.token-number-text {
+    font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+    font-size: 24px;
 }
 
 .plagiarism-group-students {
@@ -213,6 +237,7 @@ input[id="studentCodeUpload"] {
     -webkit-box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
     -moz-box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
     box-shadow: 10px 10px 12px -8px rgba(128,128,128,1);
+    border-radius: 12px;
 }
 
 #result_details_button {
@@ -223,13 +248,13 @@ input[id="studentCodeUpload"] {
 
 .code-comparison-table {
     width:100%;
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     overflow-wrap: break-word;
 }
 
 .token-list-dropdown {
     margin-top: 15px;
-    position: fixed;
+    /*position: fixed;*/
 }
 
 .codes {
@@ -251,14 +276,14 @@ input[id="studentCodeUpload"] {
     margin-left: 2px;
     font-size: 20px;
     margin-top: 10px;
-    font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
+    font-family: Big Caslon,Book Antiqua,Palatino Linotype,Georgia,serif; font-weight: bold;
 }
 
 .table_title_large {
     margin-left: 2px;
     font-size: 24px;
     margin-top: 10px;
-    font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
+    font-family: Big Caslon,Book Antiqua,Palatino Linotype,Georgia,serif; font-weight: bold;
 }
 
 .table_delete_button {
@@ -271,8 +296,8 @@ input[id="studentCodeUpload"] {
 
 .no_file_uploaded_message {
     margin-top: 200px;
-    font-size: 24px;
-    font-family: Candara,Calibri,Segoe,Segoe UI,Optima,Arial,sans-serif; font-weight: bold;
+    font-size: 20px;
+    font-family: Big Caslon,Book Antiqua,Palatino Linotype,Georgia,serif;
 }
 
 #clear_uploaded_files_button {
@@ -282,6 +307,16 @@ input[id="studentCodeUpload"] {
     font-size: 16px;
     margin-right: -120px;
     font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
+}
+
+.code-overflow {
+    max-height: calc(100vh - 190px);
+}
+
+.code-file-title {
+    background-color: #e3e3e3;
+    border-radius: 12px 0 0 12px;
+    padding: 6px 6px 6px 20px;
 }
 
 pre {
