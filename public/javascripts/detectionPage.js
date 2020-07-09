@@ -32,8 +32,8 @@ $(document).ready(function() {
             success : function(response) {
                 $("#loading_gif").hide();
                 if (response.message === "Pass") {
-                    window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
-                    // window.location = 'http://localhost:9000/home';
+                    // window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
+                    window.location = 'http://localhost:9000/home';
                 }
                 else {
                     $('#detectionMainAlert').fadeIn(300).delay(10000).fadeOut(300).text(response.message);
@@ -68,11 +68,11 @@ $(document).ready(function() {
             contentType: false,
             success : function(response) {
                 if (response.uploadedBaseFile === "None") {
-                    $('#baseCodeUploadedSection').hide()
+                    $('#base_file_uploaded_container').hide();
                 }
                 else {
-                    $('#baseCodeUploadedSection').show();
-
+                    $('#base_file_uploaded_container').show();
+                    $('#uploaded_baseFile_name').text(response.uploadedBaseFile);
                 }
 
             }
@@ -98,7 +98,7 @@ $(document).ready(function() {
                                 if(response.uploadedFiles[i].fileName){
                                     txt += '<tr>';
                                     txt += '<td>' + response.uploadedFiles[i].fileName +  '</td>';
-                                    txt += '<td><button type="button" class="btn table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
+                                    txt += '<td><button type="button" class="btn delete table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
                                     txt += '</tr>'
                                 }
                             }
@@ -121,7 +121,7 @@ $(document).ready(function() {
                     if(files[i].fileName){
                         txt += '<tr>';
                         txt += '<td>' + files[i].fileName +  '</td>';
-                        txt += '<td><button type="button" class="btn table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
+                        txt += '<td><button type="button" class="btn delete table_delete_button"><i class="fa fa-trash-o fa-lg"></i></button></td>';
                         txt += '</tr>'
                     }
                 }
@@ -138,15 +138,43 @@ $(document).ready(function() {
     //ajax request for deleting single uploaded file
     $(document).on("click", "button.delete", function () {
         var cRow = $(this).parents('tr');
+
         var fileName = $('td:nth-child(1)', cRow).text();
+        cRow.remove();
+        var rowCount = $('#uploaded_student_file_table tr').length;
+        console.log(rowCount);
+        if (rowCount === 1) {
+            $(".table_body_container").hide();
+            $(".no_file_uploaded_message").show();
+        }
         $.ajax({
             method: 'POST',
             url: document.location.href + '/deleteSingleUploadedFile',
-            processData: false,
+            processData : false,
             contentType: false,
             data: fileName,
             success : function(response) {
-                getUploadedFiles();
+                // getUploadedFiles();
+            }
+        });
+    });
+
+    //ajax request for deleting single uploaded file
+    $(document).on("click", "button#base_file_delete", function () {
+        var fileName = $('#uploaded_baseFile_name').text();
+        console.log(fileName);
+        $.ajax({
+            method: 'POST',
+            url: document.location.href + '/deleteUploadedBaseFile',
+            processData : false,
+            contentType: false,
+            data: fileName,
+            success : function(response) {
+                if (response === "Success") {
+                    console.log()
+                    $('#baseCodeUpload').val('');
+                    $('#base_file_uploaded_container').hide();
+                }
             }
         });
     });

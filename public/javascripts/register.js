@@ -27,7 +27,7 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 success : function(response) {
                     if (response.message === "Pass") {
-                        window.location = document.location.href + 'home';
+                        window.location = 'http://localhost:9000/home';
                     }
                     else {
 

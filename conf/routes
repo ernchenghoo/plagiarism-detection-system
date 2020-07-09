@@ -27,6 +27,7 @@ POST    /detection/clearUploadedFiles           controllers.RunJPlagController.c
 POST    /home/runJPlag/:id                      controllers.RunJPlagController.runJPlag(id: String)
 POST    /detection/submitSettings               controllers.RunJPlagController.submitSettings
 POST    /detection/deleteSingleUploadedFile     controllers.RunJPlagController.deleteSingleUploadedFile
+POST    /detection/deleteUploadedBaseFile       controllers.RunJPlagController.deleteBaseFileUploaded()
 
 
 # Javascript route

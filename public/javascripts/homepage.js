@@ -19,6 +19,7 @@ $(document).ready(function() {
                             checkRunningDetections("Ran");
                         }
                         else if(response.Status === "Running") {
+                            console.log("Running");
                             checkRunningDetections();
                         }
                         else {

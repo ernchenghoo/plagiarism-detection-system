@@ -9,43 +9,51 @@
   </div>
 
   <div class="row justify-content-start">
-    <div class="col-2 run_panel_container text-center">
+    <div class="col-2">
+      <div class="container run_panel_container text-center">
+        <button type="button" id="runJPlagButton" class="btn btn-primary detection_page_run_button">RUN</button>
 
-      <button type="button" id="runJPlagButton" class="btn btn-primary detection_page_run_button">RUN</button>
-
-      <div class="row">
-        <div class="col-12">
-          <form method="post" id="runForm" enctype="multipart/form-data">
-            <div class="input-group detection_input_group mx-auto">
-              <input type="text" name="detectionName" id="detectionName" autocomplete="off" class="form-control" placeholder="Detection Name" aria-label="Detection Name" aria-describedby="basic-addon2">
-            </div>
-            <div class="form-group detection_input_group mx-auto mt-2">
-              <select name="detectionLanguage" id="detectionLanguage" class="form-control">
-                <option value="Please select a language">Please select a language</option>
-                <option value="java19">Java</option>
-                <option value="c#-1.2">C# 1.2</option>
-                <option value="char">Char</option>
-                <option value="scheme">Scheme</option>
-                <option value="python3">Python 3</option>
-                <option value="c/c++">C or C++</option>
-              </select>
-            </div>
-          </form>
+        <div class="row">
+          <div class="col-12">
+            <form method="post" id="runForm" enctype="multipart/form-data">
+              <div class="input-group detection_input_group mx-auto">
+                <input type="text" name="detectionName" id="detectionName" autocomplete="off" class="form-control" placeholder="Detection Name" aria-label="Detection Name" aria-describedby="basic-addon2">
+              </div>
+              <div class="form-group detection_input_group mx-auto mt-2">
+                <select name="detectionLanguage" id="detectionLanguage" class="form-control">
+                  <option value="Please select a language">Please select a language</option>
+                  <option value="java19">Java</option>
+                  <option value="c#-1.2">C# 1.2</option>
+                  <option value="char">Char</option>
+                  <option value="scheme">Scheme</option>
+                  <option value="python3">Python 3</option>
+                  <option value="c/c++">C or C++</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-6">
+            <button type="button" class="btn icon_button" data-toggle="modal" data-target="#jplagSettingsModal">
+              <i class="fa fa-cog" style="color:black;"></i></button>
+          </div>
+          <div class="col-6">
+            <form method="post" id="studentFileUploadForm" enctype="multipart/form-data">
+              <label for="studentCodeUpload" class="custom-file-upload">
+                <i class="fa fa-upload" style="color:black;"></i>
+              </label>
+              <input type="file" name="studentFileCode" multiple="multiple" id="studentCodeUpload" class="btn btn-primary icon_button">
+            </form>
+          </div>
         </div>
       </div>
-      <div class="row mt-4" style="margin-bottom: 35px">
-        <div class="col-6">
-          <button type="button" class="btn icon_button" data-toggle="modal" data-target="#jplagSettingsModal">
-            <i class="fa fa-cog" style="color:black;"></i></button>
-        </div>
-        <div class="col-6">
-          <form method="post" id="studentFileUploadForm" enctype="multipart/form-data">
-            <label for="studentCodeUpload" class="custom-file-upload">
-              <i class="fa fa-upload" style="color:black;"></i>
-            </label>
-            <input type="file" name="studentFileCode" multiple="multiple" id="studentCodeUpload" class="btn btn-primary icon_button">
-          </form>
-        </div>
+      <div class="container base-file-uploaded-container" id="base_file_uploaded_container">
+        <p class="uploaded_baseFile_container_title">Uploaded base file</p>
+        <p class="d-inline uploaded_baseFile_name" id="uploaded_baseFile_name">No base file uploaded</p>
+        <button type="button" class="btn table_delete_button d-inline" id="base_file_delete">
+          <i class="fa fa-trash-o fa-lg"></i>
+        </button>
       </div>
     </div>
     <div class="col-9 ml-3">
@@ -101,7 +109,7 @@
         <div class="modal-body">
           <form method="post" id="settingsForm" enctype="multipart/form-data">
             <div class="form-group mt-3">
-              <label for="formControlRange">Sensitivity</label>
+              <label for="formControlRange">Sensitivity (min. token value for plagiarism)</label>
               <input type="range" name="sensitivity" class="custom-range inputRange" value="100" min="0" max="300" id="formControlRange">
               <span class="rangeValue">100</span>
             </div>

@@ -1,14 +1,12 @@
 package controllers
 import java.io.File
 import java.nio.file.{Path, Paths}
-import java.util.concurrent.{ExecutorService, Executors}
-
-import scala.concurrent.duration.Duration
-import java.util.{Calendar, Date}
-
+import akka.actor.ActorSystem
+import com.google.inject.ImplementedBy
 import javax.inject.Inject
 import models.{Account, Database, Detection, DetectionDetail, DetectionManager, JPlagSettings, PotentialPlagiarismGroup, StudentFilePair}
 import play.api.libs.Files
+import play.api.libs.concurrent.{Akka, CustomExecutionContext}
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.mvc._
 import play.api.routing.JavaScriptReverseRouter
@@ -17,22 +15,22 @@ import play.twirl.api.{Html, MimeTypes}
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future, Promise, blocking}
 
-class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Assets) extends MessagesAbstractController(cc) {
+//@ImplementedBy(classOf[MyExecutionContextImpl])
+//trait MyExecutionContext extends ExecutionContext {
+//
+//}
+//
+//class MyExecutionContextImpl @Inject() (system: ActorSystem) extends CustomExecutionContext(system, "my.executor") with MyExecutionContext
 
-  implicit val ec: ExecutionContext = new ExecutionContext {
-    val threadPool: ExecutorService = Executors.newFixedThreadPool(25)
+class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Assets, system: ActorSystem) extends MessagesAbstractController(cc) {
 
-    def execute(runnable: Runnable) {
-      threadPool.submit(runnable)
-    }
-
-    def reportFailure(t: Throwable) {}
-  }
-
+//  val myExecutionContext: ExecutionContext = system.dispatchers.lookup("my-context")
   DetectionManager.runningDetections.clear()
   DetectionManager.loggedInUsername = "ernchenghoo"
 //  DetectionManager.clearAllStudentFiles()
 //  println("Clear student files")
+
+
 
   def javascriptRoutes: Action[AnyContent] = Action { implicit request =>
     Ok(
@@ -172,16 +170,18 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 
   def register: Action[JsValue] = Action(parse.json) { request =>
     var registerResult = ""
+    var username = ""
     val accountJSON = request.body.validate[Account]
     accountJSON.fold(
       errors => {
         BadRequest(Json.obj("message" -> JsError.toJson(errors)))
       },
       account => {
-        registerResult = DetectionManager.registerAccount(account.username, account.password)
+        username = account.username
+        registerResult = DetectionManager.registerAccount(username, account.password)
       }
     )
-    Ok(Json.obj("message" -> registerResult))
+    Ok(Json.obj("message" -> registerResult)).withSession("username" -> username)
   }
 
   def validateDetection: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>
@@ -205,11 +205,16 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
   def runJPlag(detectionID: String): Action[AnyContent] = Action {
     println("\nRunning JPlag")
     val runningDetection = DetectionManager.runningDetections.find(_ .detectionDetails.get.detectionID == detectionID)
-//    val runResponse: Future[Option[String]] = scala.concurrent.Future {
-//      runningDetection.get.runJPlag()
-//    }(ec)
     val runResponse = runningDetection.get.runJPlag()
     Ok(Json.obj("Status" -> runResponse))
+//    val runJPlagFuture: Future[String] = Future {
+//      runningDetection.get.runJPlag()
+//    }(myExecutionContext)
+//    runJPlagFuture.map {
+//      runResponse =>
+//        Ok(Json.obj("Status" -> runResponse))
+//    }(myExecutionContext)
+
 //    runResponse.map(
 //      runResponse => {
 //        println("Future callback received")
@@ -223,19 +228,24 @@ class RunJPlagController @Inject()(cc: MessagesControllerComponents, assets: Ass
 //          Ok(Json.obj("Status" -> runResponse))
 //        }
 //      }
-//    )
+//    )(ec)
   }
 
   def clearUploadedFiles: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     Ok(Json.obj("message" -> DetectionManager.currentDetection.get.clearUploadedFiles()))
   }
 
-  def deleteSingleUploadedFile: Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+  def deleteSingleUploadedFile(): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     var fileName = ""
     request.body.asText.foreach( data => {
       fileName = data
     })
     Ok(DetectionManager.currentDetection.get.deleteSingleUploadedFile(fileName))
+  }
+
+  def deleteBaseFileUploaded(): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+    var fileName = request.body.asText
+    Ok(DetectionManager.currentDetection.get.deleteBaseFileUploaded(fileName.get))
   }
 
   def studentFileUpload: Action[MultipartFormData[Files.TemporaryFile]] = Action(parse.multipartFormData) { request =>

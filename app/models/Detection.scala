@@ -168,7 +168,7 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
     val uploadedFilesDirectory = new java.io.File(sourcePath)
     for (file <- uploadedFilesDirectory.listFiles()) {
       val extension = file.toString.split("\\.").last
-      if (extension == "zip" || extension == "rar") {
+      if (extension == "zip") {
         val fileName = file.getName
         println("Unzipping " + file.getName)
         ZipUtil.unpack(new File(s"$sourcePath/${fileName}"), new File(s"$sourcePath"))
@@ -184,21 +184,6 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
         ZipUtil.unpack(new File(s"$sourcePath/${extractedFileName}"), new File(s"$sourcePath"))
         extractedFile.delete
       }
-    }
-
-    println("\nDeleting non-source code files:\n")
-    val uploadedFilesName = new ListBuffer[UploadedFile]()
-    for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
-      if (uploadedFile.isDirectory) {
-        for (innerFile <- uploadedFile.listFiles) {
-          val extension = innerFile.toString.split("\\.").last
-          if (extension != "py" || extension == "java") {
-            innerFile.delete
-            println(innerFile.getName + " deleted")
-          }
-        }
-      }
-      uploadedFilesName.append(new UploadedFile(uploadedFile.getName))
     }
     println("Unzip complete")
     getUploadedFiles()
@@ -250,6 +235,15 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
         }
       }
     }
+    "Success"
+  }
+
+  def deleteBaseFileUploaded(fileName: String): String = {
+    val uploadedFilesDirectory = new java.io.File(baseCodeDirectoryPath)
+    for (uploadedFile <- uploadedFilesDirectory.listFiles()) {
+      uploadedFile.delete
+    }
+    baseCodeExist = false
     "Success"
   }
 
@@ -337,7 +331,6 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
         val studentFilePair = getStudentFilePairs(resultData(counter), resultData(counter+1),
           BigDecimal(resultData(counter+2).toDouble).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble, resultData(counter+3), detectionID, detectionMode)
         try {
-
           statement.executeUpdate(s"Insert into studentfilepair values('${studentFilePair.studentA}', '${studentFilePair.studentB}', '${studentFilePair.percentage}', " +
             s"'${studentFilePairID}', '$detectionID')")
         }
@@ -350,7 +343,7 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
         //only matches that have similarity higher than minPercentage will be saved
         if (resultData(counter+2).toDouble >= settings.minPercentage.toInt) {
           //high chance to be plagiarising
-          if (highToken.nonEmpty) {
+          if (highToken.nonEmpty || studentFilePair.percentage >= 90) {
             addIntoPlagiarismGroup(studentFilePair, highToken, studentFilePairID)
           }
           //unplagiarised student pair
@@ -396,27 +389,27 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
       var addedIntoGroupAsMatch = false
       // loop to check if token matches, if yes assume they are in the same plagiarism group
       for (group <- plagiarisedGroup) {
-        val groupID = group.groupID
-        //token matches, add into same group
-        for (highToken <- highTokenList) {
-          if (group.tokenNo == highToken.tokenNum) {
-            println("Insert into group" + group.tokenNo)
-            group.studentPairs += studentFilePair
-            addedIntoGroup = true
-            try {
-              connection = DriverManager.getConnection(url, username, password)
-              val statement = connection.createStatement()
-              statement.executeUpdate(s"Insert into groupstudent values('${groupID}', '${studentFilePairID}')")
-            }
-            catch {
-              case e: SQLException =>
-                println(e.printStackTrace())
-            }
-          }
-        }
 
-        if (!addedIntoGroup) {
-          println("No groups with similar token")
+        val groupID = group.groupID
+//        //token matches, add into same group
+//        for (highToken <- highTokenList) {
+//          if (group.tokenNo == highToken.tokenNum) {
+//            println("Insert into group " + group.tokenNo + "because of token match")
+//            group.studentPairs += studentFilePair
+//            addedIntoGroup = true
+//            try {
+//              connection = DriverManager.getConnection(url, username, password)
+//              val statement = connection.createStatement()
+//              statement.executeUpdate(s"Insert into groupstudent values('${groupID}', '${studentFilePairID}')")
+//            }
+//            catch {
+//              case e: SQLException =>
+//                println(e.printStackTrace())
+//            }
+//          }
+//        }
+
+        if (!addedIntoGroupAsMatch) {
           var studentMatch = 0
           val studentSize = group.studentPairs.size
           for (studentPair <- group.studentPairs) {
@@ -433,9 +426,9 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
               studentMatch += 1
             }
           }
-          if (studentMatch >=  studentSize) {
+          if (studentMatch >=  1) {
             group.studentPairs += studentFilePair
-            println("Added into group " + group.tokenNo + "because of name match")
+            println("Added into group " + group.tokenNo + " because of name match")
             addedIntoGroupAsMatch = true
             try {
               connection = DriverManager.getConnection(url, username, password)
@@ -450,8 +443,7 @@ class Detection (val detectionID: String) extends Database with DetectionInfo wi
         }
       }
       // boolean check failed, token is not similar to any groups currently available, create a new group
-      if (!addedIntoGroupAsMatch && !addedIntoGroup) {
-        println("No group matches at all. Create new group")
+      if (!addedIntoGroupAsMatch) {
         val newPlagiarismGroupID = UUID.randomUUID.toString
         val studentPair = studentFilePair
         plagiarisedGroup += new PotentialPlagiarismGroup(new ListBuffer[StudentFilePair](), newPlagiarismGroupID)

@@ -180,7 +180,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
       val codeFileListA = new ListBuffer[CodeFile]()
       val codeFileListB = new ListBuffer[CodeFile]()
       val codeTokenList = new ListBuffer[CodeToken]()
-      val studentPairList = new ListBuffer[StudentFilePair]()
+      var studentPairList = new ListBuffer[StudentFilePair]()
 
 
       while (studentPairQuery.next) {
@@ -219,7 +219,7 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
       }
 
       val potentialPlagiarismGroupList = new ListBuffer[PotentialPlagiarismGroup]()
-      val plagiarismGroupStudentPairList = new ListBuffer[StudentFilePair]()
+      val studentPairToRemove = new ListBuffer[StudentFilePair]()
       var studentPairAdded = false
       //create potentialPlagiarismGroups
       val groupsResultSet = statement.executeQuery(s"select * from potentialplagiarismgroup where detectionID = '$detectionID';")
@@ -235,10 +235,12 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
           for (group <- potentialPlagiarismGroupList) {
             if (group.groupID == queryPotentialPlagiarismGroup.getString("groupID")) {
               group.studentPairs += studentFilePair
+              studentPairList = studentPairList.filter(_.studentFilePairID != studentFilePair.studentFilePairID)
             }
           }
         }
       }
+
 
       val detectionQuery = statement.executeQuery(s"select detectionMode from detection where detectionID = '$detectionID'")
       var detectionMode = ""
@@ -246,7 +248,8 @@ object DetectionManager extends Database with AmazonS3 with DetectionInfo {
         detectionMode = detectionQuery.getString("detectionMode")
       }
 
-      detectionResult = Some(new DetectionResult(studentPairList.toList.sortBy(_.percentage), potentialPlagiarismGroupList.toList,  detectionMode))
+      detectionResult = Some(new DetectionResult(studentPairList.toList.sortBy(- _.percentage), potentialPlagiarismGroupList.toList.sortBy(- _.averageStudentSimilarityPercentage),
+        detectionMode))
 
     }
     catch {

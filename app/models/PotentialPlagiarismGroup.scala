@@ -17,6 +17,19 @@ class PotentialPlagiarismGroup(val studentPairs: ListBuffer[StudentFilePair], va
     largestToken
   }
 
+  def sortedStudentPairsBySimilarity: List[StudentFilePair] = {
+    studentPairs.toList.sortBy( - _.percentage)
+  }
+
+  def averageStudentSimilarityPercentage: Double = {
+    var sum = 0.0
+    for (pair <- studentPairs) {
+      sum += pair.percentage
+    }
+    val averagePercentage = sum / studentPairs.size
+    BigDecimal(averagePercentage).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+  }
+
   def getIndividualStudent: List[String] = {
     val individualStudentList: ListBuffer[String] = new ListBuffer[String]()
     for (pair <- studentPairs) {

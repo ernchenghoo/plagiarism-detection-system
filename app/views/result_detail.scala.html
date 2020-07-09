@@ -1,5 +1,5 @@
 @import scala.collection.mutable.ListBuffer
-@(filePairs: PotentialPlagiarismGroup)
+@(plagiarismGroup: PotentialPlagiarismGroup)
 
 @main("Result Detail") {
 
@@ -16,11 +16,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                @for(file <- filePairs.studentPairs) {
-                    <tr class='clickable-row' data-href="@routes.RunJPlagController.getCodeComparisonPage(Some(filePairs.groupID), file.studentFilePairID)">
-                        <td>@file.studentA</td>
-                        <td>@file.studentB</td>
-                        <td>@file.percentage</td>
+                @for(studentPair <- plagiarismGroup.sortedStudentPairsBySimilarity) {
+                    <tr class='clickable-row' data-href="@routes.RunJPlagController.getCodeComparisonPage(Some(plagiarismGroup.groupID), studentPair.studentFilePairID)">
+                        <td>@studentPair.studentA</td>
+                        <td>@studentPair.studentB</td>
+                        <td>@studentPair.percentage</td>
                     </tr>
                 }
                 </tbody>

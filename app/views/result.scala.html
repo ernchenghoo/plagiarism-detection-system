@@ -4,13 +4,13 @@
 
     <div class="container-fluid mt-5" id="similarity_report_container">
         <h3 class="table_title_large">Potential plagiarisms</h3>
-        @for(file <- result.resultPlagiarismGroups) {
+        @for(group <- result.resultPlagiarismGroups) {
             <div class="row mb-5 plagiarism-group-box">
-                @if(file.tokenNo > 150) {
-                    <div class="col-8 red-background result-file-name-container">
+                @if(group.averageStudentSimilarityPercentage > 90) {
+                    <div class="col-8 red-background result-group-name-container">
                         <div class="row plagiarism-group-students">
-                        @for(student <- file.getIndividualStudent) {
-                            <div class="col-3 pt-2">
+                        @for(student <- group.getIndividualStudent) {
+                            <div class="col-xl-3 col-lg-1 pt-2">
                                 <p>@student</p>
                             </div>
                         }
@@ -19,25 +19,25 @@
                     <div class="col-4 text-center red-background result-token-container">
                         <div class="row plagiarism-group-token">
                             <div class="col-12">
-                                <p><u>Token No.</u></p>
+                                <p><u>Average similarity</u></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <p class="token-number-text">@file.tokenNo</p>
+                                <p class="token-number-text">@group.averageStudentSimilarityPercentage%</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <a href="@routes.RunJPlagController.getResultDetailPage(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                                <a href="@routes.RunJPlagController.getResultDetailPage(group.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
                             </div>
                         </div>
                     </div>
                 } else {
-                    <div class="col-8 yellow-background result-file-name-container">
+                    <div class="col-8 yellow-background result-group-name-container">
                         <div class="row plagiarism-group-students">
-                        @for(student <- file.getIndividualStudent) {
-                            <div class="col-3 pt-2">
+                        @for(student <- group.getIndividualStudent) {
+                            <div class="col-xl-3 col-lg-1 pt-2">
                                 <p>@student</p>
                             </div>
                         }
@@ -46,17 +46,17 @@
                     <div class="col-4 text-center yellow-background result-token-container">
                         <div class="row plagiarism-group-token">
                             <div class="col-12">
-                                <p><u>Token No.</u></p>
+                                <p><u>Average similarity</u></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <p class="token-number-text">@file.tokenNo</p>
+                                <p class="token-number-text">@group.averageStudentSimilarityPercentage%</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <a href="@routes.RunJPlagController.getResultDetailPage(file.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
+                                <a href="@routes.RunJPlagController.getResultDetailPage(group.groupID)"><button type="button" class="btn" id="result_details_button">Details</button></a>
                             </div>
                         </div>
                     </div>
