@@ -27,7 +27,8 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 success : function(response) {
                     if (response.message === "Pass") {
-                        window.location = 'http://localhost:9000/home';
+                        // window.location = 'http://localhost:9000/home';
+                        window.location = 'https://plagiarism-detection-system.herokuapp.com/home';
                     }
                     else {
 
