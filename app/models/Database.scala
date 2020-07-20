@@ -11,7 +11,7 @@ trait Database {
 //  val driver = "com.mysql.cj.jdbc.Driver"
 //  val username = "root"
 //  val password = "password"
-//  var connection: Connection = DriverManager.getConnection(url, username, password)
+  var connection: Connection = DriverManager.getConnection(url, username, password)
 }
 
 object Database extends Database {
